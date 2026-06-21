@@ -25,7 +25,7 @@ interface Translations {
   contactTitle2: string;
   contactSubtitle: string;
   emailLabel: string;
-  phoneLabel: string;
+
   locationLabel: string;
   formName: string;
   formNameP: string;
@@ -68,7 +68,15 @@ interface Translations {
   reviewsSubtitle: string;
   promoVideoTitle: string;
   promoVideoSubtitle: string;
-  heroWhatsAppBtn: string;
+  whyUsTitle: string;
+  whyUsSubtitle: string;
+  customExpTitle: string;
+  customExpSubtitle: string;
+  customExpCTA: string;
+  fromPrice: string;
+  perPerson: string;
+  minPassengers: string;
+  footerNote: string;
 }
 
 const translations: Record<Language, Translations> = {
@@ -95,7 +103,6 @@ const translations: Record<Language, Translations> = {
     contactTitle2: "Contacto",
     contactSubtitle: "¿Tienes dudas sobre los paquetes turísticos o necesitas armar un tour a medida? Escríbenos y un guía local te responderá a la brevedad.",
     emailLabel: "Email Oficial",
-    phoneLabel: "Teléfono / WhatsApp",
     locationLabel: "Oficina Central",
     formName: "Nombre Completo",
     formNameP: "Ej. Juan Pérez",
@@ -115,7 +122,7 @@ const translations: Record<Language, Translations> = {
     modalIncludes: "Qué incluye",
     modalNotIncludes: "No incluye",
     modalItinerary: "Itinerario referencial",
-    modalTotal: "Total por persona",
+    modalTotal: "Total del grupo",
     modalReserve: "Reservar Tour",
     cartTitle: "Tu Carrito",
     cartEmpty: "No hay tours en tu carrito.",
@@ -138,7 +145,15 @@ const translations: Record<Language, Translations> = {
     reviewsSubtitle: "viajeros",
     promoVideoTitle: "Siente el",
     promoVideoSubtitle: "Mana",
-    heroWhatsAppBtn: "Asesoría por WhatsApp"
+    whyUsTitle: "¿Por qué",
+    whyUsSubtitle: "Toumamari?",
+    customExpTitle: "Experiencias",
+    customExpSubtitle: "Personalizadas",
+    customExpCTA: "Consultar por Email",
+    fromPrice: "Desde",
+    perPerson: "por persona",
+    minPassengers: "Mín. {n} pasajeros",
+    footerNote: "Valores sujetos a disponibilidad, temporada y condiciones climáticas. Entradas a parques no incluidas salvo indicación expresa."
   },
   en: {
     navInicio: "Home",
@@ -163,7 +178,6 @@ const translations: Record<Language, Translations> = {
     contactTitle2: "Touch",
     contactSubtitle: "Do you have questions about our tour packages or need a custom tour? Write to us and a local guide will reply shortly.",
     emailLabel: "Official Email",
-    phoneLabel: "Phone / WhatsApp",
     locationLabel: "Head Office",
     formName: "Full Name",
     formNameP: "e.g. John Doe",
@@ -183,7 +197,7 @@ const translations: Record<Language, Translations> = {
     modalIncludes: "What's included",
     modalNotIncludes: "Not included",
     modalItinerary: "Reference itinerary",
-    modalTotal: "Total per person",
+    modalTotal: "Group total",
     modalReserve: "Book Tour",
     cartTitle: "Your Cart",
     cartEmpty: "No tours in your cart.",
@@ -206,7 +220,15 @@ const translations: Record<Language, Translations> = {
     reviewsSubtitle: "say",
     promoVideoTitle: "Feel the",
     promoVideoSubtitle: "Mana",
-    heroWhatsAppBtn: "WhatsApp Advisor"
+    whyUsTitle: "Why",
+    whyUsSubtitle: "Toumamari?",
+    customExpTitle: "Custom",
+    customExpSubtitle: "Experiences",
+    customExpCTA: "Ask via Email",
+    fromPrice: "From",
+    perPerson: "per person",
+    minPassengers: "Min. {n} passengers",
+    footerNote: "Prices subject to availability, season and weather conditions. Park entrances not included unless expressly stated."
   }
 };
 

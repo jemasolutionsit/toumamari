@@ -25,7 +25,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const addToCart = (tour: Tour, date: string, travelers: number) => {
-    setItems((prev) => [...prev, { id: crypto.randomUUID(), tour, date: date || "Por definir", travelers }]);
+    if (!date) return;
+    setItems((prev) => [...prev, { id: crypto.randomUUID(), tour, date, travelers }]);
     setIsCartOpen(true);
   };
 

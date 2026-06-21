@@ -1,13 +1,74 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
+
+    <title>Toumamari – Tours en Rapa Nui (Isla de Pascua)</title>
+    <meta name="description" content="Descubre los misterios de Rapa Nui con Toumamari. Tours arqueológicos, amanecer en Ahu Tongariki, Rano Raraku, Orongo y más. Guías locales, bilingual ES/EN." />
+    <meta name="keywords" content="tours rapa nui, isla de pascua, toumamari, ahu tongariki, rano raraku, moais, hanga roa, turismo pascua, arqueología polinesia" />
+    <meta name="author" content="Toumamari – Servicios Turísticos Touamamari SpA" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://toumamari.com/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://toumamari.com/" />
+    <meta property="og:title" content="Toumamari – Tours en Rapa Nui" />
+    <meta property="og:description" content="Tours arqueológicos exclusivos en Isla de Pascua. Amanecer en Ahu Tongariki, Rano Raraku, Orongo y experiencias personalizadas con guías locales." />
+    <meta property="og:image" content="https://toumamari.com/images/tours/ahu-tongariki-day.jpg" />
+    <meta property="og:locale" content="es_CL" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:site_name" content="Toumamari" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://toumamari.com/" />
+    <meta name="twitter:title" content="Toumamari – Tours en Rapa Nui" />
+    <meta name="twitter:description" content="Tours arqueológicos exclusivos en Isla de Pascua con guías locales." />
+    <meta name="twitter:image" content="https://toumamari.com/images/tours/ahu-tongariki-day.jpg" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TouristInformationCenter",
+      "name": "Toumamari",
+      "alternateName": "Touamamari SpA",
+      "description": "Tours arqueológicos y experiencias culturales en Rapa Nui (Isla de Pascua), Chile.",
+      "url": "https://toumamari.com",
+      "email": "info@touamamari.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Hanga Roa",
+        "addressRegion": "Isla de Pascua",
+        "addressCountry": "CL"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -27.1507,
+        "longitude": -109.4272
+      },
+      "sameAs": [
+        "https://www.instagram.com/toumamari.rapanui",
+        "https://www.facebook.com/toumamari"
+      ]
+    }
+    </script>
+
+    <link rel="icon" type="image/x-icon" href="/logo.jpg" />
+
+    <!-- Google Analytics GA4 — reemplazar G-XXXXXXXXXX con ID real -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script> -->
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

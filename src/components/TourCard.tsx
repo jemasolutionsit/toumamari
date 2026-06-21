@@ -5,16 +5,16 @@ import { Tour } from "../data";
 interface TourCardProps {
   tour: Tour;
   onClick: () => void;
-  fadeUp: any; // Variante de motion
   btnText: string;
   ofertaText: string;
 }
 
-export function TourCard({ tour, onClick, fadeUp, btnText, ofertaText }: TourCardProps) {
+export function TourCard({ tour, onClick, btnText, ofertaText }: TourCardProps) {
   return (
-    <motion.article 
-      variants={fadeUp}
+    <motion.article
       onClick={onClick}
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.25 }}
       className="group cursor-pointer bg-white border border-neutral-200/80 rounded-3xl overflow-hidden hover:shadow-2xl hover:shadow-yellow-500/10 transition-all duration-500 flex flex-col h-full"
     >
       <div className="relative h-72 overflow-hidden bg-neutral-200">

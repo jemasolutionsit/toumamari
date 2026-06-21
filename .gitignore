@@ -6,3 +6,10 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Temp/upload folders
+_docs_tmp/
+_fotos_tmp/
+*.zip
+*.docx
+.claude/
