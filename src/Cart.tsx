@@ -74,16 +74,21 @@ export function CartDrawer() {
       const firstDate = items[0]?.date ?? "";
       const totalTravelers = items.reduce((s, i) => s + i.travelers, 0);
 
-      await sendBookingConfirmation({
-        traveler_name: name.trim(),
-        traveler_email: email.trim(),
-        tour_title: tourTitles,
-        tour_date: firstDate,
-        travelers: totalTravelers,
-        total_usd: total,
-        total_clp: totalCLP,
-        language,
-      });
+      // Email is best-effort — don't block success if not configured
+      try {
+        await sendBookingConfirmation({
+          traveler_name: name.trim(),
+          traveler_email: email.trim(),
+          tour_title: tourTitles,
+          tour_date: firstDate,
+          travelers: totalTravelers,
+          total_usd: total,
+          total_clp: totalCLP,
+          language,
+        });
+      } catch {
+        // silently ignore — booking already saved to Supabase
+      }
 
       setStep("success");
     } catch (err) {
