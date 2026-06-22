@@ -446,6 +446,9 @@ export function Home() {
         </div>
       </section>
 
+      {/* gradient bridge: light tours → dark gallery */}
+      <div aria-hidden className="h-24 md:h-32 bg-gradient-to-b from-neutral-50 via-neutral-700 to-neutral-950" />
+
       {/* ═══════════════ GALERÍA FOTOGRÁFICA ═══════════════ */}
       <section id="galeria" className="py-16 md:py-24 bg-neutral-950 text-white relative overflow-hidden">
         <SiteMarquee lang={language} />
@@ -587,6 +590,9 @@ export function Home() {
           </motion.div>
         </div>
       </section>
+
+      {/* gradient bridge: dark nosotros → light why-us */}
+      <div aria-hidden className="h-24 md:h-32 bg-gradient-to-b from-black via-neutral-700 to-neutral-50" />
 
       {/* ═══════════════ POR QUÉ TOUMAMARI ═══════════════ */}
       <section className="py-16 md:py-24 bg-neutral-50 relative overflow-hidden">
