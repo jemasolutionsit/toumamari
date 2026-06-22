@@ -447,7 +447,14 @@ export function Home() {
       </section>
 
       {/* gradient bridge: light tours → dark gallery */}
-      <div aria-hidden className="h-24 md:h-32 bg-gradient-to-b from-neutral-50 via-neutral-700 to-neutral-950" />
+      <div
+        aria-hidden
+        className="h-64 md:h-80 -mb-1"
+        style={{
+          background:
+            "linear-gradient(to bottom, #fafafa 0%, #f5f5f5 15%, #d4d4d4 30%, #737373 50%, #404040 70%, #1c1c1c 85%, #0a0a0a 100%)",
+        }}
+      />
 
       {/* ═══════════════ GALERÍA FOTOGRÁFICA ═══════════════ */}
       <section id="galeria" className="py-16 md:py-24 bg-neutral-950 text-white relative overflow-hidden">
@@ -592,7 +599,14 @@ export function Home() {
       </section>
 
       {/* gradient bridge: dark nosotros → light why-us */}
-      <div aria-hidden className="h-24 md:h-32 bg-gradient-to-b from-black via-neutral-700 to-neutral-50" />
+      <div
+        aria-hidden
+        className="h-64 md:h-80 -mb-1"
+        style={{
+          background:
+            "linear-gradient(to bottom, #000000 0%, #1c1c1c 15%, #404040 30%, #737373 50%, #d4d4d4 70%, #f5f5f5 85%, #fafafa 100%)",
+        }}
+      />
 
       {/* ═══════════════ POR QUÉ TOUMAMARI ═══════════════ */}
       <section className="py-16 md:py-24 bg-neutral-50 relative overflow-hidden">
