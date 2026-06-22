@@ -490,7 +490,7 @@ export function Home() {
                   delay: (i % 4) * 0.09,
                   ease: EASE,
                 }}
-                className={`relative overflow-hidden rounded-xl group cursor-pointer ${i % 14 === 0 || i % 14 === 8 ? "col-span-2 h-64" : "h-52"}`}
+                className={`relative overflow-hidden rounded-xl group cursor-pointer h-44 sm:h-52 ${i % 14 === 0 || i % 14 === 8 ? "md:col-span-2 md:h-64" : ""}`}
               >
                 <motion.img
                   src={photo.src}
