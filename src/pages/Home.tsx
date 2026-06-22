@@ -400,6 +400,16 @@ export function Home() {
         </div>
       </section>
 
+      {/* gradient bridge: dark promo → light tours */}
+      <div
+        aria-hidden
+        className="h-64 md:h-80 -mb-1"
+        style={{
+          background:
+            "linear-gradient(to bottom, #000000 0%, #1c1c1c 15%, #404040 30%, #737373 50%, #d4d4d4 70%, #f5f5f5 85%, #fafafa 100%)",
+        }}
+      />
+
       {/* ═══════════════ CATÁLOGO DE TOURS ═══════════════ */}
       <section id="tours" className="py-20 md:py-32 px-4 md:px-8 max-w-7xl mx-auto relative">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUp} className="text-center mb-16">
