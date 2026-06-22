@@ -31,10 +31,10 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
   return (
     <div className="min-h-screen bg-neutral-50 font-sans text-neutral-900 selection:bg-[#FFD700] selection:text-black flex flex-col">
       <header
-        className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${
+        className={`fixed top-0 w-full z-50 transition-all duration-500 ${
           scrolled || menuOpen
-            ? "bg-black/95 backdrop-blur-md border-[#FFD700]/20 py-3 md:py-4 shadow-xl"
-            : "bg-gradient-to-b from-black/80 to-transparent border-transparent py-4 md:py-6"
+            ? "bg-black/95 backdrop-blur-md py-3 md:py-4 shadow-xl"
+            : "bg-gradient-to-b from-black/90 via-black/50 to-transparent py-4 md:py-6 pb-8 md:pb-12"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-8 flex justify-between items-center">

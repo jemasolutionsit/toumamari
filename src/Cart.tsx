@@ -116,21 +116,21 @@ export function CartDrawer() {
             className="fixed inset-y-0 right-0 w-full md:w-[450px] bg-white shadow-2xl z-[90] flex flex-col"
           >
             {/* Header */}
-            <div className="relative px-6 py-5 flex items-center justify-between bg-gradient-to-b from-neutral-900 to-black text-white">
+            <div className="relative px-6 py-5 flex items-center justify-between bg-neutral-50">
               <motion.h2
                 initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 }}
-                className="text-xl font-black tracking-tight flex items-center gap-2"
+                className="text-xl font-black tracking-tight flex items-center gap-2 text-neutral-900"
               >
-                <ShoppingCart className="w-5 h-5 text-yellow-400" />
+                <ShoppingCart className="w-5 h-5 text-yellow-500" />
                 {t.cartTitle}
               </motion.h2>
               <motion.button
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={handleClose}
-                className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                className="p-2 hover:bg-neutral-200 rounded-full transition-colors text-neutral-900"
               >
                 <X className="w-6 h-6" />
               </motion.button>
