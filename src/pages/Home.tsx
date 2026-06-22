@@ -108,7 +108,7 @@ function SiteMarquee({ lang }: { lang: 'es' | 'en' }) {
     : ["Ahu Tongariki", "Rano Raraku", "Rano Kau Volcano", "Orongo", "Ana Kakenga", "Te Pito Kura", "Puna Pau", "Ahu Akivi", "Anakena Beach", "Ahu Vaihu", "Ana Te Pahu", "Motu Nui"];
   const doubled = [...sites, ...sites];
   return (
-    <div className="relative overflow-hidden border-y border-[#FFD700]/15 py-3 mb-14">
+    <div className="relative overflow-hidden py-3 mb-14">
       <motion.div
         className="flex gap-10 whitespace-nowrap"
         animate={{ x: ["0%", "-50%"] }}
@@ -335,7 +335,7 @@ export function Home() {
       </section>
 
       {/* ═══════════════ VIDEO PROMO ═══════════════ */}
-      <section className="py-16 md:py-24 bg-black relative border-y border-[#FFD700]/10 overflow-hidden grain-overlay">
+      <section className="py-16 md:py-24 bg-black relative overflow-hidden">
         <ParticleField />
         <div className="max-w-7xl mx-auto px-4 md:px-8 text-center text-white relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUp}>
@@ -571,7 +571,7 @@ export function Home() {
       </section>
 
       {/* ═══════════════ NOSOTROS ═══════════════ */}
-      <section id="nosotros" className="py-20 md:py-28 bg-black text-white relative overflow-hidden grain-overlay">
+      <section id="nosotros" className="py-20 md:py-28 bg-black text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#FFD700]/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-yellow-600/10 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/2" />
 
