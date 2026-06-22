@@ -116,11 +116,24 @@ export function CartDrawer() {
             className="fixed inset-y-0 right-0 w-full md:w-[450px] bg-white shadow-2xl z-[90] flex flex-col"
           >
             {/* Header */}
-            <div className="p-6 border-b border-neutral-800 flex items-center justify-between bg-black text-white">
-              <h2 className="text-xl font-black">{t.cartTitle}</h2>
-              <button onClick={handleClose} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+            <div className="relative px-6 py-5 flex items-center justify-between bg-gradient-to-b from-neutral-900 to-black text-white">
+              <motion.h2
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 }}
+                className="text-xl font-black tracking-tight flex items-center gap-2"
+              >
+                <ShoppingCart className="w-5 h-5 text-yellow-400" />
+                {t.cartTitle}
+              </motion.h2>
+              <motion.button
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={handleClose}
+                className="p-2 hover:bg-white/10 rounded-full transition-colors"
+              >
                 <X className="w-6 h-6" />
-              </button>
+              </motion.button>
             </div>
 
             {/* --- CART STEP --- */}
@@ -139,8 +152,17 @@ export function CartDrawer() {
                       <p className="font-medium text-lg">{t.cartEmpty}</p>
                     </div>
                   ) : (
-                    items.map(item => (
-                      <div key={item.id} className="flex gap-4 bg-white p-4 rounded-2xl shadow-sm border border-neutral-100">
+                    items.map((item, idx) => (
+                      <motion.div
+                        key={item.id}
+                        layout
+                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, x: 100, scale: 0.9 }}
+                        transition={{ delay: idx * 0.07, type: "spring", stiffness: 200, damping: 22 }}
+                        whileHover={{ y: -2, boxShadow: "0 10px 25px rgba(0,0,0,0.08)" }}
+                        className="flex gap-4 bg-white p-4 rounded-2xl shadow-sm border border-neutral-100"
+                      >
                         <img src={item.tour.image} alt={item.tour.title} className="w-24 h-24 object-cover rounded-xl" />
                         <div className="flex-1 flex flex-col">
                           <h4 className="font-bold text-sm leading-tight mb-2 text-neutral-900">{item.tour.title}</h4>
@@ -149,12 +171,12 @@ export function CartDrawer() {
                             <div className="flex items-center gap-3">
                               <button
                                 onClick={() => updateTravelers(item.id, Math.max(1, item.travelers - 1))}
-                                className="w-7 h-7 rounded-full border border-neutral-200 flex items-center justify-center text-sm font-bold text-neutral-500 hover:bg-neutral-100"
+                                className="w-7 h-7 rounded-full border border-neutral-200 flex items-center justify-center text-sm font-bold text-neutral-500 hover:bg-neutral-100 hover:scale-110 active:scale-95 transition-transform"
                               >-</button>
                               <span className="text-sm font-bold w-4 text-center">{item.travelers}</span>
                               <button
                                 onClick={() => updateTravelers(item.id, item.travelers + 1)}
-                                className="w-7 h-7 rounded-full border border-neutral-200 flex items-center justify-center text-sm font-bold text-neutral-500 hover:bg-neutral-100"
+                                className="w-7 h-7 rounded-full border border-neutral-200 flex items-center justify-center text-sm font-bold text-neutral-500 hover:bg-neutral-100 hover:scale-110 active:scale-95 transition-transform"
                               >+</button>
                             </div>
                             <div className="flex items-center gap-4">
@@ -167,7 +189,7 @@ export function CartDrawer() {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </motion.div>
                     ))
                   )}
                 </div>
@@ -178,13 +200,15 @@ export function CartDrawer() {
                       <span className="font-bold text-neutral-500 uppercase tracking-wider text-sm">{t.cartTotal}</span>
                       <span className="text-3xl font-black text-black">${total} USD</span>
                     </div>
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.02, y: -2, boxShadow: "0 15px 30px rgba(255,196,57,0.35)" }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={handleProceedToForm}
-                      className="w-full bg-[#FFC439] hover:bg-[#F4BB33] text-black py-4 rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-3 shadow-[0_10px_20px_rgba(255,196,57,0.2)] mb-4"
+                      className="w-full bg-[#FFC439] hover:bg-[#F4BB33] text-black py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 shadow-[0_10px_20px_rgba(255,196,57,0.2)] mb-4"
                     >
                       <CreditCard className="w-6 h-6" />
                       {t.cartPayPayPal}
-                    </button>
+                    </motion.button>
                     <div className="flex flex-col gap-2 mt-4 text-xs font-semibold text-neutral-500 items-center justify-center text-center">
                       <p className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-emerald-500" /> {t.cartSecurePayment}</p>
                       <p className="flex items-center gap-2"><CalendarCheck className="w-4 h-4 text-blue-500" /> {t.cartFlexibleCancel}</p>
