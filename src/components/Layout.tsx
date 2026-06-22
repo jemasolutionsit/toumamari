@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingCart, Globe, Instagram } from "lucide-react";
-import { motion } from "motion/react";
+import { ShoppingCart, Globe, Instagram, Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../i18n";
 import { useCart } from "../CartContext";
 import { CONTACT_INFO } from "../data";
@@ -18,23 +18,32 @@ function WhatsAppIcon() {
 export function Layout({ children, scrolled }: { children: ReactNode; scrolled: boolean }) {
   const { language, setLanguage, t } = useLanguage();
   const { items, setIsCartOpen } = useCart();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const cartCount = items.reduce((sum, item) => sum + item.travelers, 0);
+
+  const navLinks = [
+    { to: "/", label: t.navInicio, type: "route" as const },
+    { to: "/#tours", label: t.navTours, type: "hash" as const },
+    { to: "/guia", label: t.navGuia, type: "route" as const },
+    { to: "/impacto", label: t.navImpacto, type: "route" as const },
+  ];
 
   return (
     <div className="min-h-screen bg-neutral-50 font-sans text-neutral-900 selection:bg-[#FFD700] selection:text-black flex flex-col">
-      <header 
+      <header
         className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${
-          scrolled 
-            ? "bg-black/90 backdrop-blur-md border-[#FFD700]/20 py-4 shadow-xl" 
-            : "bg-gradient-to-b from-black/80 to-transparent border-transparent py-6"
+          scrolled || menuOpen
+            ? "bg-black/95 backdrop-blur-md border-[#FFD700]/20 py-3 md:py-4 shadow-xl"
+            : "bg-gradient-to-b from-black/80 to-transparent border-transparent py-4 md:py-6"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-8 flex justify-between items-center">
-          
-          <Link to="/" className="flex items-center gap-4 cursor-pointer">
-            <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#FFD700] flex items-center justify-center bg-black shadow-[0_0_15px_rgba(255,215,0,0.3)]">
-              <img 
-                src="/logo.jpg" 
-                alt="Toumamari Tour Logo" 
+
+          <Link to="/" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 md:gap-4 cursor-pointer">
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-[#FFD700] flex items-center justify-center bg-black shadow-[0_0_15px_rgba(255,215,0,0.3)] flex-shrink-0">
+              <img
+                src="/logo.jpg"
+                alt="Toumamari Tour Logo"
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
@@ -43,8 +52,8 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-xl tracking-widest text-white">TOUMAMARI</span>
-              <span className="text-[0.65rem] uppercase tracking-[0.4em] text-[#FFD700]">Tour Rapa Nui</span>
+              <span className="font-bold text-lg md:text-xl tracking-widest text-white leading-none">TOUMAMARI</span>
+              <span className="text-[0.55rem] md:text-[0.65rem] uppercase tracking-[0.3em] md:tracking-[0.4em] text-[#FFD700]">Tour Rapa Nui</span>
             </div>
           </Link>
 
@@ -55,10 +64,10 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
             <Link to="/impacto" className="text-neutral-300 hover:text-[#FFD700] transition-colors">{t.navImpacto}</Link>
           </nav>
 
-          <div className="flex items-center gap-5">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3 md:gap-5">
+            <div className="hidden sm:flex items-center gap-2">
               <Globe className="w-4 h-4 text-neutral-400" />
-              <select 
+              <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value as "es" | "en")}
                 className="bg-transparent text-sm text-neutral-300 outline-none cursor-pointer focus:text-white"
@@ -67,17 +76,80 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
                 <option value="en" className="bg-neutral-900">EN</option>
               </select>
             </div>
-            <button onClick={() => setIsCartOpen(true)} className="relative group text-white hover:text-[#FFD700] transition-colors flex items-center gap-2">
-              <ShoppingCart className="w-5 h-5" />
-              <span className="hidden sm:block text-sm font-medium">{t.cart}</span>
-              {items.length > 0 && (
-                <span className="absolute -top-2 -right-2 sm:-right-4 w-5 h-5 bg-[#FFD700] text-black text-xs font-bold flex items-center justify-center rounded-full group-hover:scale-110 transition-transform">
-                  {items.reduce((sum, item) => sum + item.travelers, 0)}
+            <button onClick={() => setIsCartOpen(true)} aria-label={t.cart} className="relative group text-white hover:text-[#FFD700] transition-colors flex items-center gap-2">
+              <ShoppingCart className="w-6 h-6 md:w-5 md:h-5" />
+              <span className="hidden lg:block text-sm font-medium">{t.cart}</span>
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 lg:-right-4 w-5 h-5 bg-[#FFD700] text-black text-xs font-bold flex items-center justify-center rounded-full group-hover:scale-110 transition-transform">
+                  {cartCount}
                 </span>
               )}
             </button>
+            {/* Hamburger — mobile/tablet only */}
+            <button
+              onClick={() => setMenuOpen(o => !o)}
+              aria-label="Menu"
+              aria-expanded={menuOpen}
+              className="lg:hidden text-white hover:text-[#FFD700] transition-colors p-1 -mr-1"
+            >
+              {menuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile menu panel */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.nav
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:hidden overflow-hidden border-t border-white/10 mt-3"
+            >
+              <div className="px-4 py-4 flex flex-col gap-1">
+                {navLinks.map((link) => (
+                  link.type === "route" ? (
+                    <Link
+                      key={link.label}
+                      to={link.to}
+                      onClick={() => setMenuOpen(false)}
+                      className="text-neutral-200 hover:text-[#FFD700] hover:bg-white/5 transition-colors py-3 px-3 rounded-xl text-base font-medium"
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a
+                      key={link.label}
+                      href={link.to}
+                      onClick={() => setMenuOpen(false)}
+                      className="text-neutral-200 hover:text-[#FFD700] hover:bg-white/5 transition-colors py-3 px-3 rounded-xl text-base font-medium"
+                    >
+                      {link.label}
+                    </a>
+                  )
+                ))}
+                {/* Language toggle inside menu */}
+                <div className="flex items-center gap-3 mt-3 pt-4 border-t border-white/10 px-3">
+                  <Globe className="w-4 h-4 text-[#FFD700]" />
+                  <div className="flex gap-2">
+                    {(["es", "en"] as const).map((lng) => (
+                      <button
+                        key={lng}
+                        onClick={() => setLanguage(lng)}
+                        className={`px-4 py-1.5 rounded-full text-sm font-bold uppercase transition-all ${
+                          language === lng ? "bg-[#FFD700] text-black" : "bg-white/10 text-neutral-300"
+                        }`}
+                      >
+                        {lng}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.nav>
+          )}
+        </AnimatePresence>
       </header>
 
       <main className="flex-1">
@@ -139,7 +211,7 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contactar por WhatsApp"
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(37,211,102,0.5)] hover:shadow-[0_4px_30px_rgba(37,211,102,0.7)]"
+        className="fixed bottom-safe right-5 md:right-6 z-50 w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(37,211,102,0.5)] hover:shadow-[0_4px_30px_rgba(37,211,102,0.7)]"
         initial={{ opacity: 0, scale: 0, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ delay: 2.5, type: "spring", stiffness: 260, damping: 20 }}

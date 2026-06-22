@@ -13,3 +13,6 @@ _fotos_tmp/
 *.zip
 *.docx
 .claude/
+.vercel
+.playwright-mcp/
+*.png

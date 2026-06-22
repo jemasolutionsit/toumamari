@@ -2,6 +2,22 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+
+/* iOS safe-area helpers (require viewport-fit=cover) */
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+.pt-safe { padding-top: env(safe-area-inset-top); }
+.bottom-safe { bottom: calc(1.25rem + env(safe-area-inset-bottom)); }
+
+/* Prevent iOS zoom on input focus (font-size < 16px triggers zoom) */
+@media (max-width: 640px) {
+  input, select, textarea { font-size: 16px; }
 }
 
 @keyframes float {

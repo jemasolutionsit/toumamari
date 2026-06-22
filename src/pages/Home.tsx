@@ -273,7 +273,7 @@ export function Home() {
   return (
     <Layout scrolled={scrolled}>
       {/* ═══════════════ HERO ═══════════════ */}
-      <section ref={heroRef} id="inicio" className="relative h-screen flex items-center justify-center overflow-hidden bg-black grain-overlay">
+      <section ref={heroRef} id="inicio" className="relative h-[100svh] min-h-[600px] flex items-center justify-center overflow-hidden bg-black grain-overlay">
         <ParticleField />
 
         <motion.div style={{ y: heroY, scale: heroScale }} className="absolute inset-0 w-full h-full">
@@ -335,7 +335,7 @@ export function Home() {
       </section>
 
       {/* ═══════════════ VIDEO PROMO ═══════════════ */}
-      <section className="py-24 bg-black relative border-y border-[#FFD700]/10 overflow-hidden grain-overlay">
+      <section className="py-16 md:py-24 bg-black relative border-y border-[#FFD700]/10 overflow-hidden grain-overlay">
         <ParticleField />
         <div className="max-w-7xl mx-auto px-4 md:px-8 text-center text-white relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUp}>
@@ -373,13 +373,15 @@ export function Home() {
             {/* arrows */}
             <button
               onClick={() => { setPromoDir(-1); setPromoVideoIndex(i => (i - 1 + HERO_VIDEOS.length) % HERO_VIDEOS.length); }}
-              className="absolute -left-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white hover:bg-[#FFD700] hover:text-black hover:border-[#FFD700] transition-all duration-200 z-10"
+              aria-label="Anterior"
+              className="absolute left-2 md:-left-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white hover:bg-[#FFD700] hover:text-black hover:border-[#FFD700] transition-all duration-200 z-10"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={() => { setPromoDir(1); setPromoVideoIndex(i => (i + 1) % HERO_VIDEOS.length); }}
-              className="absolute -right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white hover:bg-[#FFD700] hover:text-black hover:border-[#FFD700] transition-all duration-200 z-10"
+              aria-label="Siguiente"
+              className="absolute right-2 md:-right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white hover:bg-[#FFD700] hover:text-black hover:border-[#FFD700] transition-all duration-200 z-10"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
@@ -399,7 +401,7 @@ export function Home() {
       </section>
 
       {/* ═══════════════ CATÁLOGO DE TOURS ═══════════════ */}
-      <section id="tours" className="py-32 px-4 md:px-8 max-w-7xl mx-auto relative">
+      <section id="tours" className="py-20 md:py-32 px-4 md:px-8 max-w-7xl mx-auto relative">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUp} className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-black mb-6 tracking-tight text-neutral-900">
             {t.toursTitle1} <span className="text-gradient-gold">{t.toursTitle2}</span>
@@ -445,7 +447,7 @@ export function Home() {
       </section>
 
       {/* ═══════════════ GALERÍA FOTOGRÁFICA ═══════════════ */}
-      <section id="galeria" className="py-24 bg-neutral-950 text-white relative overflow-hidden">
+      <section id="galeria" className="py-16 md:py-24 bg-neutral-950 text-white relative overflow-hidden">
         <SiteMarquee lang={language} />
 
         <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
@@ -515,7 +517,7 @@ export function Home() {
       </section>
 
       {/* ═══════════════ EXPERIENCIAS PERSONALIZADAS ═══════════════ */}
-      <section className="py-24 bg-neutral-950 text-white relative overflow-hidden grain-overlay">
+      <section className="py-16 md:py-24 bg-neutral-950 text-white relative overflow-hidden grain-overlay">
         <ParticleField />
         <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-[#FFD700]/5 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2" />
         <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
@@ -549,12 +551,12 @@ export function Home() {
       </section>
 
       {/* ═══════════════ NOSOTROS ═══════════════ */}
-      <section id="nosotros" className="py-28 bg-black text-white relative overflow-hidden grain-overlay">
+      <section id="nosotros" className="py-20 md:py-28 bg-black text-white relative overflow-hidden grain-overlay">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#FFD700]/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-yellow-600/10 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/2" />
 
         <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <motion.div initial={{ opacity: 0, x: -60 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 1, ease: EASE }} className="relative h-[600px] w-full rounded-3xl overflow-hidden border border-white/10 group">
+          <motion.div initial={{ opacity: 0, x: -60 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 1, ease: EASE }} className="relative h-[380px] sm:h-[480px] lg:h-[600px] w-full rounded-3xl overflow-hidden border border-white/10 group">
             <img src={ABOUT.image} alt="Cultura Rapa Nui" loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }} className="absolute bottom-8 left-8 bg-black/80 backdrop-blur-md border border-[#FFD700]/30 p-6 rounded-2xl max-w-xs">
@@ -587,7 +589,7 @@ export function Home() {
       </section>
 
       {/* ═══════════════ POR QUÉ TOUMAMARI ═══════════════ */}
-      <section className="py-24 bg-neutral-50 relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-neutral-50 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp} className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-black text-neutral-900">{t.whyUsTitle} <span className="text-gradient-gold">{t.whyUsSubtitle}</span></h2>
@@ -610,7 +612,7 @@ export function Home() {
       </section>
 
       {/* ═══════════════ RESEÑAS ═══════════════ */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-black text-neutral-900">{t.reviewsTitle} <span className="text-gradient-gold">{t.reviewsSubtitle}</span></h2>
@@ -637,7 +639,7 @@ export function Home() {
       </section>
 
       {/* ═══════════════ CONTACTO ═══════════════ */}
-      <section id="contacto" className="py-32 px-4 md:px-8 max-w-7xl mx-auto relative">
+      <section id="contacto" className="py-20 md:py-32 px-4 md:px-8 max-w-7xl mx-auto relative">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <motion.div variants={fadeUp} className="flex flex-col justify-center">
             <h2 className="text-4xl md:text-5xl font-black mb-6">{t.contactTitle1} <span className="text-gradient-gold">{t.contactTitle2}</span></h2>
@@ -666,7 +668,7 @@ export function Home() {
             </div>
           </motion.div>
 
-          <motion.div variants={fadeUp} className="bg-white p-10 md:p-14 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.06)] border border-neutral-100 hover:shadow-[0_20px_60px_rgba(255,215,0,0.08)] transition-shadow duration-500">
+          <motion.div variants={fadeUp} className="bg-white p-6 sm:p-10 md:p-14 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.06)] border border-neutral-100 hover:shadow-[0_20px_60px_rgba(255,215,0,0.08)] transition-shadow duration-500">
             <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); contactForm.submit(); }}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
