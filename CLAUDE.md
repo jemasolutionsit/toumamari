@@ -1,10 +1,10 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance when working with code in this repository.
 
 ## Project
 
-Toumamari — bilingual (ES/EN) single-page site for booking Easter Island (Rapa Nui) tours. React SPA served by an Express server that also hosts the payment/booking API.
+Toumamari — bilingual (ES/EN) site for booking Easter Island (Rapa Nui) tours. React SPA served by an Express server that also hosts the payment/booking API.
 
 ## Commands
 
@@ -14,33 +14,41 @@ Toumamari — bilingual (ES/EN) single-page site for booking Easter Island (Rapa
 - `npm run lint` — type-check only (`tsc --noEmit`). This is the only check; there is no test suite or ESLint.
 - `npm run clean` — remove `dist`
 
-## Architecture
+## Architecture & Directory Layout
 
-**Single server, two roles** (`server.ts`): in dev it mounts Vite in middleware mode (SPA); in production it serves static `dist/` with a React-Router fallback to `index.html`. The same Express app exposes `/api/*` routes: `/api/health` and `/api/bookings/confirm` (Resend email).
+The project files have been reorganized into modular directories:
+- `src/components/`
+  - `Cart.tsx` — booking checkout flow (writes to Supabase, sends Resend email, links to WhatsApp).
+  - `Layout.tsx` — site shell, footer, and navigation. Includes language & currency toggles.
+  - `TourCard.tsx` — individual tour card with price formats and animations.
+- `src/context/`
+  - `CartContext.tsx` — cart logic, traveler counts, and currency state (CLP / USD).
+  - `i18n.tsx` — bilingual translations provider (ES/EN).
+- `src/data/`
+  - `data.ts` — static tour metadata, reviews, FAQs, official WhatsApp contact info.
+- `src/pages/`
+  - `Home.tsx` — main landing page with tour grids, reviews, contact form, and teaser gallery.
+  - `Gallery.tsx` — standalone full photo gallery page with categories and lightbox view.
+  - `Admin.tsx` / `TravelGuide.tsx` / `SocialImpact.tsx` / `Terms.tsx` — supporting views.
+- `src/lib/`
+  - `api.ts` — queries to Supabase DB.
+  - `whatsapp.ts` — WhatsApp message formatter for order checkout.
 
-**No payment gateway.** Checkout writes the booking to Supabase, sends the confirmation email, then hands the order to WhatsApp via a prefilled `wa.me` link (`src/lib/whatsapp.ts`). Payment is arranged off-site. The PayPal stubs were removed.
+## Key Configurations & Features
 
-**Routing** (`src/App.tsx`): React Router v7 with four routes — `/`, `/guia` (TravelGuide), `/impacto` (SocialImpact), `/terminos` (Terms). Most of the experience lives on Home.
-
-**Global state via React Context** (wired in `src/main.tsx`):
-- `LanguageProvider` (`src/i18n.tsx`) — hand-rolled i18n, not a library. A single `translations` object keyed `es`/`en` with a typed `Translations` interface. Default language `es`, switched in memory (no persistence/routing). Use `useLanguage()` → `{ language, setLanguage, t }`. Adding a string means adding the key to the `Translations` interface AND both `es` and `en` maps.
-- `CartProvider` (`src/CartContext.tsx`) — in-memory cart, totals as `price * travelers`. Use `useCart()`.
-
-**Tour data has two sources — be aware which one you're touching:**
-- `src/data.ts` — `getTours(lang)` returns hardcoded bilingual `Tour[]`. The `Tour` interface here is the client-facing shape.
-- `src/lib/api.ts` — `fetchTours(lang)` pulls from Supabase and maps `DbTour` → `Tour` via `dbTourToTour`. Note the category remap: DB `half_day | full_day | pack` → client `half-day | full-day | packs`.
-
-**Supabase** (`src/lib/`): `supabase.ts` creates the anon client from `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`. `database.types.ts` defines `DbTour`, `DbBooking`, `DbContactMessage` (tables: `tours`, `bookings`, `contact_messages`). `api.ts` holds all queries — bilingual columns are suffixed `_es` / `_en`.
-
-## Conventions
-
-- React 19, TypeScript, Tailwind CSS v4 (via `@tailwindcss/vite`), Vite 6, `motion` for animation, `lucide-react` icons.
-- Path alias `@/*` → repo root.
-- `noEmit` is set; the build never type-emits — Vite/esbuild transpile.
-- HMR is gated by `DISABLE_HMR` (set by AI Studio); leave `vite.config.ts` watch/HMR logic alone.
+1. **Currency Toggle (CLP / USD):** Caching is enabled for currency exchange rates fetched from `mindicador.cl`. Totals and breakdowns are dynamic throughout the app.
+2. **Performance Optimizations:**
+   - Client bundle splitting configured in `vite.config.ts` via `manualChunks` (splitting vendor, motion, supabase, and icons) to reduce initial load weight to ~107 kB.
+   - High priority preloading (`fetchpriority="high"`) configured for LCP resources.
+   - Re-compressed WebP assets under `public/images` to minimize page loading footprint (reduction of ~47% of image weight).
+3. **PWA (iOS Compatibility):**
+   - Implemented standard Vite PWA cache.
+   - Configured specific Safari iOS meta tags (`apple-mobile-web-app-capable`, `apple-mobile-web-app-status-bar-style`, etc.) in `index.html` to support proper "Add to Home Screen" fullscreen execution on iPhone.
+4. **Build & Deploy:**
+   - Deployed on Vercel via `jemasolutionsit/toumamari` project (`prj_PTIyOWTCFktGqamoKtk7yeLbsbgQ`).
+   - `sharp` is listed in `optionalDependencies` to prevent native binary installation failures in Vercel's Linux build containers.
 
 ## Env
 
-`.env.local` (gitignored). Keys: `GEMINI_API_KEY`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`. Only `VITE_`-prefixed vars reach the client — and Vite inlines them at **build** time, so Vercel must have them set before the build runs, not after.
-
-`supabase.ts` deliberately does not call `createClient` when config is missing: it would throw during module evaluation and blank the page. It exports a proxy that fails on first query instead, letting `Home.tsx` fall back to the hardcoded tours.
+`.env.local` keys: `GEMINI_API_KEY`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`.
+Only `VITE_` prefixed variables are exposed to the client and inlined during build.
