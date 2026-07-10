@@ -214,6 +214,11 @@ function TourDrawer({
         offer_discount: form.offer_discount === null || form.offer_discount === undefined ? null : Number(form.offer_discount),
         price_usd: Number(form.price_usd),
         price_clp: Number(form.price_clp),
+        // null (no la cadena vacía ni 0) significa "este tour no tiene modalidad privada"
+        price_usd_private: form.price_usd_private === null || form.price_usd_private === undefined
+          ? null : Number(form.price_usd_private),
+        price_clp_private: form.price_clp_private === null || form.price_clp_private === undefined
+          ? null : Number(form.price_clp_private),
         sort_order: Number(form.sort_order),
         min_passengers: Number(form.min_passengers),
       };
@@ -300,12 +305,24 @@ function TourDrawer({
                 <input className="field" {...fi("duration")} placeholder="8 horas" />
               </label>
               <label className="flex flex-col gap-1 text-sm">
-                <span className="font-medium text-gray-700">Precio USD *</span>
+                <span className="font-medium text-gray-700">Precio USD grupal *</span>
                 <input required type="number" min="0" className="field" value={form.price_usd} onChange={e => set("price_usd", Number(e.target.value))} />
               </label>
               <label className="flex flex-col gap-1 text-sm">
-                <span className="font-medium text-gray-700">Precio CLP *</span>
+                <span className="font-medium text-gray-700">Precio CLP grupal *</span>
                 <input required type="number" min="0" className="field" value={form.price_clp} onChange={e => set("price_clp", Number(e.target.value))} />
+              </label>
+              <label className="flex flex-col gap-1 text-sm">
+                <span className="font-medium text-gray-700">Precio USD privado</span>
+                <input type="number" min="0" className="field" placeholder="vacío = no se ofrece"
+                  value={form.price_usd_private ?? ""}
+                  onChange={e => set("price_usd_private", e.target.value === "" ? null : Number(e.target.value))} />
+              </label>
+              <label className="flex flex-col gap-1 text-sm">
+                <span className="font-medium text-gray-700">Precio CLP privado</span>
+                <input type="number" min="0" className="field" placeholder="vacío = usa el grupal"
+                  value={form.price_clp_private ?? ""}
+                  onChange={e => set("price_clp_private", e.target.value === "" ? null : Number(e.target.value))} />
               </label>
               <label className="flex flex-col gap-1 text-sm">
                 <span className="font-medium text-gray-700">Descuento % (opcional)</span>
@@ -496,6 +513,7 @@ function ToursTab() {
               <th className="px-4 py-3">Title (ES)</th>
               <th className="px-4 py-3">Category</th>
               <th className="px-4 py-3">Price USD</th>
+              <th className="px-4 py-3">USD privado</th>
               <th className="px-4 py-3">Price CLP</th>
               <th className="px-4 py-3">Discount %</th>
               <th className="px-4 py-3">Sort</th>
@@ -515,6 +533,14 @@ function ToursTab() {
                     value={tour.price_usd}
                     prefix="$"
                     onSave={v => patch(tour.id, { price_usd: v ?? tour.price_usd })}
+                  />
+                </td>
+                <td className="px-4 py-3">
+                  {/* Vaciar el campo deja null: el tour deja de ofrecer modalidad privada */}
+                  <EditableNumber
+                    value={tour.price_usd_private ?? 0}
+                    prefix="$"
+                    onSave={v => patch(tour.id, { price_usd_private: v || null })}
                   />
                 </td>
                 <td className="px-4 py-3">

@@ -131,7 +131,7 @@ export async function adminFetchAllTours(): Promise<DbTour[]> {
 
 export async function adminUpdateTour(
   id: string,
-  patch: Partial<Pick<DbTour, 'active' | 'price_usd' | 'price_clp' | 'offer_discount' | 'sort_order'>>
+  patch: Partial<Pick<DbTour, 'active' | 'price_usd' | 'price_clp' | 'price_usd_private' | 'price_clp_private' | 'offer_discount' | 'sort_order'>>
 ): Promise<void> {
   const { error } = await supabase
     .from('tours')
