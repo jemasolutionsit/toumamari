@@ -28,6 +28,7 @@ export const getTours = (lang: 'es' | 'en'): Tour[] => [
     price: 70,
     priceCLP: 45000,
     pricePrivate: 120,
+    pricePrivateCLP: 80000,
     categoryId: "full-day",
     type: "Full Day",
     duration: lang === 'es' ? "Día completo" : "Full day",
@@ -58,8 +59,9 @@ export const getTours = (lang: 'es' | 'en'): Tour[] => [
     id: "2",
     title: lang === 'es' ? "Tour Orongo y Ruta Tangata Manu" : "Orongo & Birdman Route",
     price: 50,
-    priceCLP: 45000,
+    priceCLP: 35000,
     pricePrivate: 80,
+    pricePrivateCLP: 55000,
     categoryId: "half-day",
     type: lang === 'es' ? "Medio Día" : "Half Day",
     duration: lang === 'es' ? "5 horas" : "5 hours",
@@ -252,7 +254,7 @@ export const getCustomExperiences = (lang: 'es' | 'en') => [
 export const CONTACT_INFO = {
   email: "info@touamamari.com",
   location: "Hanga Roa, Rapa Nui (Isla de Pascua)",
-  whatsapp: "+56912345678",
+  whatsapp: "+56 9 5760 9175",
   instagram: "https://www.instagram.com/toumamari.rapanui",
   facebook: "https://www.facebook.com/toumamari",
 };

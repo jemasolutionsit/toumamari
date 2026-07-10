@@ -8,6 +8,7 @@ const TravelGuide = lazy(() => import("./pages/TravelGuide").then((m) => ({ defa
 const SocialImpact = lazy(() => import("./pages/SocialImpact").then((m) => ({ default: m.SocialImpact })));
 const Terms = lazy(() => import("./pages/Terms").then((m) => ({ default: m.Terms })));
 const Admin = lazy(() => import("./pages/Admin").then((m) => ({ default: m.Admin })));
+const Gallery = lazy(() => import("./pages/Gallery").then((m) => ({ default: m.Gallery })));
 
 function RouteFallback() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/impacto" element={<SocialImpact />} />
           <Route path="/terminos" element={<Terms />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/galeria" element={<Gallery />} />
         </Routes>
       </Suspense>
     </Router>

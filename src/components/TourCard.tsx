@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { Clock, MapPin, ArrowRight, Tag } from "lucide-react";
-import { Tour } from "../data";
+import { Tour } from "../data/data";
+import { useCart } from "../context/CartContext";
 
 interface TourCardProps {
   tour: Tour;
@@ -10,6 +11,8 @@ interface TourCardProps {
 }
 
 export function TourCard({ tour, onClick, btnText, ofertaText }: TourCardProps) {
+  const { formatPrice, currency, exchangeRate } = useCart();
+
   return (
     <motion.article
       onClick={onClick}
@@ -43,9 +46,18 @@ export function TourCard({ tour, onClick, btnText, ofertaText }: TourCardProps) 
           <h3 className="font-black text-2xl text-neutral-900 leading-tight">{tour.title}</h3>
           <div className="flex flex-col items-end">
             {tour.originalPrice && (
-              <span className="text-sm text-neutral-400 line-through font-semibold mb-0.5">${tour.originalPrice}</span>
+              <span className="text-sm text-neutral-400 line-through font-semibold mb-0.5">{formatPrice(tour.originalPrice)}</span>
             )}
-            <span className="font-black text-2xl text-yellow-600">${tour.price}</span>
+            <span className="font-black text-2xl text-yellow-600 leading-none">{formatPrice(tour.price)}</span>
+            {currency === "USD" ? (
+              <span className="text-xs text-neutral-500 font-semibold mt-1">
+                (~${(Math.round((tour.price * exchangeRate) / 1000) * 1000).toLocaleString("es-CL")} CLP)
+              </span>
+            ) : (
+              <span className="text-xs text-neutral-500 font-semibold mt-1">
+                (${tour.price} USD)
+              </span>
+            )}
           </div>
         </div>
         

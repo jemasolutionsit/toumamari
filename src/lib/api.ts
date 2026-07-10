@@ -1,6 +1,6 @@
 import { supabase } from './supabase';
 import type { DbTour, DbContactMessage, DbBooking } from './database.types';
-import type { Tour } from '../data';
+import type { Tour } from '../data/data';
 
 const slugImageMap: Record<string, string> = {
   'full-day-anakena-moai':  '/images/tours/ahu-tongariki-dia.webp',

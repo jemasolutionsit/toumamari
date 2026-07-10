@@ -1,16 +1,16 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
 import { X, Trash2, MessageCircle, ShoppingCart, ShieldCheck, CalendarCheck, Loader2, CheckCircle, AlertCircle, User, Mail } from "lucide-react";
-import { useCart, unitPrice, unitPriceCLP } from "./CartContext";
-import { useLanguage } from "./i18n";
-import { createBooking, sendBookingConfirmation, getBookedSpotsForDate, DEFAULT_CAPACITY } from "./lib/api";
-import { CONTACT_INFO } from "./data";
-import { buildOrderMessage, buildWhatsAppUrl } from "./lib/whatsapp";
+import { useCart, unitPrice, unitPriceCLP } from "../context/CartContext";
+import { useLanguage } from "../context/i18n";
+import { createBooking, sendBookingConfirmation, getBookedSpotsForDate, DEFAULT_CAPACITY } from "../lib/api";
+import { CONTACT_INFO } from "../data/data";
+import { buildOrderMessage, buildWhatsAppUrl } from "../lib/whatsapp";
 
 type CheckoutStep = "cart" | "form" | "loading" | "success" | "error";
 
 export function CartDrawer() {
-  const { isCartOpen, setIsCartOpen, items, removeFromCart, updateTravelers, total } = useCart();
+  const { isCartOpen, setIsCartOpen, items, removeFromCart, updateTravelers, total, totalCLP, exchangeRate, formatPrice, currency } = useCart();
   const { t, language } = useLanguage();
 
   const [step, setStep] = useState<CheckoutStep>("cart");
@@ -20,11 +20,6 @@ export function CartDrawer() {
   // Se congela al confirmar: el carrito puede vaciarse antes de que el usuario
   // pulse el botón de WhatsApp, y el mensaje debe seguir describiendo el pedido.
   const [orderMessage, setOrderMessage] = useState("");
-
-  const totalCLP = items.reduce(
-    (sum, item) => sum + unitPriceCLP(item.tour, item.modality) * item.travelers,
-    0,
-  );
 
   const handleClose = () => {
     setIsCartOpen(false);
@@ -67,7 +62,7 @@ export function CartDrawer() {
           tour_id: item.tour.id,
           travel_date: item.date,
           travelers: item.travelers,
-          total_clp: unitPriceCLP(item.tour, item.modality) * item.travelers,
+          total_clp: unitPriceCLP(item.tour, item.modality, exchangeRate) * item.travelers,
           total_usd: unitPrice(item.tour, item.modality) * item.travelers,
           status: "pending",
           payment_method: null,
@@ -101,7 +96,7 @@ export function CartDrawer() {
         buildOrderMessage(items, total, totalCLP, language, {
           name: name.trim(),
           email: email.trim(),
-        }),
+        }, exchangeRate),
       );
       setStep("success");
     } catch (err) {
@@ -200,9 +195,20 @@ export function CartDrawer() {
                               >+</button>
                             </div>
                             <div className="flex items-center gap-4">
-                              <span className="font-black text-yellow-600">
-                                ${unitPrice(item.tour, item.modality) * item.travelers}
-                              </span>
+                              <div className="flex flex-col items-end">
+                                <span className="font-black text-yellow-600">
+                                  {formatPrice(unitPrice(item.tour, item.modality) * item.travelers)}
+                                </span>
+                                {currency === "USD" ? (
+                                  <span className="text-[10px] text-neutral-400 font-semibold">
+                                    (~${(unitPriceCLP(item.tour, item.modality, exchangeRate) * item.travelers).toLocaleString("es-CL")} CLP)
+                                  </span>
+                                ) : (
+                                  <span className="text-[10px] text-neutral-400 font-semibold">
+                                    (${unitPrice(item.tour, item.modality) * item.travelers} USD)
+                                  </span>
+                                )}
+                              </div>
                               <button onClick={() => removeFromCart(item.id)} className="text-neutral-400 hover:text-rose-500 transition-colors">
                                 <Trash2 className="w-5 h-5" />
                               </button>
@@ -218,7 +224,18 @@ export function CartDrawer() {
                   <div className="p-6 bg-white border-t border-neutral-200">
                     <div className="flex justify-between items-center mb-6">
                       <span className="font-bold text-neutral-500 uppercase tracking-wider text-sm">{t.cartTotal}</span>
-                      <span className="text-3xl font-black text-black">${total} USD</span>
+                      <div className="flex flex-col items-end">
+                        <span className="text-3xl font-black text-black">{formatPrice(total)}</span>
+                        {currency === "USD" ? (
+                          <span className="text-xs text-neutral-400 font-semibold mt-1">
+                            (~${totalCLP.toLocaleString("es-CL")} CLP)
+                          </span>
+                        ) : (
+                          <span className="text-xs text-neutral-400 font-semibold mt-1">
+                            (${total} USD)
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <motion.button
                       whileHover={{ scale: 1.02, y: -2, boxShadow: "0 15px 30px rgba(37,211,102,0.35)" }}
@@ -292,12 +309,17 @@ export function CartDrawer() {
                     {items.map(item => (
                       <div key={item.id} className="flex justify-between text-sm">
                         <span className="text-neutral-600 truncate mr-2">{item.tour.title} × {item.travelers}</span>
-                        <span className="font-bold text-neutral-900 shrink-0">${item.tour.price * item.travelers}</span>
+                        <span className="font-bold text-neutral-900 shrink-0">{formatPrice(unitPrice(item.tour, item.modality) * item.travelers)}</span>
                       </div>
                     ))}
                     <div className="border-t border-neutral-100 pt-2 flex justify-between font-black">
                       <span>{language === "es" ? "Total" : "Total"}</span>
-                      <span>${total} USD</span>
+                      <div className="flex flex-col items-end">
+                        <span className="text-neutral-900">{formatPrice(total)}</span>
+                        <span className="text-xs text-neutral-400 font-semibold">
+                          {currency === "USD" ? `(~${totalCLP.toLocaleString("es-CL")} CLP)` : `($${total} USD)`}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>

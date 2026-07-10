@@ -1,4 +1,4 @@
-import { unitPrice, unitPriceCLP, type CartItem } from "../CartContext";
+import { unitPrice, unitPriceCLP, type CartItem } from "../context/CartContext";
 
 /** Deja solo dígitos: wa.me rechaza "+", espacios y guiones. */
 const normalizePhone = (phone: string) => phone.replace(/\D/g, "");
@@ -9,6 +9,7 @@ export function buildOrderMessage(
   totalClp: number,
   language: "es" | "en",
   customer?: { name: string; email: string },
+  exchangeRate: number = 980
 ): string {
   const isEs = language === "es";
   const lines: string[] = [];
@@ -22,7 +23,7 @@ export function buildOrderMessage(
 
   items.forEach((item, i) => {
     const subtotalUsd = unitPrice(item.tour, item.modality) * item.travelers;
-    const subtotalClp = unitPriceCLP(item.tour, item.modality) * item.travelers;
+    const subtotalClp = unitPriceCLP(item.tour, item.modality, exchangeRate) * item.travelers;
     const modalidad =
       item.modality === "private" ? (isEs ? "Privado" : "Private") : isEs ? "Grupal" : "Group";
 

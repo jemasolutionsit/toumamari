@@ -1,5 +1,5 @@
 import { Layout } from "../components/Layout";
-import { useLanguage } from "../i18n";
+import { useLanguage } from "../context/i18n";
 import { Heart, Leaf, Users } from "lucide-react";
 
 export function SocialImpact() {

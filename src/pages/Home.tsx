@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef, memo } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from "motion/react";
 import { CalendarDays, MapPin, Clock, ArrowRight, Compass, Mail, X, Check, XCircle, Star, ShoppingCart, Anchor, Camera, UtensilsCrossed, Map, Users, Shield, Heart, Sparkles, ChevronDown, ChevronLeft, ChevronRight, Send, Phone } from "lucide-react";
-import { useLanguage } from "../i18n";
-import { useCart, unitPrice, type Modality } from "../CartContext";
-import { CONTACT_INFO, GALLERY_PHOTOS, getAbout, getReviews, getTours, getWhyUs, getCustomExperiences, Tour } from "../data";
+import { useLanguage } from "../context/i18n";
+import { useCart, unitPrice, unitPriceCLP, type Modality } from "../context/CartContext";
+import { Link } from "react-router-dom";
+import { CONTACT_INFO, GALLERY_PHOTOS, getAbout, getReviews, getTours, getWhyUs, getCustomExperiences, Tour } from "../data/data";
 import { fetchTours, getBookedSpotsForDate, DEFAULT_CAPACITY } from "../lib/api";
 import { submitContactMessage } from "../lib/api";
 
@@ -146,7 +147,7 @@ const customIcons: Record<string, typeof Heart> = {
 
 export function Home() {
   const { language, t } = useLanguage();
-  const { addToCart } = useCart();
+  const { addToCart, formatPrice, currency, exchangeRate } = useCart();
   const [scrolled, setScrolled] = useState(false);
   const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
   const [selectedDate, setSelectedDate] = useState("");
@@ -470,7 +471,7 @@ export function Home() {
         }}
       />
 
-      {/* ═══════════════ GALERÍA FOTOGRÁFICA ═══════════════ */}
+      {/* ═══════════════ GALERÍA FOTOGRÁFICA (TEASER) ═══════════════ */}
       <section id="galeria" className="py-16 md:py-24 bg-neutral-950 text-white relative overflow-hidden">
         <SiteMarquee lang={language} />
 
@@ -502,8 +503,8 @@ export function Home() {
             </motion.p>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {GALLERY_PHOTOS.map((photo, i) => (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            {GALLERY_PHOTOS.slice(0, 4).map((photo, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 40, scale: 0.97 }}
@@ -511,35 +512,46 @@ export function Home() {
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{
                   duration: 0.7,
-                  delay: (i % 4) * 0.09,
+                  delay: i * 0.1,
                   ease: EASE,
                 }}
-                className={`relative overflow-hidden rounded-xl group cursor-pointer h-44 sm:h-52 ${i % 14 === 0 || i % 14 === 8 ? "md:col-span-2 md:h-64" : ""}`}
+                className="relative overflow-hidden rounded-xl group cursor-default h-44 sm:h-52"
               >
-                <motion.img
+                <img
                   src={photo.src}
                   alt={language === 'es' ? photo.title_es : photo.title_en}
                   loading="lazy"
-                  decoding="async"
-                  width={1600}
-                  height={1200}
-                  className="w-full h-full object-cover"
-                  whileHover={{ scale: 1.07 }}
-                  transition={{ duration: 0.6, ease: EASE }}
+                  width={800}
+                  height={600}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-1 group-hover:translate-y-0 opacity-70 group-hover:opacity-100 transition-all duration-500">
-                  <p className="text-[#FFD700] text-[9px] font-bold uppercase tracking-[0.35em] mb-0.5">
+                <div className="absolute bottom-0 left-0 right-0 p-4 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                  <p className="text-[#FFD700] text-[8px] font-bold uppercase tracking-[0.3em] mb-0.5">
                     {language === 'es' ? photo.subtitle_es : photo.subtitle_en}
                   </p>
-                  <h3 className="text-white font-bold text-sm leading-tight">
+                  <h3 className="text-white font-bold text-xs truncate">
                     {language === 'es' ? photo.title_es : photo.title_en}
                   </h3>
                 </div>
-                <div className="absolute inset-0 ring-1 ring-white/0 group-hover:ring-[#FFD700]/30 rounded-xl transition-all duration-500" />
               </motion.div>
             ))}
           </div>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <Link 
+              to="/galeria" 
+              className="inline-flex items-center gap-3 bg-white/10 hover:bg-[#FFD700] hover:text-black text-white px-8 py-4 rounded-full font-bold uppercase tracking-wider transition-all border border-white/10 hover:border-[#FFD700] hover:shadow-[0_0_30px_rgba(255,215,0,0.25)]"
+            >
+              <Camera className="w-5 h-5" />
+              {language === 'es' ? "Ver Galería Completa" : "View Full Gallery"}
+            </Link>
+          </motion.div>
         </div>
       </section>
 
@@ -808,8 +820,14 @@ export function Home() {
                     <div>
                       <p className="text-sm text-neutral-400 font-bold uppercase tracking-wider mb-1">{t.modalPrice}</p>
                       <div className="flex items-center gap-2">
-                        <p className="text-2xl font-black text-yellow-600">${selectedTour.price} USD</p>
-                        {selectedTour.priceCLP && <p className="text-sm text-neutral-400">(${selectedTour.priceCLP.toLocaleString('es-CL')} CLP)</p>}
+                        <p className="text-2xl font-black text-yellow-600">{formatPrice(selectedTour.price)}</p>
+                        {currency === "USD" ? (
+                          <p className="text-sm text-neutral-400">
+                            (~${(Math.round((selectedTour.price * exchangeRate) / 1000) * 1000).toLocaleString("es-CL")} CLP)
+                          </p>
+                        ) : (
+                          <p className="text-sm text-neutral-400">(${selectedTour.price} USD)</p>
+                        )}
                       </div>
                       {selectedTour.minPassengers && <p className="text-xs text-neutral-400 mt-1">{t.minPassengers.replace('{n}', String(selectedTour.minPassengers))}</p>}
                     </div>
@@ -986,7 +1004,7 @@ export function Home() {
                                     : (language === 'es' ? 'Grupal' : 'Group')}
                                 </span>
                                 <span className="block text-xs font-semibold text-neutral-500">
-                                  ${price} USD {language === 'es' ? 'por persona' : 'per person'}
+                                  {formatPrice(price)} {language === 'es' ? 'por persona' : 'per person'}
                                 </span>
                               </button>
                             );
@@ -1011,7 +1029,16 @@ export function Home() {
               <div className="p-6 md:p-8 bg-white border-t border-neutral-100 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] flex items-center justify-between gap-6">
                 <div>
                   <p className="text-neutral-500 text-sm font-semibold">{t.modalTotal}</p>
-                  <p className="text-3xl font-black text-neutral-900">${unitPrice(selectedTour, modality) * travelers}</p>
+                  <p className="text-3xl font-black text-neutral-900 leading-none">{formatPrice(unitPrice(selectedTour, modality) * travelers)}</p>
+                  {currency === "USD" ? (
+                    <p className="text-xs text-neutral-400 font-semibold mt-1">
+                      (~${(unitPriceCLP(selectedTour, modality, exchangeRate) * travelers).toLocaleString("es-CL")} CLP)
+                    </p>
+                  ) : (
+                    <p className="text-xs text-neutral-400 font-semibold mt-1">
+                      (${unitPrice(selectedTour, modality) * travelers} USD)
+                    </p>
+                  )}
                 </div>
                 <button onClick={() => {
                   if (!selectedDate) {

@@ -1,5 +1,5 @@
 import { Layout } from "../components/Layout";
-import { useLanguage } from "../i18n";
+import { useLanguage } from "../context/i18n";
 
 export function Terms() {
   const { t } = useLanguage();

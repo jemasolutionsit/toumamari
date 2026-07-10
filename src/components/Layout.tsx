@@ -2,10 +2,10 @@ import { ReactNode, useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Globe, Instagram, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { useLanguage } from "../i18n";
-import { useCart } from "../CartContext";
-import { CONTACT_INFO } from "../data";
-import { CartDrawer } from "../Cart";
+import { useLanguage } from "../context/i18n";
+import { useCart } from "../context/CartContext";
+import { CONTACT_INFO } from "../data/data";
+import { CartDrawer } from "./Cart";
 
 function WhatsAppIcon() {
   return (
@@ -17,7 +17,7 @@ function WhatsAppIcon() {
 
 export function Layout({ children, scrolled }: { children: ReactNode; scrolled: boolean }) {
   const { language, setLanguage, t } = useLanguage();
-  const { items, setIsCartOpen } = useCart();
+  const { items, setIsCartOpen, currency, setCurrency } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const cartCount = items.reduce((sum, item) => sum + item.travelers, 0);
 
@@ -26,6 +26,7 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
     { to: "/#tours", label: t.navTours, type: "hash" as const },
     { to: "/guia", label: t.navGuia, type: "route" as const },
     { to: "/impacto", label: t.navImpacto, type: "route" as const },
+    { to: "/galeria", label: language === "es" ? "Galería" : "Gallery", type: "route" as const },
   ];
 
   return (
@@ -65,6 +66,7 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
             <a href="/#tours" className="text-neutral-300 hover:text-[#FFD700] transition-colors">{t.navTours}</a>
             <Link to="/guia" className="text-neutral-300 hover:text-[#FFD700] transition-colors">{t.navGuia}</Link>
             <Link to="/impacto" className="text-neutral-300 hover:text-[#FFD700] transition-colors">{t.navImpacto}</Link>
+            <Link to="/galeria" className="text-neutral-300 hover:text-[#FFD700] transition-colors">{language === "es" ? "Galería" : "Gallery"}</Link>
           </nav>
 
           <div className="flex items-center gap-3 md:gap-5">
@@ -73,11 +75,31 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value as "es" | "en")}
-                className="bg-transparent text-sm text-neutral-300 outline-none cursor-pointer focus:text-white"
+                className="bg-transparent text-sm text-neutral-300 outline-none cursor-pointer focus:text-white mr-2"
               >
                 <option value="es" className="bg-neutral-900">ES</option>
                 <option value="en" className="bg-neutral-900">EN</option>
               </select>
+            </div>
+
+            {/* Currency selector (USD / CLP) */}
+            <div className="hidden sm:flex items-center bg-white/10 rounded-full p-0.5 border border-white/10">
+              <button
+                onClick={() => setCurrency("USD")}
+                className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                  currency === "USD" ? "bg-[#FFD700] text-black shadow-md" : "text-neutral-300 hover:text-white"
+                }`}
+              >
+                USD
+              </button>
+              <button
+                onClick={() => setCurrency("CLP")}
+                className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                  currency === "CLP" ? "bg-[#FFD700] text-black shadow-md" : "text-neutral-300 hover:text-white"
+                }`}
+              >
+                CLP
+              </button>
             </div>
             <button onClick={() => setIsCartOpen(true)} aria-label={t.cart} className="relative group text-white hover:text-[#FFD700] transition-colors flex items-center gap-2">
               <ShoppingCart className="w-6 h-6 md:w-5 md:h-5" />
@@ -139,12 +161,30 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
                     {(["es", "en"] as const).map((lng) => (
                       <button
                         key={lng}
-                        onClick={() => setLanguage(lng)}
+                        onClick={() => { setLanguage(lng); setMenuOpen(false); }}
                         className={`px-4 py-1.5 rounded-full text-sm font-bold uppercase transition-all ${
                           language === lng ? "bg-[#FFD700] text-black" : "bg-white/10 text-neutral-300"
                         }`}
                       >
                         {lng}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Currency toggle inside menu */}
+                <div className="flex items-center gap-3 mt-2 pt-3 border-t border-white/10 px-3">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#FFD700]">Moneda:</span>
+                  <div className="flex gap-2">
+                    {(["USD", "CLP"] as const).map((curr) => (
+                      <button
+                        key={curr}
+                        onClick={() => { setCurrency(curr); setMenuOpen(false); }}
+                        className={`px-4 py-1.5 rounded-full text-sm font-bold uppercase transition-all ${
+                          currency === curr ? "bg-[#FFD700] text-black" : "bg-white/10 text-neutral-300"
+                        }`}
+                      >
+                        {curr}
                       </button>
                     ))}
                   </div>
