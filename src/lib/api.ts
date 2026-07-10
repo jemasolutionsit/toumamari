@@ -106,16 +106,17 @@ export const DEFAULT_CAPACITY: Record<string, number> = {
 };
 
 export async function getBookedSpotsForDate(tourId: string, date: string): Promise<number> {
-  const { data, error } = await supabase
-    .from('bookings')
-    .select('travelers')
-    .eq('tour_id', tourId)
-    .eq('travel_date', date)
-    .neq('status', 'cancelled');
+  // RPC en vez de un select directo: bookings solo permite INSERT público
+  // (ver migración 002). Un select abierto expondría guest_name/guest_email
+  // de todas las reservas a cualquiera con la clave pública; esta función
+  // vive en la base con SECURITY DEFINER y devuelve solo el conteo agregado.
+  const { data, error } = await supabase.rpc('get_booked_spots', {
+    p_tour_id: tourId,
+    p_travel_date: date,
+  });
 
   if (error) throw error;
-  if (!data || data.length === 0) return 0;
-  return (data as { travelers: number }[]).reduce((sum, row) => sum + row.travelers, 0);
+  return data ?? 0;
 }
 
 // ── Admin queries ──────────────────────────────────────────────────────────

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import type { Session } from "@supabase/supabase-js";
 import { Eye, EyeOff, LogOut, RefreshCw, Check, X, ChevronDown, Plus, Pencil, Trash2 } from "lucide-react";
 import {
   adminFetchAllTours,
@@ -17,8 +18,7 @@ import {
 } from "../lib/api";
 import type { DiscountCode } from "../lib/api";
 import type { DbTour, DbBooking, DbContactMessage } from "../lib/database.types";
-
-const PASSWORD = "toumamari2024";
+import { supabase } from "../lib/supabase";
 
 // ── helpers ────────────────────────────────────────────────────────────────
 
@@ -1184,15 +1184,22 @@ function ReportesTab() {
 
 // ── Login gate ─────────────────────────────────────────────────────────────
 
-function LoginGate({ onAuth }: { onAuth: () => void }) {
+function LoginGate() {
+  const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [show, setShow] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (pw === PASSWORD) { onAuth(); }
-    else { setError(true); setTimeout(() => setError(false), 2000); }
+    setLoading(true);
+    setError("");
+    // onAuthStateChange en Admin() recoge la sesión y refresca la vista;
+    // no hace falta un callback local de éxito.
+    const { error } = await supabase.auth.signInWithPassword({ email, password: pw });
+    setLoading(false);
+    if (error) setError(error.message);
   };
 
   return (
@@ -1207,13 +1214,27 @@ function LoginGate({ onAuth }: { onAuth: () => void }) {
         </div>
         <form onSubmit={submit} className="space-y-4">
           <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              autoFocus
+              required
+              autoComplete="username"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:border-yellow-400"
+              placeholder="admin@correo.com"
+            />
+          </div>
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <div className="relative">
               <input
                 type={show ? "text" : "password"}
                 value={pw}
                 onChange={e => setPw(e.target.value)}
-                autoFocus
+                required
+                autoComplete="current-password"
                 className={`w-full border rounded-lg px-3 py-2 pr-10 text-sm focus:outline-none focus:ring-2 transition-colors ${
                   error ? "border-red-400 focus:ring-red-200" : "border-gray-300 focus:ring-yellow-300 focus:border-yellow-400"
                 }`}
@@ -1227,13 +1248,14 @@ function LoginGate({ onAuth }: { onAuth: () => void }) {
                 {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
-            {error && <p className="mt-1 text-xs text-red-500">Incorrect password</p>}
+            {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
           </div>
           <button
             type="submit"
-            className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 rounded-lg transition-colors text-sm"
+            disabled={loading}
+            className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 rounded-lg transition-colors text-sm disabled:opacity-50"
           >
-            Sign In
+            {loading ? "Ingresando…" : "Sign In"}
           </button>
         </form>
       </div>
@@ -1246,11 +1268,26 @@ function LoginGate({ onAuth }: { onAuth: () => void }) {
 type Tab = "tours" | "bookings" | "messages" | "cupones" | "reportes";
 
 export function Admin() {
-  const [authed, setAuthed] = useState(false);
+  // undefined = todavía comprobando si hay sesión guardada; null = sin sesión.
+  const [session, setSession] = useState<Session | null | undefined>(undefined);
   const [tab, setTab] = useState<Tab>("tours");
   const [refreshKey, setRefreshKey] = useState(0);
 
-  if (!authed) return <LoginGate onAuth={() => setAuthed(true)} />;
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  if (session === undefined) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <RefreshCw className="w-6 h-6 text-gray-400 animate-spin" />
+      </div>
+    );
+  }
+
+  if (!session) return <LoginGate />;
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "tours", label: "Tours" },
@@ -1280,7 +1317,7 @@ export function Admin() {
               <RefreshCw className="w-4 h-4" />
             </button>
             <button
-              onClick={() => setAuthed(false)}
+              onClick={() => supabase.auth.signOut()}
               className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-800 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors"
             >
               <LogOut className="w-3.5 h-3.5" />
