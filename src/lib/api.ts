@@ -3,12 +3,12 @@ import type { DbTour, DbContactMessage, DbBooking } from './database.types';
 import type { Tour } from '../data';
 
 const slugImageMap: Record<string, string> = {
-  'full-day-anakena-moai':  '/images/tours/ahu-tongariki-dia.jpg',
-  'orongo-tangata-manu':    '/images/tours/rano-kau-crater.jpg',
-  'amanecer-tongariki':     '/images/tours/ahu-tongariki-amanecer.jpg',
-  'experiencia-motu':       '/images/tours/motu-islotes.jpg',
-  'tour-navegable-anakena': '/images/tours/cueva-ana-kakenga.jpg',
-  'super-full-day-privado': '/images/tours/rano-raraku-sector1.jpg',
+  'full-day-anakena-moai':  '/images/tours/ahu-tongariki-dia.webp',
+  'orongo-tangata-manu':    '/images/tours/rano-kau-crater.webp',
+  'amanecer-tongariki':     '/images/tours/ahu-tongariki-amanecer.webp',
+  'experiencia-motu':       '/images/tours/motu-islotes.webp',
+  'tour-navegable-anakena': '/images/tours/cueva-ana-kakenga.webp',
+  'super-full-day-privado': '/images/tours/rano-raraku-sector1.webp',
 };
 
 function dbTourToTour(t: DbTour, lang: 'es' | 'en'): Tour {

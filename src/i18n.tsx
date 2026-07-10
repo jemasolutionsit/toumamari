@@ -52,7 +52,7 @@ interface Translations {
   cartDate: string;
   cartTravelers: string;
   cartTotal: string;
-  cartPayPayPal: string;
+  cartQuoteWhatsApp: string;
   cartSecurePayment: string;
   cartFlexibleCancel: string;
   modalAddDate: string;
@@ -129,7 +129,7 @@ const translations: Record<Language, Translations> = {
     cartDate: "Fecha",
     cartTravelers: "Viajeros",
     cartTotal: "Subtotal",
-    cartPayPayPal: "Pagar con PayPal",
+    cartQuoteWhatsApp: "Cotizar por WhatsApp",
     cartSecurePayment: "Pago 100% seguro",
     cartFlexibleCancel: "Cancelación flexible",
     modalAddDate: "Selecciona Fecha",
@@ -204,7 +204,7 @@ const translations: Record<Language, Translations> = {
     cartDate: "Date",
     cartTravelers: "Travelers",
     cartTotal: "Subtotal",
-    cartPayPayPal: "Pay with PayPal",
+    cartQuoteWhatsApp: "Quote via WhatsApp",
     cartSecurePayment: "100% secure payment",
     cartFlexibleCancel: "Flexible cancellation",
     modalAddDate: "Select Date",

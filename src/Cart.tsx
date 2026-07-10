@@ -1,10 +1,11 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
-import { X, Trash2, CreditCard, ShoppingCart, ShieldCheck, CalendarCheck, Loader2, CheckCircle, AlertCircle, User, Mail } from "lucide-react";
+import { X, Trash2, MessageCircle, ShoppingCart, ShieldCheck, CalendarCheck, Loader2, CheckCircle, AlertCircle, User, Mail } from "lucide-react";
 import { useCart } from "./CartContext";
 import { useLanguage } from "./i18n";
 import { createBooking, sendBookingConfirmation, getBookedSpotsForDate, DEFAULT_CAPACITY } from "./lib/api";
 import { CONTACT_INFO } from "./data";
+import { buildOrderMessage, buildWhatsAppUrl } from "./lib/whatsapp";
 
 type CheckoutStep = "cart" | "form" | "loading" | "success" | "error";
 
@@ -16,6 +17,9 @@ export function CartDrawer() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  // Se congela al confirmar: el carrito puede vaciarse antes de que el usuario
+  // pulse el botón de WhatsApp, y el mensaje debe seguir describiendo el pedido.
+  const [orderMessage, setOrderMessage] = useState("");
 
   const totalCLP = items.reduce((sum, item) => sum + (item.tour.priceCLP ?? 0) * item.travelers, 0);
 
@@ -90,6 +94,12 @@ export function CartDrawer() {
         // silently ignore — booking already saved to Supabase
       }
 
+      setOrderMessage(
+        buildOrderMessage(items, total, totalCLP, language, {
+          name: name.trim(),
+          email: email.trim(),
+        }),
+      );
       setStep("success");
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : "Unknown error");
@@ -163,7 +173,7 @@ export function CartDrawer() {
                         whileHover={{ y: -2, boxShadow: "0 10px 25px rgba(0,0,0,0.08)" }}
                         className="flex gap-4 bg-white p-4 rounded-2xl shadow-sm border border-neutral-100"
                       >
-                        <img src={item.tour.image} alt={item.tour.title} className="w-24 h-24 object-cover rounded-xl" />
+                        <img src={item.tour.image} alt={item.tour.title} loading="lazy" decoding="async" width={96} height={96} className="w-24 h-24 object-cover rounded-xl" />
                         <div className="flex-1 flex flex-col">
                           <h4 className="font-bold text-sm leading-tight mb-2 text-neutral-900">{item.tour.title}</h4>
                           <p className="text-xs text-neutral-500 mb-auto">{t.cartDate}: <span className="font-semibold text-neutral-900">{item.date}</span></p>
@@ -201,13 +211,13 @@ export function CartDrawer() {
                       <span className="text-3xl font-black text-black">${total} USD</span>
                     </div>
                     <motion.button
-                      whileHover={{ scale: 1.02, y: -2, boxShadow: "0 15px 30px rgba(255,196,57,0.35)" }}
+                      whileHover={{ scale: 1.02, y: -2, boxShadow: "0 15px 30px rgba(37,211,102,0.35)" }}
                       whileTap={{ scale: 0.98 }}
                       onClick={handleProceedToForm}
-                      className="w-full bg-[#FFC439] hover:bg-[#F4BB33] text-black py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 shadow-[0_10px_20px_rgba(255,196,57,0.2)] mb-4"
+                      className="w-full bg-[#25d366] hover:bg-[#1fba59] text-white py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 shadow-[0_10px_20px_rgba(37,211,102,0.2)] mb-4"
                     >
-                      <CreditCard className="w-6 h-6" />
-                      {t.cartPayPayPal}
+                      <MessageCircle className="w-6 h-6" />
+                      {t.cartQuoteWhatsApp}
                     </motion.button>
                     <div className="flex flex-col gap-2 mt-4 text-xs font-semibold text-neutral-500 items-center justify-center text-center">
                       <p className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-emerald-500" /> {t.cartSecurePayment}</p>
@@ -292,9 +302,9 @@ export function CartDrawer() {
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 bg-[#FFC439] hover:bg-[#F4BB33] text-black py-3 rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2"
+                    className="flex-1 bg-[#25d366] hover:bg-[#1fba59] text-white py-3 rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2"
                   >
-                    <CreditCard className="w-4 h-4" />
+                    <MessageCircle className="w-4 h-4" />
                     {language === "es" ? "Confirmar reserva" : "Confirm booking"}
                   </button>
                 </div>
@@ -326,12 +336,13 @@ export function CartDrawer() {
                   </p>
                 </div>
                 <a
-                  href={`https://wa.me/${CONTACT_INFO.whatsapp.replace(/\D/g, '')}`}
+                  href={buildWhatsAppUrl(CONTACT_INFO.whatsapp, orderMessage)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-[#25d366] text-white px-6 py-3 rounded-2xl font-bold text-sm hover:bg-[#1fba59] transition-colors"
+                  className="bg-[#25d366] text-white px-6 py-3 rounded-2xl font-bold text-sm hover:bg-[#1fba59] transition-colors flex items-center gap-2"
                 >
-                  {language === "es" ? "Contactar por WhatsApp" : "Contact via WhatsApp"}
+                  <MessageCircle className="w-4 h-4" />
+                  {language === "es" ? "Enviar pedido por WhatsApp" : "Send order via WhatsApp"}
                 </a>
                 <button
                   onClick={handleClose}

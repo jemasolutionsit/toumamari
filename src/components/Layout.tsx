@@ -42,7 +42,7 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
           <Link to="/" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 md:gap-4 cursor-pointer">
             <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-[#FFD700] flex items-center justify-center bg-black shadow-[0_0_15px_rgba(255,215,0,0.3)] flex-shrink-0">
               <img
-                src="/logo.jpg"
+                src="/logo.webp"
                 alt="Toumamari Tour Logo"
                 className="w-full h-full object-cover"
                 onError={(e) => {
@@ -163,7 +163,7 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
           <div className="flex flex-col items-center md:items-start">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-md overflow-hidden bg-white/5 border border-neutral-800">
-                <img src="/logo.jpg" alt="Toumamari Tour" className="w-full h-full object-cover" />
+                <img src="/logo.webp" alt="Toumamari Tour" className="w-full h-full object-cover" />
               </div>
               <span className="font-bold text-xl text-white tracking-widest">TOUMAMARI</span>
             </div>

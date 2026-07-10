@@ -16,7 +16,9 @@ Toumamari — bilingual (ES/EN) single-page site for booking Easter Island (Rapa
 
 ## Architecture
 
-**Single server, two roles** (`server.ts`): in dev it mounts Vite in middleware mode (SPA); in production it serves static `dist/` with a React-Router fallback to `index.html`. The same Express app exposes `/api/*` routes. PayPal endpoints (`/api/payments/create-order`, `/api/payments/webhook`) are stubs — payment + booking persistence is intended to run server-side here so secrets stay off the client.
+**Single server, two roles** (`server.ts`): in dev it mounts Vite in middleware mode (SPA); in production it serves static `dist/` with a React-Router fallback to `index.html`. The same Express app exposes `/api/*` routes: `/api/health` and `/api/bookings/confirm` (Resend email).
+
+**No payment gateway.** Checkout writes the booking to Supabase, sends the confirmation email, then hands the order to WhatsApp via a prefilled `wa.me` link (`src/lib/whatsapp.ts`). Payment is arranged off-site. The PayPal stubs were removed.
 
 **Routing** (`src/App.tsx`): React Router v7 with four routes — `/`, `/guia` (TravelGuide), `/impacto` (SocialImpact), `/terminos` (Terms). Most of the experience lives on Home.
 
@@ -39,4 +41,6 @@ Toumamari — bilingual (ES/EN) single-page site for booking Easter Island (Rapa
 
 ## Env
 
-`.env.local` (gitignored). Keys: `GEMINI_API_KEY`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and server-side PayPal secrets (`PAYPAL_CLIENT_SECRET`, `PAYPAL_WEBHOOK_ID`). Only `VITE_`-prefixed vars reach the client.
+`.env.local` (gitignored). Keys: `GEMINI_API_KEY`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`. Only `VITE_`-prefixed vars reach the client — and Vite inlines them at **build** time, so Vercel must have them set before the build runs, not after.
+
+`supabase.ts` deliberately does not call `createClient` when config is missing: it would throw during module evaluation and blank the page. It exports a proxy that fails on first query instead, letting `Home.tsx` fall back to the hardcoded tours.

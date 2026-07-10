@@ -44,7 +44,7 @@ import { TourCard } from "../components/TourCard";
 import { Layout } from "../components/Layout";
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
-const HERO_VIDEOS = ["/videos/rapanui-video1.mp4", "/videos/rapanui-video2.mp4"];
+const PROMO_VIDEOS = ["/videos/rapanui-video1.mp4", "/videos/rapanui-video2.mp4"];
 
 function AnimatedCounter({ target, suffix = "" }: { target: number | string; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -155,7 +155,6 @@ export function Home() {
   const contactForm = useContactForm();
 
   const [tours, setTours] = useState<Tour[]>(() => getTours(language));
-  const [heroVideoIndex, setHeroVideoIndex] = useState(0);
   const [promoVideoIndex, setPromoVideoIndex] = useState(0);
   const [promoDir, setPromoDir] = useState(1);
 
@@ -277,21 +276,18 @@ export function Home() {
         <ParticleField />
 
         <motion.div style={{ y: heroY, scale: heroScale }} className="absolute inset-0 w-full h-full">
-          <AnimatePresence mode="sync">
-            <motion.video
-              key={heroVideoIndex}
-              autoPlay
-              muted
-              playsInline
-              onEnded={() => setHeroVideoIndex(i => (i + 1) % HERO_VIDEOS.length)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.7 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.8, ease: "easeInOut" }}
-              className="absolute inset-0 w-full h-full object-cover"
-              src={HERO_VIDEOS[heroVideoIndex]}
-            />
-          </AnimatePresence>
+          {/* Antes había aquí un video en autoplay que trababa el scroll en equipos
+              modestos. Una imagen fija da el mismo efecto sin bloquear el hilo. */}
+          <img
+            src="/hero-fondo.webp"
+            alt=""
+            aria-hidden="true"
+            fetchPriority="high"
+            decoding="async"
+            width={1920}
+            height={1080}
+            className="absolute inset-0 w-full h-full object-cover opacity-70"
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
         </motion.div>
 
@@ -361,10 +357,12 @@ export function Home() {
                 >
                   <video
                     controls
+                    muted
                     playsInline
-                    preload="metadata"
+                    preload="none"
+                    poster="/hero-fondo.webp"
                     className="w-full h-full object-cover"
-                    src={HERO_VIDEOS[promoVideoIndex]}
+                    src={PROMO_VIDEOS[promoVideoIndex]}
                   />
                 </motion.div>
               </AnimatePresence>
@@ -372,14 +370,14 @@ export function Home() {
 
             {/* arrows */}
             <button
-              onClick={() => { setPromoDir(-1); setPromoVideoIndex(i => (i - 1 + HERO_VIDEOS.length) % HERO_VIDEOS.length); }}
+              onClick={() => { setPromoDir(-1); setPromoVideoIndex(i => (i - 1 + PROMO_VIDEOS.length) % PROMO_VIDEOS.length); }}
               aria-label="Anterior"
               className="absolute left-2 md:-left-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white hover:bg-[#FFD700] hover:text-black hover:border-[#FFD700] transition-all duration-200 z-10"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
-              onClick={() => { setPromoDir(1); setPromoVideoIndex(i => (i + 1) % HERO_VIDEOS.length); }}
+              onClick={() => { setPromoDir(1); setPromoVideoIndex(i => (i + 1) % PROMO_VIDEOS.length); }}
               aria-label="Siguiente"
               className="absolute right-2 md:-right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white hover:bg-[#FFD700] hover:text-black hover:border-[#FFD700] transition-all duration-200 z-10"
             >
@@ -388,7 +386,7 @@ export function Home() {
 
             {/* dots */}
             <div className="flex justify-center gap-2 mt-5">
-              {HERO_VIDEOS.map((_, i) => (
+              {PROMO_VIDEOS.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => { if (i !== promoVideoIndex) { setPromoDir(i > promoVideoIndex ? 1 : -1); setPromoVideoIndex(i); } }}
@@ -516,6 +514,9 @@ export function Home() {
                   src={photo.src}
                   alt={language === 'es' ? photo.title_es : photo.title_en}
                   loading="lazy"
+                  decoding="async"
+                  width={1600}
+                  height={1200}
                   className="w-full h-full object-cover"
                   whileHover={{ scale: 1.07 }}
                   transition={{ duration: 0.6, ease: EASE }}
