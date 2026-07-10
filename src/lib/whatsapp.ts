@@ -15,8 +15,8 @@ export function buildOrderMessage(
 
   lines.push(
     isEs
-      ? "¡Hola! Me gustaría coordinar la siguiente reserva desde la web:"
-      : "Hello! I'd like to arrange the following booking from the website:",
+      ? "¡Hola! Me gustaría coordinar el siguiente pedido desde la web:"
+      : "Hello! I'd like to arrange the following order from the website:",
     "",
   );
 
@@ -50,7 +50,9 @@ export function buildOrderMessage(
   lines.push("");
   lines.push(
     isEs
-      ? "Quedo a la espera de la confirmación para coordinar el pago. ¡Gracias!"
+      // El informe dice "coordinar el pago y la entrega"; aquí no hay entrega
+      // física, se coordina el punto de encuentro del tour.
+      ? "Quedo a la espera de confirmación para coordinar el pago. ¡Gracias!"
       : "Looking forward to your confirmation to arrange payment. Thank you!",
   );
 

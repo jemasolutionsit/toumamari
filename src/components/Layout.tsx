@@ -44,6 +44,9 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
               <img
                 src="/logo.webp"
                 alt="Touamamari Tour Logo"
+                width={48}
+                height={48}
+                decoding="async"
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
@@ -163,7 +166,7 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
           <div className="flex flex-col items-center md:items-start">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-md overflow-hidden bg-white/5 border border-neutral-800">
-                <img src="/logo.webp" alt="Touamamari Tour" className="w-full h-full object-cover" />
+                <img src="/logo.webp" alt="Touamamari Tour" loading="lazy" decoding="async" width={48} height={48} className="w-full h-full object-cover" />
               </div>
               <span className="font-bold text-xl text-white tracking-widest">TOUAMAMARI</span>
             </div>
