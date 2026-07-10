@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
 import { X, Trash2, MessageCircle, ShoppingCart, ShieldCheck, CalendarCheck, Loader2, CheckCircle, AlertCircle, User, Mail } from "lucide-react";
-import { useCart } from "./CartContext";
+import { useCart, unitPrice, unitPriceCLP } from "./CartContext";
 import { useLanguage } from "./i18n";
 import { createBooking, sendBookingConfirmation, getBookedSpotsForDate, DEFAULT_CAPACITY } from "./lib/api";
 import { CONTACT_INFO } from "./data";
@@ -21,7 +21,10 @@ export function CartDrawer() {
   // pulse el botón de WhatsApp, y el mensaje debe seguir describiendo el pedido.
   const [orderMessage, setOrderMessage] = useState("");
 
-  const totalCLP = items.reduce((sum, item) => sum + (item.tour.priceCLP ?? 0) * item.travelers, 0);
+  const totalCLP = items.reduce(
+    (sum, item) => sum + unitPriceCLP(item.tour, item.modality) * item.travelers,
+    0,
+  );
 
   const handleClose = () => {
     setIsCartOpen(false);
@@ -64,12 +67,12 @@ export function CartDrawer() {
           tour_id: item.tour.id,
           travel_date: item.date,
           travelers: item.travelers,
-          total_clp: (item.tour.priceCLP ?? 0) * item.travelers,
-          total_usd: item.tour.price * item.travelers,
+          total_clp: unitPriceCLP(item.tour, item.modality) * item.travelers,
+          total_usd: unitPrice(item.tour, item.modality) * item.travelers,
           status: "pending",
           payment_method: null,
           payment_id: null,
-          notes: null,
+          notes: `modalidad: ${item.modality}`,
         });
       }
 
@@ -176,7 +179,14 @@ export function CartDrawer() {
                         <img src={item.tour.image} alt={item.tour.title} loading="lazy" decoding="async" width={96} height={96} className="w-24 h-24 object-cover rounded-xl" />
                         <div className="flex-1 flex flex-col">
                           <h4 className="font-bold text-sm leading-tight mb-2 text-neutral-900">{item.tour.title}</h4>
-                          <p className="text-xs text-neutral-500 mb-auto">{t.cartDate}: <span className="font-semibold text-neutral-900">{item.date}</span></p>
+                          <p className="text-xs text-neutral-500 mb-auto">
+                            {t.cartDate}: <span className="font-semibold text-neutral-900">{item.date}</span>
+                            <span className="ml-2 inline-block rounded-full bg-neutral-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-neutral-600">
+                              {item.modality === "private"
+                                ? (language === "es" ? "Privado" : "Private")
+                                : (language === "es" ? "Grupal" : "Group")}
+                            </span>
+                          </p>
                           <div className="flex items-center justify-between mt-3">
                             <div className="flex items-center gap-3">
                               <button
@@ -191,7 +201,7 @@ export function CartDrawer() {
                             </div>
                             <div className="flex items-center gap-4">
                               <span className="font-black text-yellow-600">
-                                ${item.tour.price * item.travelers}
+                                ${unitPrice(item.tour, item.modality) * item.travelers}
                               </span>
                               <button onClick={() => removeFromCart(item.id)} className="text-neutral-400 hover:text-rose-500 transition-colors">
                                 <Trash2 className="w-5 h-5" />

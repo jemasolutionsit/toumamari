@@ -1,8 +1,12 @@
 export interface Tour {
   id: string;
   title: string;
+  /** Precio por persona en modalidad grupal (USD). */
   price: number;
   priceCLP?: number;
+  /** Precio por persona en modalidad privada (USD). Ausente = no se ofrece. */
+  pricePrivate?: number;
+  pricePrivateCLP?: number;
   originalPrice?: number;
   discountPercentage?: number;
   categoryId: string;
@@ -21,12 +25,13 @@ export const getTours = (lang: 'es' | 'en'): Tour[] => [
   {
     id: "1",
     title: lang === 'es' ? "Full Day Ruta Anakena y Moai" : "Full Day Anakena & Moai Route",
-    price: 55,
+    price: 70,
     priceCLP: 45000,
+    pricePrivate: 120,
     categoryId: "full-day",
     type: "Full Day",
     duration: lang === 'es' ? "Día completo" : "Full day",
-    description: lang === 'es' ? "Recorre Vaihu, Rano Raraku, Ahu Tongariki, Te Pito Kura, Ovahe, Playa Anakena y Ahu Nau Nau." : "Visit Vaihu, Rano Raraku, Ahu Tongariki, Te Pito Kura, Ovahe, Anakena Beach and Ahu Nau Nau.",
+    description: lang === 'es' ? "Recorre Vaihu, Rano Raraku, Ahu Tongariki, Te Pito Kura, Playa Anakena y Ahu Nau Nau." : "Visit Vaihu, Rano Raraku, Ahu Tongariki, Te Pito Kura, Anakena Beach and Ahu Nau Nau.",
     longDescription: lang === 'es' ? "El recorrido más completo de Rapa Nui. Comenzamos en Ahu Vaihu, donde 8 moais yacen boca abajo desde las guerras civiles del siglo XVIII — mantenidos sin restaurar como acto deliberado de memoria histórica. Seguimos a Rano Raraku, el volcán-cantera donde se tallaron casi 400 moais; los semienterrados en sus laderas no quedaron por olvido, sino que fueron colocados de pie en fosas rituales como guardianes eternos del volcán sagrado. En Ahu Tongariki contemplamos los 15 moais restaurados tras el devastador tsunami de 1960 que los arrastró tierra adentro. Visitamos Te Pito Kura y la enigmática piedra magnética esférica (Te Pito o te Henua — El Ombligo del Mundo), junto al caído Moai Paro, el más grande jamás transportado e instalado con éxito: casi 10 metros y 80 toneladas. Terminamos en la playa de reyes de Anakena, de aguas turquesas, junto al Ahu Nau Nau." : "Rapa Nui's most complete route. We start at Ahu Vaihu, where 8 moais lie face-down since the 18th-century civil wars — left unrestored as a deliberate act of historical memory. We continue to Rano Raraku, the quarry volcano where nearly 400 moais were carved; those semiburied on its slopes were not abandoned but deliberately placed upright in ritual pits as eternal guardians of the sacred volcano. At Ahu Tongariki we stand before the 15 moais restored after the devastating 1960 tsunami that swept them inland. We visit Te Pito Kura and the enigmatic magnetic spherical stone (Te Pito o te Henua — The Navel of the World), beside the fallen Moai Paro, the largest ever successfully transported and installed: nearly 10 meters tall and 80 tons. We finish at Anakena, the kings' beach of turquoise waters, beside Ahu Nau Nau.",
     image: "/images/tours/ahu-tongariki-dia.webp",
     included: lang === 'es' ? ["Traslado ida y vuelta", "Guía local experto", "Experiencia cultural", "Tiempo para fotografías"] : ["Round trip transportation", "Expert local guide", "Cultural experience", "Photo time"],
@@ -36,7 +41,7 @@ export const getTours = (lang: 'es' | 'en'): Tour[] => [
       { time: "10:00 AM", title: "Vaihu", desc: "Primera parada en plataforma ancestral." },
       { time: "11:00 AM", title: "Rano Raraku", desc: "Trekking suave por la cantera de los moais." },
       { time: "12:30 PM", title: "Ahu Tongariki", desc: "Los 15 moais más emblemáticos de la isla." },
-      { time: "02:00 PM", title: "Te Pito Kura & Ovahe", desc: "El ombligo del mundo y caleta secreta." },
+      { time: "02:00 PM", title: "Te Pito Kura", desc: "El ombligo del mundo." },
       { time: "03:30 PM", title: "Playa Anakena", desc: "Tiempo libre, Ahu Nau Nau y relax." },
       { time: "05:30 PM", title: "Regreso", desc: "Retorno a Hanga Roa." }
     ] : [
@@ -44,7 +49,7 @@ export const getTours = (lang: 'es' | 'en'): Tour[] => [
       { time: "10:00 AM", title: "Vaihu", desc: "First stop at ancestral platform." },
       { time: "11:00 AM", title: "Rano Raraku", desc: "Gentle trekking through moai quarry." },
       { time: "12:30 PM", title: "Ahu Tongariki", desc: "The 15 most emblematic moais of the island." },
-      { time: "02:00 PM", title: "Te Pito Kura & Ovahe", desc: "The navel of the world and secret cove." },
+      { time: "02:00 PM", title: "Te Pito Kura", desc: "The navel of the world." },
       { time: "03:30 PM", title: "Anakena Beach", desc: "Free time, Ahu Nau Nau and relax." },
       { time: "05:30 PM", title: "Return", desc: "Return to Hanga Roa." }
     ]
@@ -52,12 +57,13 @@ export const getTours = (lang: 'es' | 'en'): Tour[] => [
   {
     id: "2",
     title: lang === 'es' ? "Tour Orongo y Ruta Tangata Manu" : "Orongo & Birdman Route",
-    price: 55,
+    price: 50,
     priceCLP: 45000,
+    pricePrivate: 80,
     categoryId: "half-day",
     type: lang === 'es' ? "Medio Día" : "Half Day",
     duration: lang === 'es' ? "5 horas" : "5 hours",
-    description: lang === 'es' ? "Rano Kau, Aldea Orongo, Vinapu, Puna Pau, Ahu Akivi y Ahu Te Peu." : "Rano Kau, Orongo Village, Vinapu, Puna Pau, Ahu Akivi and Ahu Te Peu.",
+    description: lang === 'es' ? "Rano Kau, Aldea Orongo, Vinapu, Puna Pau y Ahu Akivi." : "Rano Kau, Orongo Village, Vinapu, Puna Pau and Ahu Akivi.",
     longDescription: lang === 'es' ? "El tour del lado espiritual de Rapa Nui. Ascendemos al cráter del Rano Kau, cuya laguna interior de 1,5 km de diámetro está tapizada de islas flotantes de totora creando un microclima único. En su borde, la aldea ceremonial de Orongo: epicentro del culto al Tangata Manu (Hombre-Pájaro), donde cada primavera los guerreros de los clanes debían bajar acantilados de 300 metros, nadar en aguas infestadas de tiburones hasta el islote Motu Nui y esperar el primer huevo del manutara (gaviotín pascuense). En Puna Pau vemos los pukao — los cilindros de escoria roja volcánica que coronaban las cabezas de los moais de élite, simbolizando el cabello en moño alto de la nobleza rapanui y una enorme concentración de mana (fuerza espiritual). Cerramos con Ahu Akivi y sus 7 moais únicos: miran al océano y están alineados astronómicamente con los equinoccios, funcionando como calendario agrícola sagrado." : "The spiritual side of Rapa Nui. We ascend the Rano Kau crater, whose 1.5-km interior lake is carpeted with floating totora islands creating a unique microclimate. On its rim, the ceremonial village of Orongo: epicenter of the Tangata Manu (Birdman) cult, where each spring clan warriors had to descend 300-meter cliffs, swim shark-infested waters to Motu Nui islet, and wait for the first manutara (sooty tern) egg. At Puna Pau we see the pukao — volcanic red scoria cylinders that crowned elite moais' heads, symbolizing the noble bun hairstyle of the Rapanui aristocracy and a great concentration of mana (spiritual force). We close with Ahu Akivi and its 7 unique moais: they face the ocean and are astronomically aligned with the equinoxes, serving as a sacred agricultural calendar.",
     image: "/images/tours/rano-kau-crater.webp",
     included: lang === 'es' ? ["Traslado ida y vuelta", "Guía local experto", "Interpretación cultural", "Fotografías"] : ["Round trip transportation", "Expert local guide", "Cultural interpretation", "Photos"],
@@ -67,14 +73,14 @@ export const getTours = (lang: 'es' | 'en'): Tour[] => [
       { time: "09:30 AM", title: "Rano Kau", desc: "Ascenso panorámico al volcán." },
       { time: "10:15 AM", title: "Aldea Orongo", desc: "Recorrido guiado por casas ceremoniales y petroglifos." },
       { time: "11:30 AM", title: "Vinapu & Puna Pau", desc: "Plataformas ancestrales y cantera de pukao." },
-      { time: "12:30 PM", title: "Ahu Akivi & Ahu Te Peu", desc: "Los 7 moais y ruinas costeras." },
+      { time: "12:30 PM", title: "Ahu Akivi", desc: "Los 7 moais alineados con los equinoccios." },
       { time: "01:30 PM", title: "Retorno", desc: "Regreso a Hanga Roa." }
     ] : [
       { time: "09:00 AM", title: "Departure", desc: "Pick up at your accommodation." },
       { time: "09:30 AM", title: "Rano Kau", desc: "Panoramic ascent to the volcano." },
       { time: "10:15 AM", title: "Orongo Village", desc: "Guided tour through ceremonial houses and petroglyphs." },
       { time: "11:30 AM", title: "Vinapu & Puna Pau", desc: "Ancestral platforms and pukao quarry." },
-      { time: "12:30 PM", title: "Ahu Akivi & Ahu Te Peu", desc: "The 7 moais and coastal ruins." },
+      { time: "12:30 PM", title: "Ahu Akivi", desc: "The 7 moais aligned with the equinoxes." },
       { time: "01:30 PM", title: "Return", desc: "Return to Hanga Roa." }
     ]
   },
@@ -138,7 +144,7 @@ export const getTours = (lang: 'es' | 'en'): Tour[] => [
     duration: lang === 'es' ? "6 horas" : "6 hours",
     description: lang === 'es' ? "Navegación costera, almuerzo incluido y traslado Anakena – Pueblo. Una experiencia premium por mar." : "Coastal sailing, lunch included and Anakena-Town transfer. A premium experience by sea.",
     longDescription: lang === 'es' ? "Rapa Nui vista desde el océano, como llegaron por primera vez los ancestros. Zarpamos desde Hanga Roa bordeando la costa volcánica — una sucesión de acantilados y tubos de lava que emergen al mar. Navegamos frente a Ana Kakenga (la Cueva de las Dos Ventanas), donde la roca volcánica encuadra el azul del océano en una ventana perfecta, y junto a Ana Te Pahu, la 'Cueva de los Plátanos': sus amplias aberturas superiores permitían a los antiguos rapanui cultivar plátanos, taro y camotes protegidos del viento, con reservas de agua dulce subterránea vitales en tiempos de sequía. Llegamos a Anakena por mar — la perspectiva que ningún tour terrestre puede darte — y almorzamos en la playa de aguas turquesas más hermosa de la isla." : "Rapa Nui seen from the ocean, as the ancestors first arrived. We set sail from Hanga Roa along the volcanic coast — a succession of cliffs and lava tubes that emerge into the sea. We sail past Ana Kakenga (the Cave of Two Windows), where volcanic rock frames the ocean blue in a perfect aperture, and beside Ana Te Pahu, the 'Banana Cave': its wide overhead openings allowed ancient Rapanui to grow bananas, taro, and sweet potatoes sheltered from the wind, with vital underground freshwater reserves in times of drought. We arrive at Anakena by sea — the perspective no land tour can give you — and lunch on the island's most beautiful turquoise beach.",
-    image: "/images/tours/cueva-ana-kakenga.webp",
+    image: "/images/tours/ana-te-pahu.webp",
     included: lang === 'es' ? ["Navegación costera completa", "Almuerzo gourmet", "Traslado Anakena – Pueblo", "Guía náutico"] : ["Full coastal navigation", "Gourmet lunch", "Anakena-Town transfer", "Nautical guide"],
     notIncluded: lang === 'es' ? ["Ticket Parque Nacional Rapa Nui"] : ["Rapa Nui National Park Ticket"],
     itinerary: lang === 'es' ? [
@@ -164,7 +170,7 @@ export const getTours = (lang: 'es' | 'en'): Tour[] => [
     type: lang === 'es' ? "Privado" : "Private",
     duration: lang === 'es' ? "Día completo" : "Full day",
     description: lang === 'es' ? "Experiencia privada y personalizada. Recorre los sitios más emblemáticos a tu ritmo. Mínimo 2 pasajeros." : "Private and personalized experience. Visit the most iconic sites at your own pace. Minimum 2 passengers.",
-    longDescription: lang === 'es' ? "La experiencia más completa y exclusiva de Toumamari. Un día entero dedicado solo a ti y tu grupo, con tu guía privado rapanui diseñando la ruta según tus intereses. ¿Arqueología profunda? Recorremos desde las fosas rituales de Rano Raraku hasta el magnético Te Pito o te Henua. ¿Fotografía? Elegimos el ángulo y la luz exacta en cada sitio. ¿Espiritualidad? Te llevamos a miradores secretos que solo los locales conocen, donde no hay nadie más. Sin itinerarios fijos, sin grupos, sin prisas. Acceso especial a puntos no turísticos y contexto histórico profundo — cada sitio que visites cobra vida con la voz de alguien que creció entre estos moais." : "Toumamari's most complete and exclusive experience. An entire day dedicated only to you and your group, with your private Rapanui guide designing the route to your interests. Deep archaeology? We cover ritual pits of Rano Raraku to the magnetic Te Pito o te Henua. Photography? We choose the exact angle and light at each site. Spirituality? We take you to secret viewpoints only locals know, where there's nobody else. No fixed itineraries, no groups, no rush. Special access to non-tourist points and deep historical context — every site comes alive through the voice of someone who grew up among these moais.",
+    longDescription: lang === 'es' ? "La experiencia más completa y exclusiva de Touamamari. Un día entero dedicado solo a ti y tu grupo, con tu guía privado rapanui diseñando la ruta según tus intereses. ¿Arqueología profunda? Recorremos desde las fosas rituales de Rano Raraku hasta el magnético Te Pito o te Henua. ¿Fotografía? Elegimos el ángulo y la luz exacta en cada sitio. ¿Espiritualidad? Te llevamos a miradores secretos que solo los locales conocen, donde no hay nadie más. Sin itinerarios fijos, sin grupos, sin prisas. Acceso especial a puntos no turísticos y contexto histórico profundo — cada sitio que visites cobra vida con la voz de alguien que creció entre estos moais." : "Touamamari's most complete and exclusive experience. An entire day dedicated only to you and your group, with your private Rapanui guide designing the route to your interests. Deep archaeology? We cover ritual pits of Rano Raraku to the magnetic Te Pito o te Henua. Photography? We choose the exact angle and light at each site. Spirituality? We take you to secret viewpoints only locals know, where there's nobody else. No fixed itineraries, no groups, no rush. Special access to non-tourist points and deep historical context — every site comes alive through the voice of someone who grew up among these moais.",
     image: "/images/tours/rano-raraku-sector1.webp",
     included: lang === 'es' ? ["Guía privado todo el día", "Transporte exclusivo", "Ruta personalizada", "Almuerzo incluido"] : ["Private guide all day", "Exclusive transport", "Customized route", "Lunch included"],
     notIncluded: lang === 'es' ? ["Ticket Parque Nacional Rapa Nui"] : ["Rapa Nui National Park Ticket"],
@@ -206,7 +212,7 @@ export const getReviews = (lang: 'es' | 'en') => [
     id: 3,
     name: "Laura G.",
     country: lang === 'es' ? "España" : "Spain",
-    text: lang === 'es' ? "Anakena es el paraíso. Me encantó que el grupo era pequeño, se sintió como hacer un tour con amigos. ¡Gracias familia Toumamari!" : "Anakena is paradise. I loved that the group was small, it felt like doing a tour with friends. Thank you Toumamari family!",
+    text: lang === 'es' ? "Anakena es el paraíso. Me encantó que el grupo era pequeño, se sintió como hacer un tour con amigos. ¡Gracias familia Touamamari!" : "Anakena is paradise. I loved that the group was small, it felt like doing a tour with friends. Thank you Touamamari family!",
     rating: 5,
     platform: "Instagram"
   }
@@ -216,7 +222,7 @@ export const getReviews = (lang: 'es' | 'en') => [
 export const getAbout = (lang: 'es' | 'en') => ({
   title: lang === 'es' ? "Caminando con los Ancestros" : "Walking with the Ancestors",
   description: lang === 'es' ? "Servicios Turísticos Touamamari SpA ofrece experiencias diseñadas para conectar a nuestros visitantes con la historia, cultura, naturaleza y mar de Rapa Nui. Creamos experiencias auténticas y personalizadas, combinando patrimonio arqueológico, paisajes únicos, gastronomía local y atención cercana para que cada visita sea inolvidable." : "Touamamari SpA Tourism Services offers experiences designed to connect our visitors with the history, culture, nature and sea of Rapa Nui. We create authentic and personalized experiences, combining archaeological heritage, unique landscapes, local gastronomy and close attention so that every visit is unforgettable.",
-  description2: lang === 'es' ? "Nos enorgullece ser un eslabón entre el pasado milenario y el viajero moderno. Cuando recorres estas tierras con Toumamari, no eres un turista; eres un invitado a nuestra casa, a nuestra historia y a nuestra familia." : "We are proud to be a link between the ancient past and the modern traveler. When you tour these lands with Toumamari, you are not a tourist; you are a guest in our home, our history and our family.",
+  description2: lang === 'es' ? "Nos enorgullece ser un eslabón entre el pasado milenario y el viajero moderno. Cuando recorres estas tierras con Touamamari, no eres un turista; eres un invitado a nuestra casa, a nuestra historia y a nuestra familia." : "We are proud to be a link between the ancient past and the modern traveler. When you tour these lands with Touamamari, you are not a tourist; you are a guest in our home, our history and our family.",
   badges: {
     title: lang === 'es' ? "Guías Locales" : "Local Guides",
     desc: lang === 'es' ? "Expertos nacidos en el ombligo del mundo." : "Experts born in the navel of the world."
@@ -262,7 +268,7 @@ export const GALLERY_PHOTOS = [
   { src: "/images/tours/motu-islotes.webp",            title_es: "Islotes Motu",            title_en: "Motu Islets",            subtitle_es: "Vista desde Orongo",         subtitle_en: "View from Orongo" },
   { src: "/images/tours/puna-pau.webp",                title_es: "Puna Pau",                title_en: "Puna Pau",               subtitle_es: "Cantera de Pukao",           subtitle_en: "Pukao Quarry" },
   { src: "/images/tours/puna-pau-detalle.webp",        title_es: "Pukao de Puna Pau",       title_en: "Puna Pau Pukao",         subtitle_es: "Detalle de Escoria Roja",    subtitle_en: "Red Scoria Detail" },
-  { src: "/images/tours/cueva-ana-kakenga.webp",       title_es: "Ana Kakenga",             title_en: "Ana Kakenga",            subtitle_es: "Cueva de Dos Ventanas",      subtitle_en: "Cave of Two Windows" },
+  { src: "/images/tours/ana-te-pahu.webp",       title_es: "Ana Kakenga",             title_en: "Ana Kakenga",            subtitle_es: "Cueva de Dos Ventanas",      subtitle_en: "Cave of Two Windows" },
   { src: "/images/tours/cueva-costera.webp",           title_es: "Cuevas Costeras",         title_en: "Coastal Caves",          subtitle_es: "Túneles de Lava",            subtitle_en: "Lava Tunnels" },
   { src: "/images/tours/te-pito-kura.webp",            title_es: "Te Pito Kura",            title_en: "Te Pito Kura",           subtitle_es: "El Ombligo del Mundo",       subtitle_en: "The Navel of the World" },
   { src: "/images/tours/moai-paro-derribado.webp",     title_es: "Moai Paro",               title_en: "Moai Paro",              subtitle_es: "El Moai Más Grande",         subtitle_en: "The Largest Moai" },

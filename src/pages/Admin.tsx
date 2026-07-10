@@ -122,6 +122,8 @@ const EMPTY_TOUR: TourFormData = {
   experience_en: "",
   price_usd: 0,
   price_clp: 0,
+  price_usd_private: null,
+  price_clp_private: null,
   duration: "",
   category: "full_day",
   min_passengers: 1,
@@ -149,6 +151,8 @@ function touraFormFromDb(t: DbTour): TourFormData {
     experience_en: t.experience_en ?? "",
     price_usd: t.price_usd,
     price_clp: t.price_clp,
+    price_usd_private: t.price_usd_private,
+    price_clp_private: t.price_clp_private,
     duration: t.duration ?? "",
     category: t.category,
     min_passengers: t.min_passengers,
@@ -1173,7 +1177,7 @@ function LoginGate({ onAuth }: { onAuth: () => void }) {
             <span className="text-xl font-bold text-black">T</span>
           </div>
           <h1 className="text-xl font-bold text-gray-900">Admin Panel</h1>
-          <p className="text-sm text-gray-500 mt-1">Toumamari Back-office</p>
+          <p className="text-sm text-gray-500 mt-1">Touamamari Back-office</p>
         </div>
         <form onSubmit={submit} className="space-y-4">
           <div>
@@ -1239,7 +1243,7 @@ export function Admin() {
             <div className="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center">
               <span className="text-sm font-bold text-black">T</span>
             </div>
-            <span className="font-semibold text-gray-900 text-sm">Toumamari Admin</span>
+            <span className="font-semibold text-gray-900 text-sm">Touamamari Admin</span>
           </div>
           <div className="flex items-center gap-2">
             <button

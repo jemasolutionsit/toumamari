@@ -1,4 +1,4 @@
-import type { CartItem } from "../CartContext";
+import { unitPrice, unitPriceCLP, type CartItem } from "../CartContext";
 
 /** Deja solo dígitos: wa.me rechaza "+", espacios y guiones. */
 const normalizePhone = (phone: string) => phone.replace(/\D/g, "");
@@ -21,12 +21,15 @@ export function buildOrderMessage(
   );
 
   items.forEach((item, i) => {
-    const subtotalUsd = item.tour.price * item.travelers;
-    const subtotalClp = (item.tour.priceCLP ?? 0) * item.travelers;
-    lines.push(`${i + 1}. *${item.tour.title}*`);
+    const subtotalUsd = unitPrice(item.tour, item.modality) * item.travelers;
+    const subtotalClp = unitPriceCLP(item.tour, item.modality) * item.travelers;
+    const modalidad =
+      item.modality === "private" ? (isEs ? "Privado" : "Private") : isEs ? "Grupal" : "Group";
+
+    lines.push(`${i + 1}. *${item.tour.title}* (${modalidad})`);
     lines.push(`   ${isEs ? "Fecha" : "Date"}: ${item.date}`);
     lines.push(
-      `   ${isEs ? "Viajeros" : "Travelers"}: ${item.travelers} | ${isEs ? "Subtotal" : "Subtotal"}: $${subtotalUsd} USD` +
+      `   ${isEs ? "Viajeros" : "Travelers"}: ${item.travelers} | Subtotal: $${subtotalUsd} USD` +
         (subtotalClp ? ` ($${subtotalClp.toLocaleString("es-CL")} CLP)` : ""),
     );
   });

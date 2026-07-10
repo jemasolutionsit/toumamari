@@ -9,6 +9,9 @@ export interface DbTour {
   experience_en: string | null;
   price_clp: number;
   price_usd: number;
+  /** Modalidad privada. NULL cuando el tour no la ofrece. */
+  price_clp_private: number | null;
+  price_usd_private: number | null;
   duration: string | null;
   category: 'half_day' | 'full_day' | 'pack';
   min_passengers: number;

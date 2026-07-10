@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, memo } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from "motion/react";
 import { CalendarDays, MapPin, Clock, ArrowRight, Compass, Mail, X, Check, XCircle, Star, ShoppingCart, Anchor, Camera, UtensilsCrossed, Map, Users, Shield, Heart, Sparkles, ChevronDown, ChevronLeft, ChevronRight, Send, Phone } from "lucide-react";
 import { useLanguage } from "../i18n";
-import { useCart } from "../CartContext";
+import { useCart, unitPrice, type Modality } from "../CartContext";
 import { CONTACT_INFO, GALLERY_PHOTOS, getAbout, getReviews, getTours, getWhyUs, getCustomExperiences, Tour } from "../data";
 import { fetchTours, getBookedSpotsForDate, DEFAULT_CAPACITY } from "../lib/api";
 import { submitContactMessage } from "../lib/api";
@@ -151,6 +151,7 @@ export function Home() {
   const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
   const [selectedDate, setSelectedDate] = useState("");
   const [travelers, setTravelers] = useState(1);
+  const [modality, setModality] = useState<Modality>("group");
   const [activeFilter, setActiveFilter] = useState("all");
   const contactForm = useContactForm();
 
@@ -172,6 +173,11 @@ export function Home() {
       .then(result => setTours(result.length > 0 ? result : getTours(language)))
       .catch(() => setTours(getTours(language)));
   }, [language]);
+
+  // Cada tour se abre en modalidad grupal; si no, arrastraría la del tour anterior.
+  useEffect(() => {
+    setModality("group");
+  }, [selectedTour?.id]);
 
   const ABOUT = getAbout(language);
   const REVIEWS = getReviews(language);
@@ -545,7 +551,7 @@ export function Home() {
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUp} className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-black mb-4">{t.customExpTitle} <span className="text-gradient-gold">{t.customExpSubtitle}</span></h2>
             <p className="text-neutral-400 max-w-xl mx-auto text-lg">
-              {language === 'es' ? "Touamamari también ofrece experiencias adaptadas a cada visitante" : "Toumamari also offers experiences adapted to each visitor"}
+              {language === 'es' ? "Touamamari también ofrece experiencias adaptadas a cada visitante" : "Touamamari also offers experiences adapted to each visitor"}
             </p>
           </motion.div>
 
@@ -619,7 +625,7 @@ export function Home() {
         }}
       />
 
-      {/* ═══════════════ POR QUÉ TOUMAMARI ═══════════════ */}
+      {/* ═══════════════ POR QUÉ TOUAMAMARI ═══════════════ */}
       <section className="py-16 md:py-24 bg-neutral-50 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp} className="text-center mb-16">
@@ -953,6 +959,42 @@ export function Home() {
                         </p>
                       )}
                     </div>
+                    {/* Modality — solo si el tour ofrece versión privada */}
+                    {selectedTour.pricePrivate && (
+                      <div className="flex-1 w-full">
+                        <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2 block">
+                          {language === 'es' ? 'Modalidad' : 'Modality'}
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                          {(["group", "private"] as const).map((m) => {
+                            const active = modality === m;
+                            const price = m === "private" ? selectedTour.pricePrivate! : selectedTour.price;
+                            return (
+                              <button
+                                key={m}
+                                onClick={() => setModality(m)}
+                                aria-pressed={active}
+                                className={`rounded-2xl border px-4 py-3 text-left transition-all ${
+                                  active
+                                    ? "border-[#FFD700] bg-[#FFD700]/10 shadow-sm"
+                                    : "border-neutral-200 bg-white hover:border-neutral-300"
+                                }`}
+                              >
+                                <span className="block text-sm font-bold text-neutral-900">
+                                  {m === "private"
+                                    ? (language === 'es' ? 'Privado' : 'Private')
+                                    : (language === 'es' ? 'Grupal' : 'Group')}
+                                </span>
+                                <span className="block text-xs font-semibold text-neutral-500">
+                                  ${price} USD {language === 'es' ? 'por persona' : 'per person'}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Travelers */}
                     <div className="flex-1 w-full">
                       <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2 block">{t.cartTravelers}</label>
@@ -969,14 +1011,14 @@ export function Home() {
               <div className="p-6 md:p-8 bg-white border-t border-neutral-100 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] flex items-center justify-between gap-6">
                 <div>
                   <p className="text-neutral-500 text-sm font-semibold">{t.modalTotal}</p>
-                  <p className="text-3xl font-black text-neutral-900">${selectedTour.price * travelers}</p>
+                  <p className="text-3xl font-black text-neutral-900">${unitPrice(selectedTour, modality) * travelers}</p>
                 </div>
                 <button onClick={() => {
                   if (!selectedDate) {
                     alert(language === 'es' ? "Por favor selecciona una fecha para el tour." : "Please select a date for the tour.");
                     return;
                   }
-                  addToCart(selectedTour, selectedDate, travelers);
+                  addToCart(selectedTour, selectedDate, travelers, modality);
                   setSelectedTour(null);
                 }} className="bg-black text-white px-8 md:px-12 py-4 rounded-2xl font-bold uppercase tracking-wider hover:bg-[#FFD700] hover:text-black hover:shadow-xl hover:shadow-[#FFD700]/20 transition-all duration-300 flex items-center gap-3">
                   {t.modalReserve} <ShoppingCart className="w-5 h-5" />

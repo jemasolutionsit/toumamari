@@ -7,7 +7,7 @@ const slugImageMap: Record<string, string> = {
   'orongo-tangata-manu':    '/images/tours/rano-kau-crater.webp',
   'amanecer-tongariki':     '/images/tours/ahu-tongariki-amanecer.webp',
   'experiencia-motu':       '/images/tours/motu-islotes.webp',
-  'tour-navegable-anakena': '/images/tours/cueva-ana-kakenga.webp',
+  'tour-navegable-anakena': '/images/tours/ana-te-pahu.webp',
   'super-full-day-privado': '/images/tours/rano-raraku-sector1.webp',
 };
 
@@ -23,6 +23,8 @@ function dbTourToTour(t: DbTour, lang: 'es' | 'en'): Tour {
     title: lang === 'es' ? t.title_es : t.title_en,
     price: t.price_usd,
     priceCLP: t.price_clp,
+    pricePrivate: t.price_usd_private ?? undefined,
+    pricePrivateCLP: t.price_clp_private ?? undefined,
     categoryId: categoryMap[t.category] || t.category,
     type: t.category === 'half_day'
       ? (lang === 'es' ? 'Medio Día' : 'Half Day')
