@@ -10,11 +10,17 @@ coverage/
 # Temp/upload folders
 _docs_tmp/
 _fotos_tmp/
+public/images-tmp/
+public/images-tmp
 *.zip
 *.docx
 .claude/
 .vercel
 .playwright-mcp/
 *.png
+
+# Scripts temporales
+test-out.webp
+scripts/_do-copy.ps1
 
 .vercel
