@@ -42,8 +42,11 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
           <Link to="/" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 md:gap-4 cursor-pointer">
             <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-[#FFD700] flex items-center justify-center bg-black shadow-[0_0_15px_rgba(255,215,0,0.3)] flex-shrink-0">
               <img
-                src="/logo.jpg"
-                alt="Toumamari Tour Logo"
+                src="/logo.webp"
+                alt="Touamamari Tour Logo"
+                width={48}
+                height={48}
+                decoding="async"
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
@@ -52,7 +55,7 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-lg md:text-xl tracking-widest text-white leading-none">TOUMAMARI</span>
+              <span className="font-bold text-lg md:text-xl tracking-widest text-white leading-none">TOUAMAMARI</span>
               <span className="text-[0.55rem] md:text-[0.65rem] uppercase tracking-[0.3em] md:tracking-[0.4em] text-[#FFD700]">Tour Rapa Nui</span>
             </div>
           </Link>
@@ -163,9 +166,9 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
           <div className="flex flex-col items-center md:items-start">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-md overflow-hidden bg-white/5 border border-neutral-800">
-                <img src="/logo.jpg" alt="Toumamari Tour" className="w-full h-full object-cover" />
+                <img src="/logo.webp" alt="Touamamari Tour" loading="lazy" decoding="async" width={48} height={48} className="w-full h-full object-cover" />
               </div>
-              <span className="font-bold text-xl text-white tracking-widest">TOUMAMARI</span>
+              <span className="font-bold text-xl text-white tracking-widest">TOUAMAMARI</span>
             </div>
             <p className="text-sm text-neutral-500 max-w-xs leading-relaxed">
               {t.footerDesc}
@@ -199,7 +202,7 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
 
         </div>
         <div className="max-w-7xl mx-auto px-4 md:px-8 mt-16 pt-8 border-t border-neutral-900 text-center text-xs text-neutral-600 font-medium flex flex-col md:flex-row justify-between items-center gap-4">
-          <p>© {new Date().getFullYear()} Toumamari – Servicios Turísticos Touamamari SpA. Todos los derechos reservados.</p>
+          <p>© {new Date().getFullYear()} Touamamari – Servicios Turísticos Touamamari SpA. Todos los derechos reservados.</p>
         </div>
       </footer>
 
@@ -207,7 +210,7 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
 
       {/* WhatsApp floating button */}
       <motion.a
-        href={`https://wa.me/${CONTACT_INFO.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent('Hola Toumamari, quiero información sobre los tours en Rapa Nui')}`}
+        href={`https://wa.me/${CONTACT_INFO.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent('Hola Touamamari, quiero información sobre los tours en Rapa Nui')}`}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contactar por WhatsApp"

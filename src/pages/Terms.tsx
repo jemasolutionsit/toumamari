@@ -12,7 +12,7 @@ export function Terms() {
         <div className="prose prose-neutral max-w-none text-neutral-600 leading-relaxed space-y-8">
           <section>
             <h2 className="text-2xl font-bold text-black mb-4">1. Políticas de Reserva</h2>
-            <p>Las reservas se consideran confirmadas una vez realizado el pago exitoso a través de PayPal. El cliente recibirá un correo con el comprobante de su reserva y los detalles del tour.</p>
+            <p>Las reservas se registran a través del sitio y se confirman por WhatsApp, donde coordinamos el pago directamente con nuestro equipo local. El cliente recibirá un correo con el resumen de su solicitud y los detalles del tour.</p>
           </section>
 
           <section>

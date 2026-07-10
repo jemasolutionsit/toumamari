@@ -14,27 +14,15 @@ async function startServer() {
 
   // ============================================================================
   // API ROUTES (BACKEND)
-  // Aquí mantendremos las llamadas a Supabase Admin y PayPal seguras.
+  // Aquí mantenemos las llamadas a Supabase Admin seguras.
+  // El cierre de venta se coordina por WhatsApp; no hay pasarela de pago.
   // ============================================================================
-  
+
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok", message: "Toumamari Backend API funcionando" });
   });
 
-  // 1. Endpoint para crear la orden de PayPal desde el lado del servidor
-  app.post("/api/payments/create-order", async (req, res) => {
-    try {
-      // TODO: Usar el SDK de PayPal aquí con PAYPAL_CLIENT_SECRET
-      // 1. Recibir los items del carrito desde req.body
-      // 2. Comunicarse con la API de PayPal para generar el Order ID
-      // 3. Crear el registro en Supabase (Booking y Payment en estado 'pending')
-      res.json({ success: true, message: "Placeholder para Create Order" });
-    } catch (error) {
-      res.status(500).json({ error: "Error creando orden de PayPal" });
-    }
-  });
-
-  // 3. Booking confirmation email
+  // Booking confirmation email
   app.post("/api/bookings/confirm", async (req, res) => {
     const { traveler_name, traveler_email, tour_title, tour_date, travelers, total_usd, total_clp, language } = req.body as {
       traveler_name: string;
@@ -191,15 +179,6 @@ async function startServer() {
       const message = err instanceof Error ? err.message : "Unknown error";
       res.status(500).json({ error: message });
     }
-  });
-
-  // 2. Webhook seguro de PayPal (Notificaciones asíncronas de pago)
-  app.post("/api/payments/webhook", async (req, res) => {
-    // TODO: 
-    // 1. Validar la firma enviada por PayPal usando PAYPAL_WEBHOOK_ID
-    // 2. Extraer el estado (ej. PAYMENT.CAPTURE.COMPLETED)
-    // 3. Actualizar la tabla de 'Payments' y 'Bookings' en Supabase a 'confirmed'
-    res.status(200).send("Webhook recibido");
   });
 
   // ============================================================================

@@ -18,11 +18,14 @@ export function TourCard({ tour, onClick, btnText, ofertaText }: TourCardProps) 
       className="group cursor-pointer bg-white border border-neutral-200/80 rounded-3xl overflow-hidden hover:shadow-2xl hover:shadow-yellow-500/10 transition-all duration-500 flex flex-col h-full"
     >
       <div className="relative h-72 overflow-hidden bg-neutral-200">
-        <img 
-          src={tour.image} 
+        <img
+          src={tour.image}
           alt={tour.title}
           loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+          decoding="async"
+          width={1200}
+          height={900}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-md text-white text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full border border-white/10 shadow-lg">

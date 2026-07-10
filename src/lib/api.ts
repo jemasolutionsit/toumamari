@@ -3,12 +3,12 @@ import type { DbTour, DbContactMessage, DbBooking } from './database.types';
 import type { Tour } from '../data';
 
 const slugImageMap: Record<string, string> = {
-  'full-day-anakena-moai':  '/images/tours/ahu-tongariki-dia.jpg',
-  'orongo-tangata-manu':    '/images/tours/rano-kau-crater.jpg',
-  'amanecer-tongariki':     '/images/tours/ahu-tongariki-amanecer.jpg',
-  'experiencia-motu':       '/images/tours/motu-islotes.jpg',
-  'tour-navegable-anakena': '/images/tours/cueva-ana-kakenga.jpg',
-  'super-full-day-privado': '/images/tours/rano-raraku-sector1.jpg',
+  'full-day-anakena-moai':  '/images/tours/ahu-tongariki-dia.webp',
+  'orongo-tangata-manu':    '/images/tours/rano-kau-crater.webp',
+  'amanecer-tongariki':     '/images/tours/ahu-tongariki-amanecer.webp',
+  'experiencia-motu':       '/images/tours/motu-islotes.webp',
+  'tour-navegable-anakena': '/images/tours/ana-te-pahu.webp',
+  'super-full-day-privado': '/images/tours/rano-raraku-sector1.webp',
 };
 
 function dbTourToTour(t: DbTour, lang: 'es' | 'en'): Tour {
@@ -23,6 +23,8 @@ function dbTourToTour(t: DbTour, lang: 'es' | 'en'): Tour {
     title: lang === 'es' ? t.title_es : t.title_en,
     price: t.price_usd,
     priceCLP: t.price_clp,
+    pricePrivate: t.price_usd_private ?? undefined,
+    pricePrivateCLP: t.price_clp_private ?? undefined,
     categoryId: categoryMap[t.category] || t.category,
     type: t.category === 'half_day'
       ? (lang === 'es' ? 'Medio Día' : 'Half Day')
@@ -129,7 +131,7 @@ export async function adminFetchAllTours(): Promise<DbTour[]> {
 
 export async function adminUpdateTour(
   id: string,
-  patch: Partial<Pick<DbTour, 'active' | 'price_usd' | 'price_clp' | 'offer_discount' | 'sort_order'>>
+  patch: Partial<Pick<DbTour, 'active' | 'price_usd' | 'price_clp' | 'price_usd_private' | 'price_clp_private' | 'offer_discount' | 'sort_order'>>
 ): Promise<void> {
   const { error } = await supabase
     .from('tours')

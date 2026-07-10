@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, memo } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from "motion/react";
 import { CalendarDays, MapPin, Clock, ArrowRight, Compass, Mail, X, Check, XCircle, Star, ShoppingCart, Anchor, Camera, UtensilsCrossed, Map, Users, Shield, Heart, Sparkles, ChevronDown, ChevronLeft, ChevronRight, Send, Phone } from "lucide-react";
 import { useLanguage } from "../i18n";
-import { useCart } from "../CartContext";
+import { useCart, unitPrice, type Modality } from "../CartContext";
 import { CONTACT_INFO, GALLERY_PHOTOS, getAbout, getReviews, getTours, getWhyUs, getCustomExperiences, Tour } from "../data";
 import { fetchTours, getBookedSpotsForDate, DEFAULT_CAPACITY } from "../lib/api";
 import { submitContactMessage } from "../lib/api";
@@ -44,7 +44,7 @@ import { TourCard } from "../components/TourCard";
 import { Layout } from "../components/Layout";
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
-const HERO_VIDEOS = ["/videos/rapanui-video1.mp4", "/videos/rapanui-video2.mp4"];
+const PROMO_VIDEOS = ["/videos/rapanui-video1.mp4", "/videos/rapanui-video2.mp4"];
 
 function AnimatedCounter({ target, suffix = "" }: { target: number | string; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -151,11 +151,11 @@ export function Home() {
   const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
   const [selectedDate, setSelectedDate] = useState("");
   const [travelers, setTravelers] = useState(1);
+  const [modality, setModality] = useState<Modality>("group");
   const [activeFilter, setActiveFilter] = useState("all");
   const contactForm = useContactForm();
 
   const [tours, setTours] = useState<Tour[]>(() => getTours(language));
-  const [heroVideoIndex, setHeroVideoIndex] = useState(0);
   const [promoVideoIndex, setPromoVideoIndex] = useState(0);
   const [promoDir, setPromoDir] = useState(1);
 
@@ -173,6 +173,11 @@ export function Home() {
       .then(result => setTours(result.length > 0 ? result : getTours(language)))
       .catch(() => setTours(getTours(language)));
   }, [language]);
+
+  // Cada tour se abre en modalidad grupal; si no, arrastraría la del tour anterior.
+  useEffect(() => {
+    setModality("group");
+  }, [selectedTour?.id]);
 
   const ABOUT = getAbout(language);
   const REVIEWS = getReviews(language);
@@ -277,21 +282,18 @@ export function Home() {
         <ParticleField />
 
         <motion.div style={{ y: heroY, scale: heroScale }} className="absolute inset-0 w-full h-full">
-          <AnimatePresence mode="sync">
-            <motion.video
-              key={heroVideoIndex}
-              autoPlay
-              muted
-              playsInline
-              onEnded={() => setHeroVideoIndex(i => (i + 1) % HERO_VIDEOS.length)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.7 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.8, ease: "easeInOut" }}
-              className="absolute inset-0 w-full h-full object-cover"
-              src={HERO_VIDEOS[heroVideoIndex]}
-            />
-          </AnimatePresence>
+          {/* Antes había aquí un video en autoplay que trababa el scroll en equipos
+              modestos. Una imagen fija da el mismo efecto sin bloquear el hilo. */}
+          <img
+            src="/hero-fondo.webp"
+            alt=""
+            aria-hidden="true"
+            fetchPriority="high"
+            decoding="async"
+            width={1920}
+            height={1080}
+            className="absolute inset-0 w-full h-full object-cover opacity-70"
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
         </motion.div>
 
@@ -361,10 +363,12 @@ export function Home() {
                 >
                   <video
                     controls
+                    muted
                     playsInline
-                    preload="metadata"
+                    preload="none"
+                    poster="/hero-fondo.webp"
                     className="w-full h-full object-cover"
-                    src={HERO_VIDEOS[promoVideoIndex]}
+                    src={PROMO_VIDEOS[promoVideoIndex]}
                   />
                 </motion.div>
               </AnimatePresence>
@@ -372,14 +376,14 @@ export function Home() {
 
             {/* arrows */}
             <button
-              onClick={() => { setPromoDir(-1); setPromoVideoIndex(i => (i - 1 + HERO_VIDEOS.length) % HERO_VIDEOS.length); }}
+              onClick={() => { setPromoDir(-1); setPromoVideoIndex(i => (i - 1 + PROMO_VIDEOS.length) % PROMO_VIDEOS.length); }}
               aria-label="Anterior"
               className="absolute left-2 md:-left-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white hover:bg-[#FFD700] hover:text-black hover:border-[#FFD700] transition-all duration-200 z-10"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
-              onClick={() => { setPromoDir(1); setPromoVideoIndex(i => (i + 1) % HERO_VIDEOS.length); }}
+              onClick={() => { setPromoDir(1); setPromoVideoIndex(i => (i + 1) % PROMO_VIDEOS.length); }}
               aria-label="Siguiente"
               className="absolute right-2 md:-right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white hover:bg-[#FFD700] hover:text-black hover:border-[#FFD700] transition-all duration-200 z-10"
             >
@@ -388,7 +392,7 @@ export function Home() {
 
             {/* dots */}
             <div className="flex justify-center gap-2 mt-5">
-              {HERO_VIDEOS.map((_, i) => (
+              {PROMO_VIDEOS.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => { if (i !== promoVideoIndex) { setPromoDir(i > promoVideoIndex ? 1 : -1); setPromoVideoIndex(i); } }}
@@ -516,6 +520,9 @@ export function Home() {
                   src={photo.src}
                   alt={language === 'es' ? photo.title_es : photo.title_en}
                   loading="lazy"
+                  decoding="async"
+                  width={1600}
+                  height={1200}
                   className="w-full h-full object-cover"
                   whileHover={{ scale: 1.07 }}
                   transition={{ duration: 0.6, ease: EASE }}
@@ -544,7 +551,7 @@ export function Home() {
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUp} className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-black mb-4">{t.customExpTitle} <span className="text-gradient-gold">{t.customExpSubtitle}</span></h2>
             <p className="text-neutral-400 max-w-xl mx-auto text-lg">
-              {language === 'es' ? "Touamamari también ofrece experiencias adaptadas a cada visitante" : "Toumamari also offers experiences adapted to each visitor"}
+              {language === 'es' ? "Touamamari también ofrece experiencias adaptadas a cada visitante" : "Touamamari also offers experiences adapted to each visitor"}
             </p>
           </motion.div>
 
@@ -618,7 +625,7 @@ export function Home() {
         }}
       />
 
-      {/* ═══════════════ POR QUÉ TOUMAMARI ═══════════════ */}
+      {/* ═══════════════ POR QUÉ TOUAMAMARI ═══════════════ */}
       <section className="py-16 md:py-24 bg-neutral-50 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp} className="text-center mb-16">
@@ -952,6 +959,42 @@ export function Home() {
                         </p>
                       )}
                     </div>
+                    {/* Modality — solo si el tour ofrece versión privada */}
+                    {selectedTour.pricePrivate && (
+                      <div className="flex-1 w-full">
+                        <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2 block">
+                          {language === 'es' ? 'Modalidad' : 'Modality'}
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                          {(["group", "private"] as const).map((m) => {
+                            const active = modality === m;
+                            const price = m === "private" ? selectedTour.pricePrivate! : selectedTour.price;
+                            return (
+                              <button
+                                key={m}
+                                onClick={() => setModality(m)}
+                                aria-pressed={active}
+                                className={`rounded-2xl border px-4 py-3 text-left transition-all ${
+                                  active
+                                    ? "border-[#FFD700] bg-[#FFD700]/10 shadow-sm"
+                                    : "border-neutral-200 bg-white hover:border-neutral-300"
+                                }`}
+                              >
+                                <span className="block text-sm font-bold text-neutral-900">
+                                  {m === "private"
+                                    ? (language === 'es' ? 'Privado' : 'Private')
+                                    : (language === 'es' ? 'Grupal' : 'Group')}
+                                </span>
+                                <span className="block text-xs font-semibold text-neutral-500">
+                                  ${price} USD {language === 'es' ? 'por persona' : 'per person'}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Travelers */}
                     <div className="flex-1 w-full">
                       <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2 block">{t.cartTravelers}</label>
@@ -968,14 +1011,14 @@ export function Home() {
               <div className="p-6 md:p-8 bg-white border-t border-neutral-100 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] flex items-center justify-between gap-6">
                 <div>
                   <p className="text-neutral-500 text-sm font-semibold">{t.modalTotal}</p>
-                  <p className="text-3xl font-black text-neutral-900">${selectedTour.price * travelers}</p>
+                  <p className="text-3xl font-black text-neutral-900">${unitPrice(selectedTour, modality) * travelers}</p>
                 </div>
                 <button onClick={() => {
                   if (!selectedDate) {
                     alert(language === 'es' ? "Por favor selecciona una fecha para el tour." : "Please select a date for the tour.");
                     return;
                   }
-                  addToCart(selectedTour, selectedDate, travelers);
+                  addToCart(selectedTour, selectedDate, travelers, modality);
                   setSelectedTour(null);
                 }} className="bg-black text-white px-8 md:px-12 py-4 rounded-2xl font-bold uppercase tracking-wider hover:bg-[#FFD700] hover:text-black hover:shadow-xl hover:shadow-[#FFD700]/20 transition-all duration-300 flex items-center gap-3">
                   {t.modalReserve} <ShoppingCart className="w-5 h-5" />

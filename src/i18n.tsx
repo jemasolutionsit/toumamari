@@ -52,7 +52,7 @@ interface Translations {
   cartDate: string;
   cartTravelers: string;
   cartTotal: string;
-  cartPayPayPal: string;
+  cartQuoteWhatsApp: string;
   cartSecurePayment: string;
   cartFlexibleCancel: string;
   modalAddDate: string;
@@ -129,7 +129,7 @@ const translations: Record<Language, Translations> = {
     cartDate: "Fecha",
     cartTravelers: "Viajeros",
     cartTotal: "Subtotal",
-    cartPayPayPal: "Pagar con PayPal",
+    cartQuoteWhatsApp: "Cotizar Pedido por WhatsApp",
     cartSecurePayment: "Pago 100% seguro",
     cartFlexibleCancel: "Cancelación flexible",
     modalAddDate: "Selecciona Fecha",
@@ -146,7 +146,7 @@ const translations: Record<Language, Translations> = {
     promoVideoTitle: "Siente el",
     promoVideoSubtitle: "Mana",
     whyUsTitle: "¿Por qué",
-    whyUsSubtitle: "Toumamari?",
+    whyUsSubtitle: "Touamamari?",
     customExpTitle: "Experiencias",
     customExpSubtitle: "Personalizadas",
     customExpCTA: "Consultar por Email",
@@ -204,7 +204,7 @@ const translations: Record<Language, Translations> = {
     cartDate: "Date",
     cartTravelers: "Travelers",
     cartTotal: "Subtotal",
-    cartPayPayPal: "Pay with PayPal",
+    cartQuoteWhatsApp: "Quote Order via WhatsApp",
     cartSecurePayment: "100% secure payment",
     cartFlexibleCancel: "Flexible cancellation",
     modalAddDate: "Select Date",
@@ -221,7 +221,7 @@ const translations: Record<Language, Translations> = {
     promoVideoTitle: "Feel the",
     promoVideoSubtitle: "Mana",
     whyUsTitle: "Why",
-    whyUsSubtitle: "Toumamari?",
+    whyUsSubtitle: "Touamamari?",
     customExpTitle: "Custom",
     customExpSubtitle: "Experiences",
     customExpCTA: "Ask via Email",

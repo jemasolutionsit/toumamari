@@ -37,7 +37,6 @@ export interface BookingItem {
 export interface Payment {
   id: string;
   booking_id: string; // Referencia a Booking
-  paypal_order_id: string; // Transaction ID retornado por PayPal API
   amount: number;
   status: 'pending' | 'completed' | 'failed' | 'refunded';
   created_at: string;
