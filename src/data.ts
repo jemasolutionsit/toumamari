@@ -268,8 +268,6 @@ export const GALLERY_PHOTOS = [
   { src: "/images/tours/motu-islotes.webp",            title_es: "Islotes Motu",            title_en: "Motu Islets",            subtitle_es: "Vista desde Orongo",         subtitle_en: "View from Orongo" },
   { src: "/images/tours/puna-pau.webp",                title_es: "Puna Pau",                title_en: "Puna Pau",               subtitle_es: "Cantera de Pukao",           subtitle_en: "Pukao Quarry" },
   { src: "/images/tours/puna-pau-detalle.webp",        title_es: "Pukao de Puna Pau",       title_en: "Puna Pau Pukao",         subtitle_es: "Detalle de Escoria Roja",    subtitle_en: "Red Scoria Detail" },
-  { src: "/images/tours/ana-te-pahu.webp",       title_es: "Ana Kakenga",             title_en: "Ana Kakenga",            subtitle_es: "Cueva de Dos Ventanas",      subtitle_en: "Cave of Two Windows" },
-  { src: "/images/tours/cueva-costera.webp",           title_es: "Cuevas Costeras",         title_en: "Coastal Caves",          subtitle_es: "Túneles de Lava",            subtitle_en: "Lava Tunnels" },
   { src: "/images/tours/te-pito-kura.webp",            title_es: "Te Pito Kura",            title_en: "Te Pito Kura",           subtitle_es: "El Ombligo del Mundo",       subtitle_en: "The Navel of the World" },
   { src: "/images/tours/moai-paro-derribado.webp",     title_es: "Moai Paro",               title_en: "Moai Paro",              subtitle_es: "El Moai Más Grande",         subtitle_en: "The Largest Moai" },
   { src: "/images/tours/ahu-vaihu.webp",               title_es: "Ahu Vaihu",               title_en: "Ahu Vaihu",              subtitle_es: "Moais Derribados",           subtitle_en: "Fallen Moais" },
