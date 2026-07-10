@@ -16,3 +16,5 @@ _fotos_tmp/
 .vercel
 .playwright-mcp/
 *.png
+
+.vercel

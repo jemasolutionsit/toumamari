@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#0a0a0a" />
 
     <title>Touamamari – Tours en Rapa Nui (Isla de Pascua)</title>
     <meta name="description" content="Descubre los misterios de Rapa Nui con Touamamari. Tours arqueológicos, amanecer en Ahu Tongariki, Rano Raraku, Orongo y más. Guías locales, bilingual ES/EN." />
@@ -12,12 +12,17 @@
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://toumamari.com/" />
 
+    <!-- ═══ PWA / iOS Safari — CRITICO para "Añadir a pantalla de inicio" ═══ -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Toumamari" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://toumamari.com/" />
     <meta property="og:title" content="Touamamari – Tours en Rapa Nui" />
     <meta property="og:description" content="Tours arqueológicos exclusivos en Isla de Pascua. Amanecer en Ahu Tongariki, Rano Raraku, Orongo y experiencias personalizadas con guías locales." />
-    <!-- JPEG dedicado: el soporte de WebP en los crawlers sociales es irregular -->
     <meta property="og:image" content="https://toumamari.com/og-image.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -32,7 +37,7 @@
     <meta name="twitter:description" content="Tours arqueológicos exclusivos en Isla de Pascua con guías locales." />
     <meta name="twitter:image" content="https://toumamari.com/og-image.jpg" />
 
-    <!-- Structured Data -->
+    <!-- Structured Data — incluye teléfono para Google Business -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -41,6 +46,7 @@
       "alternateName": "Touamamari SpA",
       "description": "Tours arqueológicos y experiencias culturales en Rapa Nui (Isla de Pascua), Chile.",
       "url": "https://toumamari.com",
+      "telephone": "+56957609175",
       "email": "info@touamamari.com",
       "address": {
         "@type": "PostalAddress",
@@ -62,9 +68,16 @@
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <!-- La imagen del hero es el LCP: se precarga para que no espere al bundle -->
+    <!-- ═══ Performance: preconnect y dns-prefetch ═══ -->
+    <!-- Supabase: llamada para cargar tours y disponibilidad -->
+    <link rel="preconnect" href="https://fdhwvzspdyethtiqcwqv.supabase.co" crossorigin />
+    <!-- API tipo de cambio USD/CLP -->
+    <link rel="dns-prefetch" href="https://mindicador.cl" />
+    <!-- WhatsApp (checkout final) -->
+    <link rel="dns-prefetch" href="https://wa.me" />
+
+    <!-- Hero es el LCP: precargar antes de que React hidrate -->
     <link rel="preload" as="image" href="/hero-fondo.webp" fetchpriority="high" />
 
     <style>
@@ -101,15 +114,6 @@
         #root:empty::after { animation: none; }
       }
     </style>
-
-    <!-- Google Analytics GA4 — reemplazar G-XXXXXXXXXX con ID real -->
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-XXXXXXXXXX');
-    </script> -->
   </head>
   <body>
     <div id="root"></div>
