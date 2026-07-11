@@ -10,10 +10,18 @@ body {
   overflow-x: hidden;
 }
 
-/* iOS safe-area helpers (require viewport-fit=cover) */
-.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
-.pt-safe { padding-top: env(safe-area-inset-top); }
-.bottom-safe { bottom: calc(1.25rem + env(safe-area-inset-bottom)); }
+/* iOS safe-areas (requieren viewport-fit=cover en el meta viewport).
+   En Safari los insets valen 0 (el navegador los gestiona internamente);
+   en PWA standalone la app es responsable: el notch/Dynamic Island aporta
+   ~47-59px arriba y el home indicator ~34px abajo. */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+}
+
+.pb-safe { padding-bottom: var(--sab); }
+.pt-safe { padding-top: var(--sat); }
+.bottom-safe { bottom: calc(1.25rem + var(--sab)); }
 
 /* Prevent iOS zoom on input focus (font-size < 16px triggers zoom) */
 @media (max-width: 640px) {

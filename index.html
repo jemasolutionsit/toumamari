@@ -83,7 +83,8 @@
     <style>
       /* App Shell: se pinta antes de que React hidrate y lo reemplace. */
       #root:empty {
-        min-height: 100svh;
+        /* dvh: altura correcta tanto en Safari como en PWA standalone */
+        min-height: 100dvh;
         background: #0a0a0a;
       }
       #root:empty::before {

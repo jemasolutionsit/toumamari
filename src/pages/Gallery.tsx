@@ -45,12 +45,13 @@ export function Gallery() {
   ] as const;
 
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden font-sans">
+    <div className="min-h-dvh bg-black text-white relative overflow-hidden font-sans">
       {/* Background radial glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-gradient-to-b from-[#FFD700]/5 via-transparent to-transparent pointer-events-none" />
 
       {/* Floating back button */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-8 relative z-10">
+      {/* max(): en standalone el botón baja bajo la status bar del iPhone */}
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-[max(2rem,env(safe-area-inset-top))] relative z-10">
         <Link
           to="/"
           className="inline-flex items-center gap-2 text-neutral-400 hover:text-[#FFD700] transition-colors font-bold uppercase tracking-wider text-sm group"
@@ -154,7 +155,7 @@ export function Gallery() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedPhoto(null)}
-            className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 pt-[max(1rem,env(safe-area-inset-top))] backdrop-blur-sm"
           >
             <div className="relative max-w-5xl w-full max-h-[85vh] flex flex-col items-center justify-center">
               <motion.img

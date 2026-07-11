@@ -30,7 +30,7 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
   ];
 
   return (
-    <div className="min-h-screen bg-neutral-50 font-sans text-neutral-900 selection:bg-[#FFD700] selection:text-black flex flex-col">
+    <div className="min-h-dvh bg-neutral-50 font-sans text-neutral-900 selection:bg-[#FFD700] selection:text-black flex flex-col">
       <header
         className={`fixed top-0 w-full z-50 transition-all duration-500 ${
           scrolled || menuOpen
@@ -38,7 +38,9 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
             : "bg-gradient-to-b from-black/90 via-black/50 to-transparent py-4 md:py-6 pb-8 md:pb-12"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 md:px-8 flex justify-between items-center">
+        {/* pt-safe: en PWA standalone el header es responsable de librar el
+            notch/Dynamic Island (el fondo del header sí cubre la status bar). */}
+        <div className="max-w-7xl mx-auto px-4 md:px-8 flex justify-between items-center pt-safe">
 
           <Link to="/" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 md:gap-4 cursor-pointer">
             <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-[#FFD700] flex items-center justify-center bg-black shadow-[0_0_15px_rgba(255,215,0,0.3)] flex-shrink-0">
@@ -166,7 +168,7 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
       </main>
 
       {/* FOOTER */}
-      <footer className="bg-neutral-950 text-neutral-400 py-16 border-t border-neutral-900 mt-auto">
+      <footer className="bg-neutral-950 text-neutral-400 py-16 pb-[calc(4rem+env(safe-area-inset-bottom))] border-t border-neutral-900 mt-auto">
         <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
           
           <div className="flex flex-col items-center md:items-start">

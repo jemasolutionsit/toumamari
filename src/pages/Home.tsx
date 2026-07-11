@@ -304,7 +304,7 @@ export function Home() {
       {/* min-h (no h fija): si el contenido no cabe en ventanas bajas —notebooks,
           escalado 125% de Windows— la sección crece en vez de cortar los botones
           o meter el badge bajo el navbar. */}
-      <section ref={heroRef} id="inicio" className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-black grain-overlay">
+      <section ref={heroRef} id="inicio" className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-black grain-overlay">
         <ParticleField />
 
         <motion.div style={{ y: heroY, scale: heroScale }} className="absolute inset-0 w-full h-full">
@@ -328,8 +328,9 @@ export function Home() {
             un corte duro contra la sección negra siguiente. Este lo cubre siempre. */}
         <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-40 md:h-56 bg-gradient-to-b from-transparent to-black z-[5]" />
 
-        {/* pt-28 libra el navbar fijo (80px); pb-28 reserva la franja del chevron. */}
-        <motion.div style={{ opacity: heroOpacity }} className="relative z-10 text-center px-4 max-w-5xl mx-auto pt-28 pb-28">
+        {/* pt libra el navbar fijo (80px) + el safe-area del notch en standalone;
+            pb-28 reserva la franja del chevron. */}
+        <motion.div style={{ opacity: heroOpacity }} className="relative z-10 text-center px-4 max-w-5xl mx-auto pt-[calc(7rem+env(safe-area-inset-top))] pb-28">
           <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="flex flex-col items-center">
             <motion.span variants={fadeUp} className="text-[#FFD700] border border-[#FFD700]/50 rounded-full px-5 py-2 text-xs uppercase tracking-[0.25em] font-semibold mb-6 flex items-center gap-2 bg-black/40 backdrop-blur-sm">
               <MapPin className="w-3 h-3" /> {t.heroSub}
@@ -809,7 +810,7 @@ export function Home() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed inset-x-0 bottom-0 top-10 md:top-20 z-[70] bg-white rounded-t-[2.5rem] overflow-hidden flex flex-col shadow-2xl mx-auto md:max-w-5xl"
+              className="fixed inset-x-0 bottom-0 top-[max(2.5rem,env(safe-area-inset-top))] md:top-20 z-[70] bg-white rounded-t-[2.5rem] overflow-hidden flex flex-col shadow-2xl mx-auto md:max-w-5xl"
             >
               <div className="absolute top-6 right-6 z-10">
                 <button onClick={() => setSelectedTour(null)} className="w-12 h-12 bg-white/50 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg border border-white/20 text-neutral-900">

@@ -123,7 +123,7 @@ export function CartDrawer() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-y-0 right-0 w-full md:w-[450px] bg-white shadow-2xl z-[90] flex flex-col"
+            className="fixed inset-y-0 right-0 w-full md:w-[450px] bg-white shadow-2xl z-[90] flex flex-col pt-safe pb-safe"
           >
             {/* Header */}
             <div className="relative px-6 py-5 flex items-center justify-between bg-neutral-50">
