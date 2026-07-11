@@ -10,7 +10,9 @@ import { buildOrderMessage, buildWhatsAppUrl } from "../lib/whatsapp";
 type CheckoutStep = "cart" | "form" | "loading" | "success" | "error";
 
 export function CartDrawer() {
-  const { isCartOpen, setIsCartOpen, items, removeFromCart, updateTravelers, total, totalCLP, exchangeRate, formatPrice, currency } = useCart();
+  // total/totalCLP/exchangeRate se siguen calculando para registrarlos en la
+  // reserva (Supabase) aunque el sitio ya no muestre precios.
+  const { isCartOpen, setIsCartOpen, items, removeFromCart, updateTravelers, total, totalCLP, exchangeRate } = useCart();
   const { t, language } = useLanguage();
 
   const [step, setStep] = useState<CheckoutStep>("cart");
@@ -93,10 +95,10 @@ export function CartDrawer() {
       }
 
       setOrderMessage(
-        buildOrderMessage(items, total, totalCLP, language, {
+        buildOrderMessage(items, language, {
           name: name.trim(),
           email: email.trim(),
-        }, exchangeRate),
+        }),
       );
       setStep("success");
     } catch (err) {
@@ -194,25 +196,9 @@ export function CartDrawer() {
                                 className="w-7 h-7 rounded-full border border-neutral-200 flex items-center justify-center text-sm font-bold text-neutral-500 hover:bg-neutral-100 hover:scale-110 active:scale-95 transition-transform"
                               >+</button>
                             </div>
-                            <div className="flex items-center gap-4">
-                              <div className="flex flex-col items-end">
-                                <span className="font-black text-yellow-600">
-                                  {formatPrice(unitPrice(item.tour, item.modality) * item.travelers)}
-                                </span>
-                                {currency === "USD" ? (
-                                  <span className="text-[10px] text-neutral-400 font-semibold">
-                                    (~${(unitPriceCLP(item.tour, item.modality, exchangeRate) * item.travelers).toLocaleString("es-CL")} CLP)
-                                  </span>
-                                ) : (
-                                  <span className="text-[10px] text-neutral-400 font-semibold">
-                                    (${unitPrice(item.tour, item.modality) * item.travelers} USD)
-                                  </span>
-                                )}
-                              </div>
-                              <button onClick={() => removeFromCart(item.id)} className="text-neutral-400 hover:text-rose-500 transition-colors">
-                                <Trash2 className="w-5 h-5" />
-                              </button>
-                            </div>
+                            <button onClick={() => removeFromCart(item.id)} className="text-neutral-400 hover:text-rose-500 transition-colors">
+                              <Trash2 className="w-5 h-5" />
+                            </button>
                           </div>
                         </div>
                       </motion.div>
@@ -222,21 +208,11 @@ export function CartDrawer() {
 
                 {items.length > 0 && (
                   <div className="p-6 bg-white border-t border-neutral-200">
-                    <div className="flex justify-between items-center mb-6">
-                      <span className="font-bold text-neutral-500 uppercase tracking-wider text-sm">{t.cartTotal}</span>
-                      <div className="flex flex-col items-end">
-                        <span className="text-3xl font-black text-black">{formatPrice(total)}</span>
-                        {currency === "USD" ? (
-                          <span className="text-xs text-neutral-400 font-semibold mt-1">
-                            (~${totalCLP.toLocaleString("es-CL")} CLP)
-                          </span>
-                        ) : (
-                          <span className="text-xs text-neutral-400 font-semibold mt-1">
-                            (${total} USD)
-                          </span>
-                        )}
-                      </div>
-                    </div>
+                    <p className="mb-6 text-sm font-semibold text-neutral-500 text-center leading-relaxed">
+                      {language === "es"
+                        ? "El valor se cotiza por WhatsApp según el número de personas."
+                        : "Pricing is quoted via WhatsApp based on group size."}
+                    </p>
                     <motion.button
                       whileHover={{ scale: 1.02, y: -2, boxShadow: "0 15px 30px rgba(37,211,102,0.35)" }}
                       whileTap={{ scale: 0.98 }}
@@ -309,17 +285,12 @@ export function CartDrawer() {
                     {items.map(item => (
                       <div key={item.id} className="flex justify-between text-sm">
                         <span className="text-neutral-600 truncate mr-2">{item.tour.title} × {item.travelers}</span>
-                        <span className="font-bold text-neutral-900 shrink-0">{formatPrice(unitPrice(item.tour, item.modality) * item.travelers)}</span>
                       </div>
                     ))}
-                    <div className="border-t border-neutral-100 pt-2 flex justify-between font-black">
-                      <span>{language === "es" ? "Total" : "Total"}</span>
-                      <div className="flex flex-col items-end">
-                        <span className="text-neutral-900">{formatPrice(total)}</span>
-                        <span className="text-xs text-neutral-400 font-semibold">
-                          {currency === "USD" ? `(~${totalCLP.toLocaleString("es-CL")} CLP)` : `($${total} USD)`}
-                        </span>
-                      </div>
+                    <div className="border-t border-neutral-100 pt-2 text-xs font-semibold text-neutral-500">
+                      {language === "es"
+                        ? "El valor se cotiza por WhatsApp según el número de personas."
+                        : "Pricing is quoted via WhatsApp based on group size."}
                     </div>
                   </div>
                 </div>

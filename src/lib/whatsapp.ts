@@ -1,46 +1,33 @@
-import { unitPrice, unitPriceCLP, type CartItem } from "../context/CartContext";
+import { type CartItem } from "../context/CartContext";
 
 /** Deja solo dígitos: wa.me rechaza "+", espacios y guiones. */
 const normalizePhone = (phone: string) => phone.replace(/\D/g, "");
 
+// Sin montos: el cliente cotiza por WhatsApp según el número de personas,
+// así que el mensaje solo lleva tours, fechas y viajeros.
 export function buildOrderMessage(
   items: CartItem[],
-  totalUsd: number,
-  totalClp: number,
   language: "es" | "en",
   customer?: { name: string; email: string },
-  exchangeRate: number = 980
 ): string {
   const isEs = language === "es";
   const lines: string[] = [];
 
   lines.push(
     isEs
-      ? "¡Hola! Me gustaría coordinar el siguiente pedido desde la web:"
-      : "Hello! I'd like to arrange the following order from the website:",
+      ? "¡Hola! Me gustaría cotizar los siguientes tours desde la web:"
+      : "Hello! I'd like a quote for the following tours from the website:",
     "",
   );
 
   items.forEach((item, i) => {
-    const subtotalUsd = unitPrice(item.tour, item.modality) * item.travelers;
-    const subtotalClp = unitPriceCLP(item.tour, item.modality, exchangeRate) * item.travelers;
     const modalidad =
       item.modality === "private" ? (isEs ? "Privado" : "Private") : isEs ? "Grupal" : "Group";
 
     lines.push(`${i + 1}. *${item.tour.title}* (${modalidad})`);
     lines.push(`   ${isEs ? "Fecha" : "Date"}: ${item.date}`);
-    lines.push(
-      `   ${isEs ? "Viajeros" : "Travelers"}: ${item.travelers} | Subtotal: $${subtotalUsd} USD` +
-        (subtotalClp ? ` ($${subtotalClp.toLocaleString("es-CL")} CLP)` : ""),
-    );
+    lines.push(`   ${isEs ? "Viajeros" : "Travelers"}: ${item.travelers}`);
   });
-
-  lines.push("");
-  lines.push(
-    `*${isEs ? "TOTAL ESTIMADO" : "ESTIMATED TOTAL"}: $${totalUsd} USD` +
-      (totalClp ? ` / $${totalClp.toLocaleString("es-CL")} CLP` : "") +
-      "*",
-  );
 
   if (customer?.name) {
     lines.push("");
@@ -51,10 +38,8 @@ export function buildOrderMessage(
   lines.push("");
   lines.push(
     isEs
-      // El informe dice "coordinar el pago y la entrega"; aquí no hay entrega
-      // física, se coordina el punto de encuentro del tour.
-      ? "Quedo a la espera de confirmación para coordinar el pago. ¡Gracias!"
-      : "Looking forward to your confirmation to arrange payment. Thank you!",
+      ? "Quedo a la espera de la cotización y disponibilidad. ¡Gracias!"
+      : "Looking forward to the quote and availability. Thank you!",
   );
 
   return lines.join("\n");

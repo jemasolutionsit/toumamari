@@ -108,12 +108,8 @@ async function startServer() {
                 <td style="padding:8px 0;color:#0a0a0a;font-size:14px;">${travelers}</td>
               </tr>
               <tr style="background:#fafafa;">
-                <td style="padding:8px 0;color:#888888;font-size:14px;">${isEs ? "Total USD" : "Total USD"}</td>
-                <td style="padding:8px 0;color:#0a0a0a;font-size:14px;font-weight:bold;">$${total_usd} USD</td>
-              </tr>
-              <tr>
-                <td style="padding:8px 0;color:#888888;font-size:14px;">${isEs ? "Total CLP" : "Total CLP"}</td>
-                <td style="padding:8px 0;color:#0a0a0a;font-size:14px;">$${total_clp.toLocaleString("es-CL")} CLP</td>
+                <td style="padding:8px 0;color:#888888;font-size:14px;">${isEs ? "Valor" : "Price"}</td>
+                <td style="padding:8px 0;color:#0a0a0a;font-size:14px;font-weight:bold;">${isEs ? "Se cotiza por WhatsApp según el número de personas" : "Quoted via WhatsApp based on group size"}</td>
               </tr>
             </table>
           </td>

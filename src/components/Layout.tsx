@@ -17,7 +17,7 @@ function WhatsAppIcon() {
 
 export function Layout({ children, scrolled }: { children: ReactNode; scrolled: boolean }) {
   const { language, setLanguage, t } = useLanguage();
-  const { items, setIsCartOpen, currency, setCurrency } = useCart();
+  const { items, setIsCartOpen } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const cartCount = items.reduce((sum, item) => sum + item.travelers, 0);
 
@@ -82,25 +82,8 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
               </select>
             </div>
 
-            {/* Currency selector (USD / CLP) */}
-            <div className="hidden sm:flex items-center bg-white/10 rounded-full p-0.5 border border-white/10">
-              <button
-                onClick={() => setCurrency("USD")}
-                className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                  currency === "USD" ? "bg-[#FFD700] text-black shadow-md" : "text-neutral-300 hover:text-white"
-                }`}
-              >
-                USD
-              </button>
-              <button
-                onClick={() => setCurrency("CLP")}
-                className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                  currency === "CLP" ? "bg-[#FFD700] text-black shadow-md" : "text-neutral-300 hover:text-white"
-                }`}
-              >
-                CLP
-              </button>
-            </div>
+            {/* El selector USD/CLP se quitó junto con los precios: la
+                cotización se hace por WhatsApp según el número de personas. */}
             <button onClick={() => setIsCartOpen(true)} aria-label={t.cart} className="relative group text-white hover:text-[#FFD700] transition-colors flex items-center gap-2">
               <ShoppingCart className="w-6 h-6 md:w-5 md:h-5" />
               <span className="hidden lg:block text-sm font-medium">{t.cart}</span>
@@ -172,23 +155,6 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
                   </div>
                 </div>
 
-                {/* Currency toggle inside menu */}
-                <div className="flex items-center gap-3 mt-2 pt-3 border-t border-white/10 px-3">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#FFD700]">Moneda:</span>
-                  <div className="flex gap-2">
-                    {(["USD", "CLP"] as const).map((curr) => (
-                      <button
-                        key={curr}
-                        onClick={() => { setCurrency(curr); setMenuOpen(false); }}
-                        className={`px-4 py-1.5 rounded-full text-sm font-bold uppercase transition-all ${
-                          currency === curr ? "bg-[#FFD700] text-black" : "bg-white/10 text-neutral-300"
-                        }`}
-                      >
-                        {curr}
-                      </button>
-                    ))}
-                  </div>
-                </div>
               </div>
             </motion.nav>
           )}

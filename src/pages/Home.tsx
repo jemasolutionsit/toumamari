@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, memo } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from "motion/react";
 import { CalendarDays, MapPin, Clock, ArrowRight, Compass, Mail, X, Check, XCircle, Star, ShoppingCart, Anchor, Camera, UtensilsCrossed, Map, Users, Shield, Heart, Sparkles, ChevronDown, ChevronLeft, ChevronRight, Send, Phone } from "lucide-react";
 import { useLanguage } from "../context/i18n";
-import { useCart, unitPrice, unitPriceCLP, type Modality } from "../context/CartContext";
+import { useCart, type Modality } from "../context/CartContext";
 import { Link } from "react-router-dom";
 import { CONTACT_INFO, GALLERY_PHOTOS, getAbout, getReviews, getTours, getWhyUs, getCustomExperiences, Tour } from "../data/data";
 import { fetchTours, getBookedSpotsForDate, DEFAULT_CAPACITY } from "../lib/api";
@@ -169,7 +169,7 @@ const customIcons: Record<string, typeof Heart> = {
 
 export function Home() {
   const { language, t } = useLanguage();
-  const { addToCart, formatPrice, currency, exchangeRate } = useCart();
+  const { addToCart } = useCart();
   const [scrolled, setScrolled] = useState(false);
   const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
   const [selectedDate, setSelectedDate] = useState("");
@@ -832,16 +832,12 @@ export function Home() {
                   <div className="flex flex-wrap gap-8 py-6 border-y border-neutral-100">
                     <div>
                       <p className="text-sm text-neutral-400 font-bold uppercase tracking-wider mb-1">{t.modalPrice}</p>
-                      <div className="flex items-center gap-2">
-                        <p className="text-2xl font-black text-yellow-600">{formatPrice(selectedTour.price)}</p>
-                        {currency === "USD" ? (
-                          <p className="text-sm text-neutral-400">
-                            (~${(Math.round((selectedTour.price * exchangeRate) / 1000) * 1000).toLocaleString("es-CL")} CLP)
-                          </p>
-                        ) : (
-                          <p className="text-sm text-neutral-400">(${selectedTour.price} USD)</p>
-                        )}
-                      </div>
+                      <p className="text-lg font-black text-neutral-900 leading-snug">
+                        {language === 'es' ? 'Se cotiza por WhatsApp' : 'Quoted via WhatsApp'}
+                      </p>
+                      <p className="text-xs text-neutral-400 mt-1">
+                        {language === 'es' ? 'según el número de personas' : 'based on group size'}
+                      </p>
                       {selectedTour.minPassengers && <p className="text-xs text-neutral-400 mt-1">{t.minPassengers.replace('{n}', String(selectedTour.minPassengers))}</p>}
                     </div>
                     <div>
@@ -999,7 +995,6 @@ export function Home() {
                         <div className="grid grid-cols-2 gap-2">
                           {(["group", "private"] as const).map((m) => {
                             const active = modality === m;
-                            const price = m === "private" ? selectedTour.pricePrivate! : selectedTour.price;
                             return (
                               <button
                                 key={m}
@@ -1017,7 +1012,9 @@ export function Home() {
                                     : (language === 'es' ? 'Grupal' : 'Group')}
                                 </span>
                                 <span className="block text-xs font-semibold text-neutral-500">
-                                  {formatPrice(price)} {language === 'es' ? 'por persona' : 'per person'}
+                                  {m === "private"
+                                    ? (language === 'es' ? 'Solo tu grupo' : 'Your group only')
+                                    : (language === 'es' ? 'Compartido' : 'Shared')}
                                 </span>
                               </button>
                             );
@@ -1041,17 +1038,15 @@ export function Home() {
 
               <div className="p-6 md:p-8 bg-white border-t border-neutral-100 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] flex items-center justify-between gap-6">
                 <div>
-                  <p className="text-neutral-500 text-sm font-semibold">{t.modalTotal}</p>
-                  <p className="text-3xl font-black text-neutral-900 leading-none">{formatPrice(unitPrice(selectedTour, modality) * travelers)}</p>
-                  {currency === "USD" ? (
-                    <p className="text-xs text-neutral-400 font-semibold mt-1">
-                      (~${(unitPriceCLP(selectedTour, modality, exchangeRate) * travelers).toLocaleString("es-CL")} CLP)
-                    </p>
-                  ) : (
-                    <p className="text-xs text-neutral-400 font-semibold mt-1">
-                      (${unitPrice(selectedTour, modality) * travelers} USD)
-                    </p>
-                  )}
+                  <p className="text-neutral-500 text-sm font-semibold">
+                    {language === 'es' ? 'Valor del tour' : 'Tour price'}
+                  </p>
+                  <p className="text-lg font-black text-neutral-900 leading-snug">
+                    {language === 'es' ? 'Se cotiza por WhatsApp' : 'Quoted via WhatsApp'}
+                  </p>
+                  <p className="text-xs text-neutral-400 font-semibold mt-1">
+                    {language === 'es' ? 'según el número de personas' : 'based on group size'}
+                  </p>
                 </div>
                 <button onClick={() => {
                   if (!selectedDate) {

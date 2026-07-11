@@ -1,7 +1,6 @@
 import { motion } from "motion/react";
 import { Clock, MapPin, ArrowRight, Tag } from "lucide-react";
 import { Tour } from "../data/data";
-import { useCart } from "../context/CartContext";
 
 interface TourCardProps {
   tour: Tour;
@@ -10,9 +9,9 @@ interface TourCardProps {
   ofertaText: string;
 }
 
+// Los precios no se muestran en el sitio por pedido del cliente:
+// la cotización se hace por WhatsApp según el número de personas.
 export function TourCard({ tour, onClick, btnText, ofertaText }: TourCardProps) {
-  const { formatPrice, currency, exchangeRate } = useCart();
-
   return (
     <motion.article
       onClick={onClick}
@@ -42,23 +41,8 @@ export function TourCard({ tour, onClick, btnText, ofertaText }: TourCardProps) 
       </div>
       
       <div className="p-8 flex flex-col flex-grow">
-        <div className="flex justify-between items-start mb-4 gap-4">
+        <div className="mb-4">
           <h3 className="font-black text-2xl text-neutral-900 leading-tight">{tour.title}</h3>
-          <div className="flex flex-col items-end">
-            {tour.originalPrice && (
-              <span className="text-sm text-neutral-400 line-through font-semibold mb-0.5">{formatPrice(tour.originalPrice)}</span>
-            )}
-            <span className="font-black text-2xl text-yellow-600 leading-none">{formatPrice(tour.price)}</span>
-            {currency === "USD" ? (
-              <span className="text-xs text-neutral-500 font-semibold mt-1">
-                (~${(Math.round((tour.price * exchangeRate) / 1000) * 1000).toLocaleString("es-CL")} CLP)
-              </span>
-            ) : (
-              <span className="text-xs text-neutral-500 font-semibold mt-1">
-                (${tour.price} USD)
-              </span>
-            )}
-          </div>
         </div>
         
         <div className="flex items-center gap-6 text-sm text-neutral-500 font-semibold mb-6">
