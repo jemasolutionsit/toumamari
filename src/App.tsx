@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Home } from "./pages/Home";
 
 // Home entra en el bundle inicial: es la landing y el LCP depende de ella.
@@ -7,7 +7,6 @@ import { Home } from "./pages/Home";
 const TravelGuide = lazy(() => import("./pages/TravelGuide").then((m) => ({ default: m.TravelGuide })));
 const SocialImpact = lazy(() => import("./pages/SocialImpact").then((m) => ({ default: m.SocialImpact })));
 const Terms = lazy(() => import("./pages/Terms").then((m) => ({ default: m.Terms })));
-const Admin = lazy(() => import("./pages/Admin").then((m) => ({ default: m.Admin })));
 const Gallery = lazy(() => import("./pages/Gallery").then((m) => ({ default: m.Gallery })));
 
 function RouteFallback() {
@@ -31,8 +30,9 @@ export default function App() {
           <Route path="/guia" element={<TravelGuide />} />
           <Route path="/impacto" element={<SocialImpact />} />
           <Route path="/terminos" element={<Terms />} />
-          <Route path="/admin" element={<Admin />} />
           <Route path="/galeria" element={<Gallery />} />
+          {/* Cualquier URL desconocida vuelve a la landing (no hay página 404). */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
     </Router>

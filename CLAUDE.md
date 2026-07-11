@@ -29,7 +29,7 @@ The project files have been reorganized into modular directories:
 - `src/pages/`
   - `Home.tsx` — main landing page with tour grids, reviews, contact form, and teaser gallery.
   - `Gallery.tsx` — standalone full photo gallery page with categories and lightbox view.
-  - `Admin.tsx` / `TravelGuide.tsx` / `SocialImpact.tsx` / `Terms.tsx` — supporting views.
+  - `TravelGuide.tsx` / `SocialImpact.tsx` / `Terms.tsx` — supporting views.
 - `src/lib/`
   - `api.ts` — queries to Supabase DB.
   - `whatsapp.ts` — WhatsApp message formatter for order checkout.

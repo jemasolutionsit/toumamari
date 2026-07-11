@@ -109,11 +109,13 @@ function SectionDivider() {
  * de la marca (misma figura que SectionDivider).
  */
 function SectionBridge({ from }: { from: 'dark' | 'light' }) {
+  // Paradas con luminancia repartida de forma pareja: si el cambio se concentra
+  // en el centro, el ojo lo lee como un corte en vez de un degradado.
   const gradient = from === 'dark'
-    ? "linear-gradient(to bottom, #000000 0%, #171717 22%, #525252 48%, #a3a3a3 72%, #ececec 92%, #fafafa 100%)"
-    : "linear-gradient(to bottom, #fafafa 0%, #ececec 8%, #a3a3a3 28%, #525252 52%, #171717 78%, #0a0a0a 100%)";
+    ? "linear-gradient(to bottom, #000000 0%, #121212 10%, #242424 20%, #454545 33%, #6e6e6e 47%, #9a9a9a 61%, #c4c4c4 75%, #e3e3e3 88%, #fafafa 100%)"
+    : "linear-gradient(to bottom, #fafafa 0%, #e3e3e3 12%, #c4c4c4 25%, #9a9a9a 39%, #6e6e6e 53%, #454545 67%, #242424 80%, #121212 90%, #0a0a0a 100%)";
   return (
-    <div aria-hidden className="relative h-36 md:h-44 -mb-1 flex items-center justify-center" style={{ background: gradient }}>
+    <div aria-hidden className="relative h-48 md:h-64 -mb-1 flex items-center justify-center" style={{ background: gradient }}>
       <div className="flex items-center">
         <div className="h-px w-20 md:w-32 bg-gradient-to-r from-transparent to-[#FFD700]/60" />
         <div className="w-2.5 h-2.5 rotate-45 border border-[#FFD700]/70 mx-4 shadow-[0_0_14px_rgba(255,215,0,0.45)]" />
@@ -317,6 +319,11 @@ export function Home() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
         </motion.div>
+
+        {/* Velo inferior fijo a la sección (fuera del parallax): la imagen se
+            desplaza con el scroll y su propio degradado se va con ella, dejando
+            un corte duro contra la sección negra siguiente. Este lo cubre siempre. */}
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-40 md:h-56 bg-gradient-to-b from-transparent to-black z-[5]" />
 
         <motion.div style={{ opacity: heroOpacity }} className="relative z-10 text-center px-4 max-w-5xl mx-auto pt-20">
           <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="flex flex-col items-center">
