@@ -7,7 +7,7 @@ const slugImageMap: Record<string, string> = {
   'orongo-tangata-manu':    '/images/tours/rano-kau-crater.webp',
   'amanecer-tongariki':     '/images/tours/ahu-tongariki-amanecer.webp',
   'experiencia-motu':       '/images/tours/motu-islotes.webp',
-  'tour-navegable-anakena': '/images/tours/ana-te-pahu.webp',
+  'tour-navegable-anakena': '/images/tours/bote-navegable-anakena.webp',
   'super-full-day-privado': '/images/tours/rano-raraku-sector1.webp',
 };
 
