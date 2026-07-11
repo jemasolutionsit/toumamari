@@ -301,7 +301,10 @@ export function Home() {
   return (
     <Layout scrolled={scrolled}>
       {/* ═══════════════ HERO ═══════════════ */}
-      <section ref={heroRef} id="inicio" className="relative h-[100svh] min-h-[600px] flex items-center justify-center overflow-hidden bg-black grain-overlay">
+      {/* min-h (no h fija): si el contenido no cabe en ventanas bajas —notebooks,
+          escalado 125% de Windows— la sección crece en vez de cortar los botones
+          o meter el badge bajo el navbar. */}
+      <section ref={heroRef} id="inicio" className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-black grain-overlay">
         <ParticleField />
 
         <motion.div style={{ y: heroY, scale: heroScale }} className="absolute inset-0 w-full h-full">
@@ -325,13 +328,17 @@ export function Home() {
             un corte duro contra la sección negra siguiente. Este lo cubre siempre. */}
         <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-40 md:h-56 bg-gradient-to-b from-transparent to-black z-[5]" />
 
-        <motion.div style={{ opacity: heroOpacity }} className="relative z-10 text-center px-4 max-w-5xl mx-auto pt-20">
+        {/* pt-28 libra el navbar fijo (80px); pb-28 reserva la franja del chevron. */}
+        <motion.div style={{ opacity: heroOpacity }} className="relative z-10 text-center px-4 max-w-5xl mx-auto pt-28 pb-28">
           <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="flex flex-col items-center">
-            <motion.span variants={fadeUp} className="text-[#FFD700] border border-[#FFD700]/50 rounded-full px-5 py-2 text-xs uppercase tracking-[0.25em] font-semibold mb-8 flex items-center gap-2 bg-black/40 backdrop-blur-sm">
+            <motion.span variants={fadeUp} className="text-[#FFD700] border border-[#FFD700]/50 rounded-full px-5 py-2 text-xs uppercase tracking-[0.25em] font-semibold mb-6 flex items-center gap-2 bg-black/40 backdrop-blur-sm">
               <MapPin className="w-3 h-3" /> {t.heroSub}
             </motion.span>
 
-            <motion.h1 variants={fadeUp} className="text-5xl md:text-7xl lg:text-[5.5rem] font-black text-white mb-8 uppercase tracking-tight leading-[1.05]">
+            {/* Tamaño fluido acotado por ALTO (svh) y ancho: en notebooks de poca
+                altura el título se reduce solo; en móvil (48px) y monitores
+                grandes (88px) queda igual que antes. */}
+            <motion.h1 variants={fadeUp} className="text-[clamp(3rem,min(8.5svh,7vw+0.5rem),5.5rem)] font-black text-white mb-6 md:mb-8 uppercase tracking-tight leading-[1.05]">
               <motion.span className="inline-block" initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3, duration: 0.8 }}>
                 {t.heroTitle1}
               </motion.span>{" "}
@@ -344,7 +351,7 @@ export function Home() {
               </motion.span>
             </motion.h1>
 
-            <motion.p variants={fadeUp} className="text-lg md:text-xl text-neutral-300 mb-12 max-w-2xl mx-auto font-light leading-relaxed">
+            <motion.p variants={fadeUp} className="text-lg md:text-xl text-neutral-300 mb-8 md:mb-10 max-w-2xl mx-auto font-light leading-relaxed">
               {t.heroText}
             </motion.p>
 
