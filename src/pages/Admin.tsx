@@ -18,7 +18,7 @@ import {
 import type { DiscountCode } from "../lib/api";
 import type { DbTour, DbBooking, DbContactMessage } from "../lib/database.types";
 
-const PASSWORD = "toumamari2024";
+const PASSWORD = "touamamari2024";
 
 // ── helpers ────────────────────────────────────────────────────────────────
 

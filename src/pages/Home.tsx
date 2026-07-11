@@ -103,6 +103,26 @@ function SectionDivider() {
   );
 }
 
+/**
+ * Transición entre secciones oscuras y claras. El degradado corto evita el
+ * scroll muerto en desktop y el ornamento dorado mantiene la firma visual
+ * de la marca (misma figura que SectionDivider).
+ */
+function SectionBridge({ from }: { from: 'dark' | 'light' }) {
+  const gradient = from === 'dark'
+    ? "linear-gradient(to bottom, #000000 0%, #171717 22%, #525252 48%, #a3a3a3 72%, #ececec 92%, #fafafa 100%)"
+    : "linear-gradient(to bottom, #fafafa 0%, #ececec 8%, #a3a3a3 28%, #525252 52%, #171717 78%, #0a0a0a 100%)";
+  return (
+    <div aria-hidden className="relative h-36 md:h-44 -mb-1 flex items-center justify-center" style={{ background: gradient }}>
+      <div className="flex items-center">
+        <div className="h-px w-20 md:w-32 bg-gradient-to-r from-transparent to-[#FFD700]/60" />
+        <div className="w-2.5 h-2.5 rotate-45 border border-[#FFD700]/70 mx-4 shadow-[0_0_14px_rgba(255,215,0,0.45)]" />
+        <div className="h-px w-20 md:w-32 bg-gradient-to-l from-transparent to-[#FFD700]/60" />
+      </div>
+    </div>
+  );
+}
+
 function SiteMarquee({ lang }: { lang: 'es' | 'en' }) {
   const sites = lang === 'es'
     ? ["Ahu Tongariki", "Rano Raraku", "Volcán Rano Kau", "Orongo", "Ana Kakenga", "Te Pito Kura", "Puna Pau", "Ahu Akivi", "Anakena", "Ahu Vaihu", "Ana Te Pahu", "Motu Nui"]
@@ -406,14 +426,7 @@ export function Home() {
       </section>
 
       {/* gradient bridge: dark promo → light tours */}
-      <div
-        aria-hidden
-        className="h-64 md:h-80 -mb-1"
-        style={{
-          background:
-            "linear-gradient(to bottom, #000000 0%, #1c1c1c 15%, #404040 30%, #737373 50%, #d4d4d4 70%, #f5f5f5 85%, #fafafa 100%)",
-        }}
-      />
+      <SectionBridge from="dark" />
 
       {/* ═══════════════ CATÁLOGO DE TOURS ═══════════════ */}
       <section id="tours" className="py-20 md:py-32 px-4 md:px-8 max-w-7xl mx-auto relative">
@@ -462,14 +475,7 @@ export function Home() {
       </section>
 
       {/* gradient bridge: light tours → dark gallery */}
-      <div
-        aria-hidden
-        className="h-64 md:h-80 -mb-1"
-        style={{
-          background:
-            "linear-gradient(to bottom, #fafafa 0%, #f5f5f5 15%, #d4d4d4 30%, #737373 50%, #404040 70%, #1c1c1c 85%, #0a0a0a 100%)",
-        }}
-      />
+      <SectionBridge from="light" />
 
       {/* ═══════════════ GALERÍA FOTOGRÁFICA (TEASER) ═══════════════ */}
       <section id="galeria" className="py-16 md:py-24 bg-neutral-950 text-white relative overflow-hidden">
@@ -628,14 +634,7 @@ export function Home() {
       </section>
 
       {/* gradient bridge: dark nosotros → light why-us */}
-      <div
-        aria-hidden
-        className="h-64 md:h-80 -mb-1"
-        style={{
-          background:
-            "linear-gradient(to bottom, #000000 0%, #1c1c1c 15%, #404040 30%, #737373 50%, #d4d4d4 70%, #f5f5f5 85%, #fafafa 100%)",
-        }}
-      />
+      <SectionBridge from="dark" />
 
       {/* ═══════════════ POR QUÉ TOUAMAMARI ═══════════════ */}
       <section className="py-16 md:py-24 bg-neutral-50 relative overflow-hidden">

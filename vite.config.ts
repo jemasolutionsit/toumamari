@@ -13,8 +13,8 @@ export default defineConfig(() => {
         registerType: 'autoUpdate',
         includeAssets: ['favicon.svg', 'favicon-32.png', 'apple-touch-icon.png'],
         manifest: {
-          name: 'Toumamari — Tours en Rapa Nui',
-          short_name: 'Toumamari',
+          name: 'Touamamari — Tours en Rapa Nui',
+          short_name: 'Touamamari',
           description:
             'Tours arqueológicos y experiencias culturales en Rapa Nui (Isla de Pascua).',
           lang: 'es',

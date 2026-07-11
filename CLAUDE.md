@@ -4,7 +4,7 @@ This file provides guidance when working with code in this repository.
 
 ## Project
 
-Toumamari — bilingual (ES/EN) site for booking Easter Island (Rapa Nui) tours. React SPA served by an Express server that also hosts the payment/booking API.
+Touamamari — bilingual (ES/EN) site for booking Easter Island (Rapa Nui) tours. React SPA served by an Express server that also hosts the payment/booking API.
 
 ## Commands
 
@@ -45,7 +45,7 @@ The project files have been reorganized into modular directories:
    - Implemented standard Vite PWA cache.
    - Configured specific Safari iOS meta tags (`apple-mobile-web-app-capable`, `apple-mobile-web-app-status-bar-style`, etc.) in `index.html` to support proper "Add to Home Screen" fullscreen execution on iPhone.
 4. **Build & Deploy:**
-   - Deployed on Vercel via `jemasolutionsit/toumamari` project (`prj_PTIyOWTCFktGqamoKtk7yeLbsbgQ`).
+   - Deployed on Vercel via `jemasolutionsit/touamamari` project (`prj_PTIyOWTCFktGqamoKtk7yeLbsbgQ`); production URL https://touamamari.vercel.app.
    - `sharp` is listed in `optionalDependencies` to prevent native binary installation failures in Vercel's Linux build containers.
 
 ## Env

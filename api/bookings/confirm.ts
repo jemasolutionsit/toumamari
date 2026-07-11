@@ -51,7 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             <p style="margin:0;font-size:11px;letter-spacing:4px;color:#c9a94d;text-transform:uppercase;">
               ${isEs ? "Isla de Pascua · Rapa Nui" : "Easter Island · Rapa Nui"}
             </p>
-            <h1 style="margin:8px 0 0;font-size:28px;color:#ffffff;letter-spacing:2px;">TOUMAMARI</h1>
+            <h1 style="margin:8px 0 0;font-size:28px;color:#ffffff;letter-spacing:2px;">TOUAMAMARI</h1>
           </td>
         </tr>
         <tr>
@@ -105,7 +105,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 ? "Nuestro guía se pondrá en contacto contigo por WhatsApp para confirmar los detalles del punto de encuentro y la hora de inicio."
                 : "Our guide will contact you via WhatsApp to confirm the meeting point details and start time."}
             </p>
-            <a href="https://wa.me/56912345678"
+            <a href="https://wa.me/56957609175"
                style="display:inline-block;background:#25d366;color:#ffffff;text-decoration:none;padding:12px 28px;border-radius:6px;font-size:14px;font-weight:bold;letter-spacing:1px;">
               ${isEs ? "Contactar por WhatsApp" : "Contact via WhatsApp"}
             </a>
@@ -113,7 +113,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         </tr>
         <tr>
           <td style="padding:28px 40px;background:#fafafa;text-align:center;">
-            <p style="margin:0 0 4px;font-size:12px;color:#aaaaaa;">Toumamari SpA</p>
+            <p style="margin:0 0 4px;font-size:12px;color:#aaaaaa;">Touamamari SpA</p>
             <p style="margin:0;font-size:12px;color:#aaaaaa;">Hanga Roa, Isla de Pascua (Rapa Nui), Chile</p>
           </td>
         </tr>
@@ -125,7 +125,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const { error } = await resend.emails.send({
-      from: "Toumamari <onboarding@resend.dev>",
+      from: "Touamamari <onboarding@resend.dev>",
       to: traveler_email,
       subject,
       html,
