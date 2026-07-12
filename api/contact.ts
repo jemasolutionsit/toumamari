@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { sbInsert, notifyOwner, esc } from "./_lib/store";
+import { sbInsert, notifyOwner, esc } from "./_lib/store.js";
 
 // Guarda el mensaje del formulario de contacto y avisa al negocio por correo.
 // RLS bloquea los INSERT con la clave pública, por eso pasa por el backend.

@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { sbInsert, notifyOwner, esc } from "../_lib/store";
+import { sbInsert, notifyOwner, esc } from "../_lib/store.js";
 
 // Crea la reserva desde el backend: RLS bloquea los INSERT con la clave
 // pública, así que el navegador ya no escribe directo en Supabase.
