@@ -54,23 +54,31 @@ export async function fetchTours(lang: 'es' | 'en'): Promise<Tour[]> {
   return (data as DbTour[]).map(t => dbTourToTour(t, lang));
 }
 
+// Los INSERT públicos están bloqueados por RLS: el navegador llama a los
+// endpoints /api/* y el backend escribe con la service role key.
 export async function submitContactMessage(msg: Omit<DbContactMessage, 'id' | 'read' | 'created_at'>) {
-  const { error } = await supabase
-    .from('contact_messages')
-    .insert(msg);
-
-  if (error) throw error;
+  const res = await fetch('/api/contact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(msg),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({})) as { error?: string };
+    throw new Error(body.error ?? 'Failed to send contact message');
+  }
 }
 
 export async function createBooking(booking: Omit<DbBooking, 'id' | 'created_at' | 'updated_at'>) {
-  const { data, error } = await supabase
-    .from('bookings')
-    .insert(booking)
-    .select()
-    .single();
-
-  if (error) throw error;
-  return data;
+  const res = await fetch('/api/bookings/create', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(booking),
+  });
+  const body = await res.json().catch(() => null);
+  if (!res.ok) {
+    throw new Error((body as { error?: string } | null)?.error ?? 'Failed to create booking');
+  }
+  return body;
 }
 
 export interface BookingConfirmationPayload {

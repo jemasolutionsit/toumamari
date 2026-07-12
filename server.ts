@@ -4,6 +4,7 @@ import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import { Resend } from "resend";
+import { sbInsert, notifyOwner, esc, FROM_EMAIL } from "./api/_lib/store";
 
 async function startServer() {
   const app = express();
@@ -20,6 +21,90 @@ async function startServer() {
 
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok", message: "Touamamari Backend API funcionando" });
+  });
+
+  // Mensaje de contacto: RLS bloquea los INSERT públicos, escribe el backend
+  // (mismo comportamiento que api/contact.ts en Vercel)
+  app.post("/api/contact", async (req, res) => {
+    const b = req.body as Record<string, unknown>;
+    const name = typeof b.name === "string" ? b.name.trim().slice(0, 120) : "";
+    const email = typeof b.email === "string" ? b.email.trim().slice(0, 200) : "";
+    const subject = typeof b.subject === "string" && b.subject.trim() ? b.subject.trim().slice(0, 200) : null;
+    const message = typeof b.message === "string" ? b.message.trim().slice(0, 4000) : "";
+
+    if (!name || !email.includes("@") || !message) {
+      res.status(400).json({ error: "Missing or invalid contact fields" });
+      return;
+    }
+
+    try {
+      await sbInsert("contact_messages", { name, email, subject, message });
+
+      await notifyOwner(
+        `Nuevo mensaje de contacto — ${esc(name)}`,
+        `<h2>Nuevo mensaje desde touamamari.vercel.app</h2>
+         <p><b>Nombre:</b> ${esc(name)}<br/>
+         <b>Email:</b> ${esc(email)}<br/>
+         <b>Asunto:</b> ${esc(subject ?? "(sin asunto)")}</p>
+         <p style="white-space:pre-wrap;border-left:3px solid #FFD700;padding-left:12px;">${esc(message)}</p>
+         <p>Responde directamente al correo del visitante.</p>`,
+      );
+
+      res.json({ success: true });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      res.status(500).json({ error: msg });
+    }
+  });
+
+  // Crear reserva (mismo comportamiento que api/bookings/create.ts en Vercel)
+  app.post("/api/bookings/create", async (req, res) => {
+    const b = req.body as Record<string, unknown>;
+    const guest_name = typeof b.guest_name === "string" ? b.guest_name.trim().slice(0, 120) : "";
+    const guest_email = typeof b.guest_email === "string" ? b.guest_email.trim().slice(0, 200) : "";
+    const tour_id = typeof b.tour_id === "string" ? b.tour_id : "";
+    const travel_date = typeof b.travel_date === "string" ? b.travel_date.slice(0, 10) : "";
+    const travelers = Math.min(50, Math.max(1, Number(b.travelers) || 0));
+    const notes = typeof b.notes === "string" ? b.notes.slice(0, 300) : null;
+
+    if (!guest_name || !guest_email.includes("@") || !tour_id || !/^\d{4}-\d{2}-\d{2}$/.test(travel_date) || !Number(b.travelers)) {
+      res.status(400).json({ error: "Missing or invalid booking fields" });
+      return;
+    }
+
+    try {
+      const created = await sbInsert("bookings", {
+        profile_id: null,
+        guest_name,
+        guest_email,
+        tour_id,
+        travel_date,
+        travelers,
+        total_clp: Number(b.total_clp) || 0,
+        total_usd: Number(b.total_usd) || 0,
+        status: "pending",
+        payment_method: null,
+        payment_id: null,
+        notes,
+      });
+
+      await notifyOwner(
+        `Nueva reserva web — ${esc(guest_name)} (${travel_date})`,
+        `<h2>Nueva reserva desde touamamari.vercel.app</h2>
+         <p><b>Nombre:</b> ${esc(guest_name)}<br/>
+         <b>Email:</b> ${esc(guest_email)}<br/>
+         <b>Tour ID:</b> ${esc(tour_id)}<br/>
+         <b>Fecha:</b> ${esc(travel_date)}<br/>
+         <b>Viajeros:</b> ${travelers}<br/>
+         <b>Notas:</b> ${esc(notes ?? "-")}</p>
+         <p>El valor se cotiza por WhatsApp según el número de personas.</p>`,
+      );
+
+      res.json(created);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      res.status(500).json({ error: msg });
+    }
   });
 
   // Booking confirmation email
@@ -159,7 +244,9 @@ async function startServer() {
 
     try {
       const { error } = await resend.emails.send({
-        from: "Touamamari <noreply@touamamari.com>",
+        // Sandbox de Resend: solo puede enviar desde onboarding@resend.dev
+        // hasta que touamamari.com esté comprado y verificado
+        from: FROM_EMAIL,
         to: traveler_email,
         subject,
         html,
