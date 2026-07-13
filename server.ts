@@ -42,7 +42,7 @@ async function startServer() {
 
       await notifyOwner(
         `Nuevo mensaje de contacto — ${esc(name)}`,
-        `<h2>Nuevo mensaje desde touamamari.vercel.app</h2>
+        `<h2>Nuevo mensaje desde www.touamamari.cl</h2>
          <p><b>Nombre:</b> ${esc(name)}<br/>
          <b>Email:</b> ${esc(email)}<br/>
          <b>Asunto:</b> ${esc(subject ?? "(sin asunto)")}</p>
@@ -90,7 +90,7 @@ async function startServer() {
 
       await notifyOwner(
         `Nueva reserva web — ${esc(guest_name)} (${travel_date})`,
-        `<h2>Nueva reserva desde touamamari.vercel.app</h2>
+        `<h2>Nueva reserva desde www.touamamari.cl</h2>
          <p><b>Nombre:</b> ${esc(guest_name)}<br/>
          <b>Email:</b> ${esc(guest_email)}<br/>
          <b>Tour ID:</b> ${esc(tour_id)}<br/>
@@ -244,8 +244,6 @@ async function startServer() {
 
     try {
       const { error } = await resend.emails.send({
-        // Sandbox de Resend: solo puede enviar desde onboarding@resend.dev
-        // hasta que touamamari.com esté comprado y verificado
         from: FROM_EMAIL,
         to: traveler_email,
         subject,

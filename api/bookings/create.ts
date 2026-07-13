@@ -40,7 +40,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Aviso interno al negocio (best-effort, no bloquea la reserva)
     await notifyOwner(
       `Nueva reserva web — ${esc(guest_name)} (${travel_date})`,
-      `<h2>Nueva reserva desde touamamari.vercel.app</h2>
+      `<h2>Nueva reserva desde www.touamamari.cl</h2>
        <p><b>Nombre:</b> ${esc(guest_name)}<br/>
        <b>Email:</b> ${esc(guest_email)}<br/>
        <b>Tour ID:</b> ${esc(tour_id)}<br/>

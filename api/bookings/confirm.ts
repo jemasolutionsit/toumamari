@@ -121,7 +121,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const { error } = await resend.emails.send({
-      from: "Touamamari <onboarding@resend.dev>",
+      from: "Touamamari <noreply@touamamari.cl>",
       to: traveler_email,
       subject,
       html,

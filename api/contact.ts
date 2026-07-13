@@ -24,7 +24,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Aviso al negocio (best-effort): sin esto el mensaje solo queda en la BD
     await notifyOwner(
       `Nuevo mensaje de contacto — ${esc(name)}`,
-      `<h2>Nuevo mensaje desde touamamari.vercel.app</h2>
+      `<h2>Nuevo mensaje desde www.touamamari.cl</h2>
        <p><b>Nombre:</b> ${esc(name)}<br/>
        <b>Email:</b> ${esc(email)}<br/>
        <b>Asunto:</b> ${esc(subject ?? "(sin asunto)")}</p>

@@ -1,19 +1,19 @@
 # Touamamari — Información pendiente del cliente
 
-El sitio está en producción en **https://touamamari.vercel.app** y funciona de punta a punta
-(catálogo desde la base de datos, carrito, reserva registrada y cierre por WhatsApp).
+El sitio está en producción en **https://www.touamamari.cl** y funciona de punta a punta
+(catálogo desde la base de datos, carrito, reserva registrada, avisos por correo al
+negocio y cierre por WhatsApp).
 Para dejarlo 100% operativo faltan estos datos, que solo el cliente puede entregar:
 
-## 1. Correo oficial de Touamamari (lo más importante)
-- El cliente indicó `info@touamamari.com`, pero **el dominio touamamari.com no está
-  comprado** (verificado 2026-07-11: no existe en DNS), así que esa casilla aún no puede
-  funcionar. **Falta: comprar el dominio touamamari.com** (~10 USD/año, p. ej. en
-  Namecheap o GoDaddy) y avisarnos para configurar el correo y los envíos automáticos.
-- **Para qué:** hoy el sistema de correos (Resend) está en modo prueba y **el cliente que
-  reserva no recibe su correo de confirmación**. Con el dominio comprado se verifica en
-  Resend y las confirmaciones salen desde info@touamamari.com.
-- La reserva igual queda registrada y el cierre por WhatsApp funciona; esto solo afecta
-  el correo automático.
+## 1. Casilla de correo info@touamamari.cl
+- **LISTO (2026-07-13):** el dominio touamamari.cl está comprado, conectado al sitio y
+  verificado en Resend — los correos automáticos ya salen desde `noreply@touamamari.cl`
+  y pueden llegar a cualquier destinatario.
+- **Falta: crear el buzón `info@touamamari.cl`** para poder RECIBIR correos (el dominio
+  aún no tiene servicio de casillas). Opciones: Google Workspace (~6 USD/mes),
+  Zoho Mail (gratis para 1 casilla) o el correo que incluya el proveedor del dominio.
+  Al crearlo, avisar para redirigir ahí los avisos de reservas y mensajes de contacto
+  (hoy llegan a jemasolutionsit@gmail.com).
 
 ## 2. Redes sociales
 - El cliente confirmó que **sí tienen Instagram** y enviará el usuario a la brevedad.
@@ -26,10 +26,10 @@ Para dejarlo 100% operativo faltan estos datos, que solo el cliente puede entreg
 - **Qué necesitamos:** confirmar que **+56 9 5760 9175** es el número oficial donde
   quieren recibir las reservas y consultas (todo el flujo de venta termina ahí).
 
-## 4. Dominio propio (opcional pero recomendado)
-- **Qué necesitamos:** decidir si compran `touamamari.com` (o similar, ~10 USD/año).
-- **Para qué:** hoy la dirección es `touamamari.vercel.app`. Un dominio propio se ve más
-  profesional, sirve para el correo del punto 1 y mejora el posicionamiento en Google.
+## 4. Dominio propio
+- **LISTO (2026-07-13):** `www.touamamari.cl` es la dirección oficial del sitio
+  (touamamari.cl redirige a www). Las direcciones touamamari.vercel.app y
+  toumamari.vercel.app siguen funcionando como respaldo.
 
 ## 5. Datos legales
 - **Qué necesitamos:** la razón social exacta (el sitio dice "Servicios Turísticos
@@ -40,6 +40,6 @@ Para dejarlo 100% operativo faltan estos datos, que solo el cliente puede entreg
 - **Precios: LISTO (2026-07-11)** — a pedido del cliente, el sitio ya no muestra ningún
   precio; en su lugar indica que el valor se cotiza por WhatsApp según el número de
   personas. (Los valores siguen guardados internamente por si quieren reactivarlos.)
-- **Falta: la foto nueva del Tour Navegable a Anakena** (la del bote que envió el
-  cliente por WhatsApp) en buena resolución, para reemplazar la actual.
+- **Foto del bote: LISTO (2026-07-11)** — la foto enviada por el cliente ya está
+  publicada en el Tour Navegable a Anakena.
 - Confirmar también el teléfono publicado para Google (+56 9 5760 9175).

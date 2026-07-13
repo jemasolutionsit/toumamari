@@ -26,13 +26,12 @@ export async function sbInsert<T = unknown>(table: string, row: unknown): Promis
   return (Array.isArray(body) ? body[0] : body) as T;
 }
 
-/** Casilla del negocio. Mientras Resend esté en sandbox (sin dominio
- *  verificado) es la ÚNICA dirección que puede recibir correos. */
+/** Casilla del negocio. info@touamamari.cl aún no tiene buzón (el dominio
+ *  no tiene hosting de correo); cambiar aquí o vía NOTIFY_EMAIL cuando exista. */
 export const OWNER_EMAIL = process.env.NOTIFY_EMAIL || "jemasolutionsit@gmail.com";
 
-/** Remitente permitido en sandbox; cambiar a noreply@touamamari.com
- *  cuando el dominio esté comprado y verificado en Resend. */
-export const FROM_EMAIL = "Touamamari Web <onboarding@resend.dev>";
+/** touamamari.cl está verificado en Resend (DKIM/SPF en Vercel DNS). */
+export const FROM_EMAIL = "Touamamari <noreply@touamamari.cl>";
 
 /** Notificación interna al negocio. Best-effort: nunca lanza. */
 export async function notifyOwner(subject: string, html: string): Promise<boolean> {
