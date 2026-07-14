@@ -104,18 +104,17 @@ function SectionDivider() {
 }
 
 /**
- * Transición entre secciones oscuras y claras. El degradado corto evita el
- * scroll muerto en desktop y el ornamento dorado mantiene la firma visual
- * de la marca (misma figura que SectionDivider).
+ * Costura entre secciones oscuras y claras: una franja corta con grises
+ * cálidos (armonizan con el dorado) y el rombo de la marca centrado en el
+ * borde. Corta a propósito — un degradado largo blanco↔negro pasa por grises
+ * neutros "sucios" y se lee como una sección gris vacía, no como transición.
  */
 function SectionBridge({ from }: { from: 'dark' | 'light' }) {
-  // Paradas con luminancia repartida de forma pareja: si el cambio se concentra
-  // en el centro, el ojo lo lee como un corte en vez de un degradado.
   const gradient = from === 'dark'
-    ? "linear-gradient(to bottom, #000000 0%, #121212 10%, #242424 20%, #454545 33%, #6e6e6e 47%, #9a9a9a 61%, #c4c4c4 75%, #e3e3e3 88%, #fafafa 100%)"
-    : "linear-gradient(to bottom, #fafafa 0%, #e3e3e3 12%, #c4c4c4 25%, #9a9a9a 39%, #6e6e6e 53%, #454545 67%, #242424 80%, #121212 90%, #0a0a0a 100%)";
+    ? "linear-gradient(to bottom, #0a0a0a 0%, #55524c 55%, #fafaf8 100%)"
+    : "linear-gradient(to bottom, #fafaf8 0%, #55524c 45%, #0a0a0a 100%)";
   return (
-    <div aria-hidden className="relative h-48 md:h-64 -mb-1 flex items-center justify-center" style={{ background: gradient }}>
+    <div aria-hidden className="relative h-16 md:h-20 -mb-1 flex items-center justify-center" style={{ background: gradient }}>
       <div className="flex items-center">
         <div className="h-px w-20 md:w-32 bg-gradient-to-r from-transparent to-[#FFD700]/60" />
         <div className="w-2.5 h-2.5 rotate-45 border border-[#FFD700]/70 mx-4 shadow-[0_0_14px_rgba(255,215,0,0.45)]" />
@@ -464,7 +463,7 @@ export function Home() {
       <section id="tours" className="py-20 md:py-32 px-4 md:px-8 max-w-7xl mx-auto relative">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUp} className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-black mb-6 tracking-tight text-neutral-900">
-            {t.toursTitle1} <span className="text-gradient-gold">{t.toursTitle2}</span>
+            {t.toursTitle1} <span className="text-gradient-gold-dark">{t.toursTitle2}</span>
           </h2>
           <p className="text-neutral-500 max-w-2xl mx-auto text-lg mb-10">{t.toursSubtitle}</p>
 
@@ -628,8 +627,11 @@ export function Home() {
         </div>
       </section>
 
+      {/* divisor sutil entre secciones oscuras */}
+      <div aria-hidden className="relative h-px bg-gradient-to-r from-transparent via-[#FFD700]/20 to-transparent" />
+
       {/* ═══════════════ NOSOTROS ═══════════════ */}
-      <section id="nosotros" className="py-20 md:py-28 bg-black text-white relative overflow-hidden">
+      <section id="nosotros" className="py-20 md:py-28 bg-neutral-950 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#FFD700]/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-yellow-600/10 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/2" />
 
@@ -673,7 +675,7 @@ export function Home() {
       <section className="py-16 md:py-24 bg-neutral-50 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp} className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-neutral-900">{t.whyUsTitle} <span className="text-gradient-gold">{t.whyUsSubtitle}</span></h2>
+            <h2 className="text-4xl md:text-5xl font-black text-neutral-900">{t.whyUsTitle} <span className="text-gradient-gold-dark">{t.whyUsSubtitle}</span></h2>
           </motion.div>
 
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -696,7 +698,7 @@ export function Home() {
       <section className="py-16 md:py-24 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-black text-neutral-900">{t.reviewsTitle} <span className="text-gradient-gold">{t.reviewsSubtitle}</span></h2>
+            <h2 className="text-3xl md:text-5xl font-black text-neutral-900">{t.reviewsTitle} <span className="text-gradient-gold-dark">{t.reviewsSubtitle}</span></h2>
           </motion.div>
 
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -723,7 +725,7 @@ export function Home() {
       <section id="contacto" className="py-20 md:py-32 px-4 md:px-8 max-w-7xl mx-auto relative">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <motion.div variants={fadeUp} className="flex flex-col justify-center">
-            <h2 className="text-4xl md:text-5xl font-black mb-6">{t.contactTitle1} <span className="text-gradient-gold">{t.contactTitle2}</span></h2>
+            <h2 className="text-4xl md:text-5xl font-black mb-6">{t.contactTitle1} <span className="text-gradient-gold-dark">{t.contactTitle2}</span></h2>
             <p className="text-neutral-500 text-lg mb-12">{t.contactSubtitle}</p>
 
             <div className="space-y-8">
