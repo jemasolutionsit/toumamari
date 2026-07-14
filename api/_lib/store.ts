@@ -26,9 +26,12 @@ export async function sbInsert<T = unknown>(table: string, row: unknown): Promis
   return (Array.isArray(body) ? body[0] : body) as T;
 }
 
-/** Casilla del negocio. info@touamamari.cl aún no tiene buzón (el dominio
- *  no tiene hosting de correo); cambiar aquí o vía NOTIFY_EMAIL cuando exista. */
-export const OWNER_EMAIL = process.env.NOTIFY_EMAIL || "jemasolutionsit@gmail.com";
+/** Casillas del negocio (acepta lista separada por comas vía NOTIFY_EMAIL).
+ *  info@touamamari.com es el correo oficial; jema queda como copia de respaldo. */
+export const OWNER_EMAILS = (process.env.NOTIFY_EMAIL || "info@touamamari.com,jemasolutionsit@gmail.com")
+  .split(",")
+  .map((e) => e.trim())
+  .filter(Boolean);
 
 /** touamamari.cl está verificado en Resend (DKIM/SPF en Vercel DNS). */
 export const FROM_EMAIL = "Touamamari <noreply@touamamari.cl>";
@@ -41,7 +44,7 @@ export async function notifyOwner(subject: string, html: string): Promise<boolea
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: FROM_EMAIL, to: OWNER_EMAIL, subject, html }),
+      body: JSON.stringify({ from: FROM_EMAIL, to: OWNER_EMAILS, subject, html }),
     });
     return res.ok;
   } catch {
