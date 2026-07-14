@@ -5,15 +5,16 @@ El sitio está en producción en **https://www.touamamari.cl** y funciona de pun
 negocio y cierre por WhatsApp).
 Para dejarlo 100% operativo faltan estos datos, que solo el cliente puede entregar:
 
-## 1. Casilla de correo info@touamamari.cl
-- **LISTO (2026-07-13):** el dominio touamamari.cl está comprado, conectado al sitio y
-  verificado en Resend — los correos automáticos ya salen desde `noreply@touamamari.cl`
-  y pueden llegar a cualquier destinatario.
-- **Falta: crear el buzón `info@touamamari.cl`** para poder RECIBIR correos (el dominio
-  aún no tiene servicio de casillas). Opciones: Google Workspace (~6 USD/mes),
-  Zoho Mail (gratis para 1 casilla) o el correo que incluya el proveedor del dominio.
-  Al crearlo, avisar para redirigir ahí los avisos de reservas y mensajes de contacto
-  (hoy llegan a jemasolutionsit@gmail.com).
+## 1. Correo del negocio: info@touamamari.com
+- **LISTO (2026-07-13):** los avisos de reservas y mensajes de contacto del sitio ahora
+  se envían a `info@touamamari.com` (con copia de respaldo a jemasolutionsit@gmail.com
+  para que nada se pierda). Ese correo también es el que aparece publicado en la página.
+- **Falta confirmar que los correos LLEGAN:** revisar la bandeja de `info@touamamari.com`
+  — enviamos un correo de prueba el 2026-07-13 desde `noreply@touamamari.cl` con asunto
+  "Prueba de avisos — www.touamamari.cl". Si NO llega, la casilla tiene un problema de
+  recepción que hay que resolver con quien administra ese correo (mientras tanto, la
+  copia de respaldo asegura que ninguna reserva se pierda). Cuando confirmen que llega,
+  avisar para quitar la copia de respaldo.
 
 ## 2. Redes sociales
 - El cliente confirmó que **sí tienen Instagram** y enviará el usuario a la brevedad.
