@@ -148,7 +148,7 @@ export function Gallery() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-1 group-hover:translate-y-0 opacity-80 group-hover:opacity-100 transition-all duration-300">
-                  <p className="text-[#FFD700] text-[9px] font-bold uppercase tracking-[0.3em] mb-1">
+                  <p className="text-[#FFD700] text-[10px] font-bold uppercase tracking-[0.25em] mb-1">
                     {language === "es" ? photo.subtitle_es : photo.subtitle_en}
                   </p>
                   <h3 className="text-white font-bold text-sm">

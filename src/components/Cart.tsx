@@ -202,14 +202,14 @@ export function CartDrawer() {
                                 type="button"
                                 aria-label={language === "es" ? "Quitar un viajero" : "Remove one traveler"}
                                 onClick={() => updateTravelers(item.id, Math.max(1, item.travelers - 1))}
-                                className="w-7 h-7 rounded-full border border-neutral-200 flex items-center justify-center text-sm font-bold text-neutral-500 hover:bg-neutral-100 hover:scale-110 active:scale-95 transition-transform"
+                                className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center text-base font-bold text-neutral-500 hover:bg-neutral-100 hover:scale-110 active:scale-95 transition-transform"
                               >-</button>
                               <span className="text-sm font-bold w-4 text-center">{item.travelers}</span>
                               <button
                                 type="button"
                                 aria-label={language === "es" ? "Añadir un viajero" : "Add one traveler"}
                                 onClick={() => updateTravelers(item.id, item.travelers + 1)}
-                                className="w-7 h-7 rounded-full border border-neutral-200 flex items-center justify-center text-sm font-bold text-neutral-500 hover:bg-neutral-100 hover:scale-110 active:scale-95 transition-transform"
+                                className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center text-base font-bold text-neutral-500 hover:bg-neutral-100 hover:scale-110 active:scale-95 transition-transform"
                               >+</button>
                             </div>
                             <button type="button" aria-label={language === "es" ? "Eliminar del carrito" : "Remove from cart"} onClick={() => removeFromCart(item.id)} className="text-neutral-400 hover:text-rose-500 transition-colors">

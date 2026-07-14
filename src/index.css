@@ -81,6 +81,21 @@ body {
   animation: grain 8s steps(10) infinite;
 }
 
+/* Con "reducir movimiento" activado se apagan las animaciones decorativas en
+   bucle (las de framer-motion ya las apaga MotionConfig reducedMotion="user";
+   los spinners de carga se mantienen porque comunican estado). */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-shimmer,
+  .animate-pulse-glow,
+  .grain-overlay::after {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 .parallax-slow {
   will-change: transform;
 }

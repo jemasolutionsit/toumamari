@@ -448,8 +448,12 @@ export function Home() {
                   type="button"
                   aria-label={language === 'es' ? `Ver video ${i + 1}` : `Watch video ${i + 1}`}
                   onClick={() => { if (i !== promoVideoIndex) { setPromoDir(i > promoVideoIndex ? 1 : -1); setPromoVideoIndex(i); } }}
-                  className={`h-2 rounded-full transition-all duration-300 ${i === promoVideoIndex ? "w-6 bg-[#FFD700]" : "w-2 bg-white/30 hover:bg-white/60"}`}
-                />
+                  className="group/dot p-3 -m-1.5 flex items-center justify-center"
+                >
+                  {/* el punto es chico pero el área táctil del botón mide ~32px
+                      (las flechas de 44px son el control principal del carrusel) */}
+                  <span className={`block h-2 rounded-full transition-all duration-300 ${i === promoVideoIndex ? "w-6 bg-[#FFD700]" : "w-2 bg-white/30 group-hover/dot:bg-white/60"}`} />
+                </button>
               ))}
             </div>
           </div>
@@ -565,7 +569,7 @@ export function Home() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-4 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
-                  <p className="text-[#FFD700] text-[8px] font-bold uppercase tracking-[0.3em] mb-0.5">
+                  <p className="text-[#FFD700] text-[10px] font-bold uppercase tracking-[0.25em] mb-0.5">
                     {language === 'es' ? photo.subtitle_es : photo.subtitle_en}
                   </p>
                   <h3 className="text-white font-bold text-xs truncate">
