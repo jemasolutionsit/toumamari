@@ -11,6 +11,10 @@ begin;
 create table if not exists tours_backup_20260709 as
   select * from public.tours;
 
+-- Sin RLS la tabla queda legible/escribible con la anon key pública.
+-- Con RLS activado y sin políticas, solo la service role puede tocarla.
+alter table tours_backup_20260709 enable row level security;
+
 -- 2. Modalidad privada. NULL = el tour no la ofrece.
 alter table public.tours
   add column if not exists price_usd_private numeric,
