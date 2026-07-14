@@ -5,15 +5,15 @@ El sitio está en producción en **https://www.touamamari.cl** y funciona de pun
 negocio y cierre por WhatsApp).
 Para dejarlo 100% operativo faltan estos datos, que solo el cliente puede entregar:
 
-## 1. Correo del negocio: info@touamamari.com
+## 1. Correo del negocio: info@touamamari.cl
 - **LISTO (2026-07-13):** los avisos de reservas y mensajes de contacto del sitio ahora
-  se envían a `info@touamamari.com` (con copia de respaldo a jemasolutionsit@gmail.com
+  se envían a `info@touamamari.cl` (con copia de respaldo a jemasolutionsit@gmail.com
   para que nada se pierda). Ese correo también es el que aparece publicado en la página.
-- **Falta confirmar que los correos LLEGAN:** revisar la bandeja de `info@touamamari.com`
-  — enviamos un correo de prueba el 2026-07-13 desde `noreply@touamamari.cl` con asunto
-  "Prueba de avisos — www.touamamari.cl". Si NO llega, la casilla tiene un problema de
-  recepción que hay que resolver con quien administra ese correo (mientras tanto, la
-  copia de respaldo asegura que ninguna reserva se pierda). Cuando confirmen que llega,
+- **Falta confirmar que los correos LLEGAN:** revisar la bandeja de `info@touamamari.cl`
+  — enviamos un correo de prueba el 2026-07-13 con asunto "Prueba de avisos —
+  www.touamamari.cl". Si NO llega, avisar: puede que la casilla aún no exista como
+  buzón (crear el buzón toma minutos y podemos ayudar con eso). Mientras tanto, la
+  copia de respaldo asegura que ninguna reserva se pierda. Cuando confirmen que llega,
   avisar para quitar la copia de respaldo.
 
 ## 2. Redes sociales
