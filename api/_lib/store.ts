@@ -39,19 +39,22 @@ export const OWNER_EMAILS = (process.env.NOTIFY_EMAIL || "info@touamamari.com,je
 export const FROM_EMAIL = "Touamamari <noreply@touamamari.cl>";
 
 /** Notificación interna al negocio. Best-effort: nunca lanza. */
+// Un envío POR destinatario, no una lista: con lista compartida el rebote de
+// una casilla caída (hoy info@touamamari.com, dominio en clientHold) marca
+// todo el correo "bounced" y no se puede saber si el respaldo sí lo recibió.
 export async function notifyOwner(subject: string, html: string): Promise<boolean> {
   const key = process.env.RESEND_API_KEY;
   if (!key) return false;
-  try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: FROM_EMAIL, to: OWNER_EMAILS, subject, html }),
-    });
-    return res.ok;
-  } catch {
-    return false;
-  }
+  const results = await Promise.allSettled(
+    OWNER_EMAILS.map((to) =>
+      fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ from: FROM_EMAIL, to: [to], subject, html }),
+      }),
+    ),
+  );
+  return results.some((r) => r.status === "fulfilled" && r.value.ok);
 }
 
 /** Escapa contenido del usuario antes de meterlo en HTML de correos. */
