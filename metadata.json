@@ -1,6 +1,0 @@
-{
-  "name": "Touamamari Tour Rapa Nui",
-  "description": "Plataforma de reservas y catálogo turístico para Rapa Nui.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

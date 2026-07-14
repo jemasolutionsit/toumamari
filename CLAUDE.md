@@ -50,5 +50,9 @@ The project files have been reorganized into modular directories:
 
 ## Env
 
-`.env.local` keys: `GEMINI_API_KEY`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`.
+`.env.local` keys: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY` (optional: `NOTIFY_EMAIL`).
 Only `VITE_` prefixed variables are exposed to the client and inlined during build.
+
+## Docs
+
+Client-facing documentation (pending items, contact data) lives in `docs/PARA-EL-CLIENTE.md`.
