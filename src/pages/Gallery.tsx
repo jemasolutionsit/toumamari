@@ -54,7 +54,7 @@ export function Gallery() {
   }, [selectedPhoto]);
 
   return (
-    <div className="min-h-dvh bg-black text-white relative overflow-hidden font-sans">
+    <div className="min-h-dvh bg-neutral-950 text-white relative overflow-hidden font-sans">
       {/* Background radial glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-gradient-to-b from-[#FFD700]/5 via-transparent to-transparent pointer-events-none" />
 

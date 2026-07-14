@@ -334,8 +334,11 @@ export function Home() {
 
         {/* Velo inferior fijo a la sección (fuera del parallax): la imagen se
             desplaza con el scroll y su propio degradado se va con ella, dejando
-            un corte duro contra la sección negra siguiente. Este lo cubre siempre. */}
-        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-40 md:h-56 bg-gradient-to-b from-transparent to-black z-[5]" />
+            un corte duro contra la sección negra siguiente. Termina en #0a0a0a
+            (neutral-950, el negro de TODAS las secciones oscuras) con un tramo
+            sólido final para que el empalme sea invisible aunque el parallax
+            mueva la imagen. */}
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-56 md:h-72 bg-[linear-gradient(to_bottom,transparent,rgba(10,10,10,0.9)_65%,#0a0a0a_88%)] z-[5]" />
 
         {/* pt libra el navbar fijo (80px) + el safe-area del notch en standalone;
             pb-28 reserva la franja del chevron. */}
@@ -382,7 +385,9 @@ export function Home() {
       </section>
 
       {/* ═══════════════ VIDEO PROMO ═══════════════ */}
-      <section className="py-16 md:py-24 bg-black relative overflow-hidden">
+      {/* neutral-950 como TODAS las secciones oscuras: dos negros distintos
+          pegados (#000 vs #0a0a0a) dibujan una línea de corte visible */}
+      <section className="py-16 md:py-24 bg-neutral-950 relative overflow-hidden">
         <ParticleField />
         <div className="max-w-7xl mx-auto px-4 md:px-8 text-center text-white relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUp}>
@@ -598,9 +603,12 @@ export function Home() {
       </section>
 
       {/* ═══════════════ EXPERIENCIAS PERSONALIZADAS ═══════════════ */}
-      <section className="py-16 md:py-24 bg-neutral-950 text-white relative overflow-hidden grain-overlay">
+      {/* Sin grain-overlay: el grano suma ~3% de luz y contra la galería plana
+          (mismo neutral-950) se veía la línea de empalme. El resplandor va
+          alejado del borde superior para que overflow-hidden no lo corte. */}
+      <section className="py-16 md:py-24 bg-neutral-950 text-white relative overflow-hidden">
         <ParticleField />
-        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-[#FFD700]/5 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute top-40 left-0 w-[500px] h-[500px] bg-[#FFD700]/5 rounded-full blur-[120px] -translate-x-1/2" />
         <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUp} className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-black mb-4">{t.customExpTitle} <span className="text-gradient-gold">{t.customExpSubtitle}</span></h2>
@@ -636,8 +644,10 @@ export function Home() {
 
       {/* ═══════════════ NOSOTROS ═══════════════ */}
       <section id="nosotros" className="py-20 md:py-28 bg-neutral-950 text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#FFD700]/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-yellow-600/10 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/2" />
+        {/* resplandores alejados de los bordes: si tocan el límite de la
+            sección, overflow-hidden los corta en una línea recta visible */}
+        <div className="absolute top-32 right-0 w-96 h-96 bg-[#FFD700]/5 rounded-full blur-[100px] translate-x-1/3" />
+        <div className="absolute bottom-32 left-0 w-96 h-96 bg-yellow-600/10 rounded-full blur-[100px] -translate-x-1/2" />
 
         <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div initial={{ opacity: 0, x: -60 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 1, ease: EASE }} className="relative h-[380px] sm:h-[480px] lg:h-[600px] w-full rounded-3xl overflow-hidden border border-white/10 group">
