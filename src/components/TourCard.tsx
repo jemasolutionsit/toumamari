@@ -61,7 +61,7 @@ export function TourCard({ tour, onClick, btnText, ofertaText }: TourCardProps) 
         </p>
         
         <div className="pt-6 border-t border-neutral-100 flex gap-4 mt-auto">
-          <button className="flex-grow bg-neutral-900 text-white py-4 rounded-2xl text-sm font-bold uppercase tracking-wider hover:bg-[#FFD700] hover:text-black transition-all duration-300 flex items-center justify-center gap-2 group/btn">
+          <button type="button" className="flex-grow bg-neutral-900 text-white py-4 rounded-2xl text-sm font-bold uppercase tracking-wider hover:bg-[#FFD700] hover:text-black transition-all duration-300 flex items-center justify-center gap-2 group/btn">
             {btnText}
             <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
           </button>

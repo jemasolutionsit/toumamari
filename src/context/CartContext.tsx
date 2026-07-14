@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useMemo, ReactNode } from "react";
 import { Tour } from "../data/data";
 
 export type Modality = "group" | "private";
@@ -50,7 +50,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [exchangeRate, setExchangeRate] = useState<number>(980);
 
   useEffect(() => {
-    fetch("https://mindicador.cl/api/dolar")
+    // AbortController: si el provider se desmonta antes de la respuesta,
+    // se cancela y no queda un setState colgando (fuga / race condition).
+    const controller = new AbortController();
+    fetch("https://mindicador.cl/api/dolar", { signal: controller.signal })
       .then((res) => res.json())
       .then((data) => {
         if (data && data.serie && data.serie[0] && data.serie[0].valor) {
@@ -58,8 +61,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }
       })
       .catch((err) => {
+        if (err instanceof DOMException && err.name === "AbortError") return;
         console.warn("Failed to fetch exchange rate from mindicador.cl, using fallback 980", err);
       });
+    return () => controller.abort();
   }, []);
 
   const addToCart = (tour: Tour, date: string, travelers: number, modality: Modality = "group") => {
@@ -102,24 +107,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // useMemo: un objeto literal nuevo en cada render haría re-renderizar a
+  // todos los consumidores del contexto aunque nada haya cambiado.
+  const value = useMemo(
+    () => ({
+      items,
+      addToCart,
+      removeFromCart,
+      updateTravelers,
+      total,
+      totalCLP,
+      isCartOpen,
+      setIsCartOpen,
+      currency,
+      setCurrency,
+      exchangeRate,
+      formatPrice,
+      getTourPriceVal,
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [items, total, totalCLP, isCartOpen, currency, exchangeRate],
+  );
+
   return (
-    <CartContext.Provider
-      value={{
-        items,
-        addToCart,
-        removeFromCart,
-        updateTravelers,
-        total,
-        totalCLP,
-        isCartOpen,
-        setIsCartOpen,
-        currency,
-        setCurrency,
-        exchangeRate,
-        formatPrice,
-        getTourPriceVal,
-      }}
-    >
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   );

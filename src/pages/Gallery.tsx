@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowLeft, Camera, Image as ImageIcon } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -15,34 +15,43 @@ interface Photo {
   subtitle_en: string;
 }
 
+// Función pura y lista fija: fuera del componente para no recrearlas en cada render.
+const getPhotoCategory = (p: Photo): "moais" | "landscapes" | "caves" => {
+  const src = p.src.toLowerCase();
+  const txt = (p.title_es + " " + p.subtitle_es).toLowerCase();
+  if (src.includes("moai") || txt.includes("moai") || src.includes("tongariki") || src.includes("akivi") || src.includes("paro") || src.includes("vaihu")) {
+    return "moais";
+  }
+  if (src.includes("cueva") || src.includes("ana-") || src.includes("cueva-costa") || src.includes("motu")) {
+    return "caves";
+  }
+  return "landscapes";
+};
+
+const categories = [
+  { id: "all", label_es: "Todos", label_en: "All" },
+  { id: "moais", label_es: "Moais", label_en: "Moais" },
+  { id: "landscapes", label_es: "Volcanes y Canteras", label_en: "Volcanoes & Quarries" },
+  { id: "caves", label_es: "Cuevas y Islotes", label_en: "Caves & Islets" }
+] as const;
+
 export function Gallery() {
   const { language } = useLanguage();
   const [filter, setFilter] = useState<"all" | "moais" | "landscapes" | "caves">("all");
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
-
-  const getPhotoCategory = (p: Photo): "moais" | "landscapes" | "caves" => {
-    const src = p.src.toLowerCase();
-    const txt = (p.title_es + " " + p.subtitle_es).toLowerCase();
-    if (src.includes("moai") || txt.includes("moai") || src.includes("tongariki") || src.includes("akivi") || src.includes("paro") || src.includes("vaihu")) {
-      return "moais";
-    }
-    if (src.includes("cueva") || src.includes("ana-") || src.includes("cueva-costa") || src.includes("motu")) {
-      return "caves";
-    }
-    return "landscapes";
-  };
 
   const filteredPhotos = GALLERY_PHOTOS.filter(p => {
     if (filter === "all") return true;
     return getPhotoCategory(p) === filter;
   });
 
-  const categories = [
-    { id: "all", label_es: "Todos", label_en: "All" },
-    { id: "moais", label_es: "Moais", label_en: "Moais" },
-    { id: "landscapes", label_es: "Volcanes y Canteras", label_en: "Volcanoes & Quarries" },
-    { id: "caves", label_es: "Cuevas y Islotes", label_en: "Caves & Islets" }
-  ] as const;
+  // Cierre con Escape: el fondo clickeable del lightbox no es alcanzable por teclado.
+  useEffect(() => {
+    if (!selectedPhoto) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setSelectedPhoto(null); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selectedPhoto]);
 
   return (
     <div className="min-h-dvh bg-black text-white relative overflow-hidden font-sans">
@@ -93,6 +102,7 @@ export function Gallery() {
           {categories.map((c) => (
             <button
               key={c.id}
+              type="button"
               onClick={() => setFilter(c.id)}
               className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${
                 filter === c.id
@@ -122,7 +132,11 @@ export function Gallery() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.45, ease: EASE }}
                 onClick={() => setSelectedPhoto(photo)}
-                className="relative overflow-hidden rounded-2xl group cursor-pointer aspect-[4/3] bg-neutral-900 border border-white/5"
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedPhoto(photo); } }}
+                role="button"
+                tabIndex={0}
+                aria-label={language === "es" ? `Ampliar foto: ${photo.title_es}` : `Enlarge photo: ${photo.title_en}`}
+                className="relative overflow-hidden rounded-2xl group cursor-pointer aspect-[4/3] bg-neutral-900 border border-white/5 focus-visible:ring-2 focus-visible:ring-[#FFD700] outline-none"
               >
                 <img
                   src={photo.src}
@@ -155,6 +169,9 @@ export function Gallery() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedPhoto(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label={language === "es" ? selectedPhoto.title_es : selectedPhoto.title_en}
             className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 pt-[max(1rem,env(safe-area-inset-top))] backdrop-blur-sm"
           >
             <div className="relative max-w-5xl w-full max-h-[85vh] flex flex-col items-center justify-center">

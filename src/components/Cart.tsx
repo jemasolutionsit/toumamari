@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X, Trash2, MessageCircle, ShoppingCart, ShieldCheck, CalendarCheck, Loader2, CheckCircle, AlertCircle, User, Mail } from "lucide-react";
 import { useCart, unitPrice, unitPriceCLP } from "../context/CartContext";
 import { useLanguage } from "../context/i18n";
@@ -35,6 +35,15 @@ export function CartDrawer() {
   };
 
   const handleProceedToForm = () => setStep("form");
+
+  // Cierre con Escape: el fondo clickeable no es alcanzable por teclado.
+  useEffect(() => {
+    if (!isCartOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") handleClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCartOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,6 +125,7 @@ export function CartDrawer() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleClose}
+            aria-hidden="true"
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[80]"
           />
           <motion.div
@@ -137,9 +147,11 @@ export function CartDrawer() {
                 {t.cartTitle}
               </motion.h2>
               <motion.button
+                type="button"
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={handleClose}
+                aria-label={language === "es" ? "Cerrar carrito" : "Close cart"}
                 className="p-2 hover:bg-neutral-200 rounded-full transition-colors text-neutral-900"
               >
                 <X className="w-6 h-6" />
@@ -187,16 +199,20 @@ export function CartDrawer() {
                           <div className="flex items-center justify-between mt-3">
                             <div className="flex items-center gap-3">
                               <button
+                                type="button"
+                                aria-label={language === "es" ? "Quitar un viajero" : "Remove one traveler"}
                                 onClick={() => updateTravelers(item.id, Math.max(1, item.travelers - 1))}
                                 className="w-7 h-7 rounded-full border border-neutral-200 flex items-center justify-center text-sm font-bold text-neutral-500 hover:bg-neutral-100 hover:scale-110 active:scale-95 transition-transform"
                               >-</button>
                               <span className="text-sm font-bold w-4 text-center">{item.travelers}</span>
                               <button
+                                type="button"
+                                aria-label={language === "es" ? "Añadir un viajero" : "Add one traveler"}
                                 onClick={() => updateTravelers(item.id, item.travelers + 1)}
                                 className="w-7 h-7 rounded-full border border-neutral-200 flex items-center justify-center text-sm font-bold text-neutral-500 hover:bg-neutral-100 hover:scale-110 active:scale-95 transition-transform"
                               >+</button>
                             </div>
-                            <button onClick={() => removeFromCart(item.id)} className="text-neutral-400 hover:text-rose-500 transition-colors">
+                            <button type="button" aria-label={language === "es" ? "Eliminar del carrito" : "Remove from cart"} onClick={() => removeFromCart(item.id)} className="text-neutral-400 hover:text-rose-500 transition-colors">
                               <Trash2 className="w-5 h-5" />
                             </button>
                           </div>
@@ -214,6 +230,7 @@ export function CartDrawer() {
                         : "Pricing is quoted via WhatsApp based on group size."}
                     </p>
                     <motion.button
+                      type="button"
                       whileHover={{ scale: 1.02, y: -2, boxShadow: "0 15px 30px rgba(37,211,102,0.35)" }}
                       whileTap={{ scale: 0.98 }}
                       onClick={handleProceedToForm}
@@ -248,11 +265,12 @@ export function CartDrawer() {
 
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-bold text-neutral-700 mb-1">
+                      <label htmlFor="guest-name" className="block text-sm font-bold text-neutral-700 mb-1">
                         <User className="inline w-4 h-4 mr-1" />
                         {language === "es" ? "Nombre completo" : "Full name"}
                       </label>
                       <input
+                        id="guest-name"
                         type="text"
                         required
                         value={name}
@@ -262,11 +280,12 @@ export function CartDrawer() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-bold text-neutral-700 mb-1">
+                      <label htmlFor="guest-email" className="block text-sm font-bold text-neutral-700 mb-1">
                         <Mail className="inline w-4 h-4 mr-1" />
                         {language === "es" ? "Correo electrónico" : "Email address"}
                       </label>
                       <input
+                        id="guest-email"
                         type="email"
                         required
                         value={email}
@@ -348,6 +367,7 @@ export function CartDrawer() {
                   {language === "es" ? "Enviar pedido por WhatsApp" : "Send order via WhatsApp"}
                 </a>
                 <button
+                  type="button"
                   onClick={handleClose}
                   className="text-sm text-neutral-400 hover:text-neutral-600 underline"
                 >
@@ -369,6 +389,7 @@ export function CartDrawer() {
                   </p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setStep("form")}
                   className="bg-neutral-900 text-white px-6 py-3 rounded-2xl font-bold text-sm hover:bg-neutral-700 transition-colors"
                 >

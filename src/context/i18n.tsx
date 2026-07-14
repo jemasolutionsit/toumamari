@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext, useState } from "react";
+import { ReactNode, createContext, useContext, useMemo, useState } from "react";
 
 type Language = "es" | "en";
 
@@ -243,8 +243,14 @@ const LanguageContext = createContext<LanguageContextProps | undefined>(undefine
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("es");
 
+  // useMemo: evita re-renderizar todos los consumidores en cada render del provider.
+  const value = useMemo(
+    () => ({ language, setLanguage, t: translations[language] }),
+    [language],
+  );
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t: translations[language] }}>
+    <LanguageContext.Provider value={value}>
       {children}
     </LanguageContext.Provider>
   );

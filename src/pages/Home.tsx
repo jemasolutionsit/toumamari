@@ -138,7 +138,7 @@ function SiteMarquee({ lang }: { lang: 'es' | 'en' }) {
         transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
       >
         {doubled.map((site, i) => (
-          <span key={i} className="flex items-center gap-8 text-[#FFD700]/35 text-[11px] font-bold uppercase tracking-[0.4em]">
+          <span key={`${site}-${i}`} className="flex items-center gap-8 text-[#FFD700]/35 text-[11px] font-bold uppercase tracking-[0.4em]">
             {site}
             <span className="inline-block w-1 h-1 rounded-full bg-[#FFD700]/25" />
           </span>
@@ -165,6 +165,28 @@ const customIcons: Record<string, typeof Heart> = {
   "📸": Camera,
   "🚐": Map,
   "♿": Users,
+};
+
+// Variantes de animación: no dependen de estado, viven fuera del componente
+// para no reconstruirse en cada render.
+const fadeUp = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: EASE } }
+};
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.6 } }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.12 } }
+};
+
+const scaleUp = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: EASE } }
 };
 
 export function Home() {
@@ -201,6 +223,14 @@ export function Home() {
   useEffect(() => {
     setModality("group");
   }, [selectedTour?.id]);
+
+  // Cierre con Escape: el fondo clickeable no es alcanzable por teclado.
+  useEffect(() => {
+    if (!selectedTour) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setSelectedTour(null); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selectedTour]);
 
   const ABOUT = getAbout(language);
   const REVIEWS = getReviews(language);
@@ -277,26 +307,6 @@ export function Home() {
       .catch(() => setAvailabilityForSelected(null));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate, selectedTour]);
-
-  const fadeUp = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: EASE } }
-  };
-
-  const fadeIn = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.6 } }
-  };
-
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.12 } }
-  };
-
-  const scaleUp = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: EASE } }
-  };
 
   return (
     <Layout scrolled={scrolled}>
@@ -415,6 +425,7 @@ export function Home() {
 
             {/* arrows */}
             <button
+              type="button"
               onClick={() => { setPromoDir(-1); setPromoVideoIndex(i => (i - 1 + PROMO_VIDEOS.length) % PROMO_VIDEOS.length); }}
               aria-label="Anterior"
               className="absolute left-2 md:-left-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white hover:bg-[#FFD700] hover:text-black hover:border-[#FFD700] transition-all duration-200 z-10"
@@ -422,6 +433,7 @@ export function Home() {
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
+              type="button"
               onClick={() => { setPromoDir(1); setPromoVideoIndex(i => (i + 1) % PROMO_VIDEOS.length); }}
               aria-label="Siguiente"
               className="absolute right-2 md:-right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white hover:bg-[#FFD700] hover:text-black hover:border-[#FFD700] transition-all duration-200 z-10"
@@ -434,6 +446,8 @@ export function Home() {
               {PROMO_VIDEOS.map((_, i) => (
                 <button
                   key={i}
+                  type="button"
+                  aria-label={language === 'es' ? `Ver video ${i + 1}` : `Watch video ${i + 1}`}
                   onClick={() => { if (i !== promoVideoIndex) { setPromoDir(i > promoVideoIndex ? 1 : -1); setPromoVideoIndex(i); } }}
                   className={`h-2 rounded-full transition-all duration-300 ${i === promoVideoIndex ? "w-6 bg-[#FFD700]" : "w-2 bg-white/30 hover:bg-white/60"}`}
                 />
@@ -463,6 +477,7 @@ export function Home() {
             ].map((f) => (
               <motion.button
                 key={f.id}
+                type="button"
                 variants={scaleUp}
                 onClick={() => setActiveFilter(f.id)}
                 className={`px-6 py-2.5 rounded-full text-sm font-bold uppercase tracking-wider transition-all border ${activeFilter === f.id ? "bg-black text-white border-black shadow-lg" : "bg-white text-neutral-500 border-neutral-200 hover:border-black hover:text-black"}`}
@@ -530,7 +545,7 @@ export function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
             {GALLERY_PHOTOS.slice(0, 4).map((photo, i) => (
               <motion.div
-                key={i}
+                key={photo.src}
                 initial={{ opacity: 0, y: 40, scale: 0.97 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: "-40px" }}
@@ -595,7 +610,7 @@ export function Home() {
             {CUSTOM_EXP.map((exp, i) => {
               const Icon = customIcons[exp.emoji] || Sparkles;
               return (
-                <motion.div key={i} variants={scaleUp} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 hover:border-[#FFD700]/30 transition-all duration-400 group hover-lift">
+                <motion.div key={exp.text} variants={scaleUp} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 hover:border-[#FFD700]/30 transition-all duration-400 group hover-lift">
                   <div className="w-12 h-12 bg-[#FFD700]/10 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:bg-[#FFD700]/20 transition-colors">
                     <Icon className="w-6 h-6 text-[#FFD700]" />
                   </div>
@@ -665,7 +680,7 @@ export function Home() {
             {WHY_US.map((item, i) => {
               const Icon = whyUsIcons[item.icon] || Check;
               return (
-                <motion.div key={i} variants={fadeUp} className="flex items-center gap-4 bg-white p-6 rounded-2xl border border-neutral-200 hover:border-[#FFD700]/40 hover:shadow-lg transition-all duration-400 hover-lift">
+                <motion.div key={item.icon} variants={fadeUp} className="flex items-center gap-4 bg-white p-6 rounded-2xl border border-neutral-200 hover:border-[#FFD700]/40 hover:shadow-lg transition-all duration-400 hover-lift">
                   <div className="w-12 h-12 bg-[#FFD700]/10 rounded-xl flex items-center justify-center flex-shrink-0">
                     <Icon className="w-6 h-6 text-[#FFD700]" />
                   </div>
@@ -717,7 +732,7 @@ export function Home() {
                 { icon: MapPin, label: t.locationLabel, value: CONTACT_INFO.location, href: undefined },
                 { icon: Phone, label: "WhatsApp", value: CONTACT_INFO.whatsapp, href: `https://wa.me/${CONTACT_INFO.whatsapp.replace(/[^0-9]/g, '')}` },
               ].map((item, i) => (
-                <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="flex items-center gap-6 group">
+                <motion.div key={item.label} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="flex items-center gap-6 group">
                   <div className="w-16 h-16 bg-neutral-100 flex items-center justify-center rounded-2xl text-neutral-900 group-hover:bg-[#FFD700]/10 group-hover:text-[#FFD700] transition-all duration-300">
                     <item.icon className="w-7 h-7" />
                   </div>
@@ -738,21 +753,21 @@ export function Home() {
             <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); contactForm.submit(); }}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider ml-2">{t.formName}</label>
-                  <input type="text" required value={contactForm.formData.name} onChange={(e) => contactForm.update("name", e.target.value)} placeholder={t.formNameP} className="w-full bg-neutral-50 border border-neutral-200 focus:bg-white focus:border-[#FFD700] focus:ring-4 focus:ring-[#FFD700]/10 rounded-2xl px-5 py-4 outline-none transition-all" />
+                  <label htmlFor="contact-name" className="text-xs font-bold text-neutral-500 uppercase tracking-wider ml-2">{t.formName}</label>
+                  <input id="contact-name" type="text" required value={contactForm.formData.name} onChange={(e) => contactForm.update("name", e.target.value)} placeholder={t.formNameP} className="w-full bg-neutral-50 border border-neutral-200 focus:bg-white focus:border-[#FFD700] focus:ring-4 focus:ring-[#FFD700]/10 rounded-2xl px-5 py-4 outline-none transition-all" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider ml-2">{t.formEmail}</label>
-                  <input type="email" required value={contactForm.formData.email} onChange={(e) => contactForm.update("email", e.target.value)} placeholder="correo@ejemplo.com" className="w-full bg-neutral-50 border border-neutral-200 focus:bg-white focus:border-[#FFD700] focus:ring-4 focus:ring-[#FFD700]/10 rounded-2xl px-5 py-4 outline-none transition-all" />
+                  <label htmlFor="contact-email" className="text-xs font-bold text-neutral-500 uppercase tracking-wider ml-2">{t.formEmail}</label>
+                  <input id="contact-email" type="email" required value={contactForm.formData.email} onChange={(e) => contactForm.update("email", e.target.value)} placeholder="correo@ejemplo.com" className="w-full bg-neutral-50 border border-neutral-200 focus:bg-white focus:border-[#FFD700] focus:ring-4 focus:ring-[#FFD700]/10 rounded-2xl px-5 py-4 outline-none transition-all" />
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider ml-2">{t.formSubj}</label>
-                <input type="text" value={contactForm.formData.subject} onChange={(e) => contactForm.update("subject", e.target.value)} placeholder={t.formSubjP} className="w-full bg-neutral-50 border border-neutral-200 focus:bg-white focus:border-[#FFD700] focus:ring-4 focus:ring-[#FFD700]/10 rounded-2xl px-5 py-4 outline-none transition-all" />
+                <label htmlFor="contact-subject" className="text-xs font-bold text-neutral-500 uppercase tracking-wider ml-2">{t.formSubj}</label>
+                <input id="contact-subject" type="text" value={contactForm.formData.subject} onChange={(e) => contactForm.update("subject", e.target.value)} placeholder={t.formSubjP} className="w-full bg-neutral-50 border border-neutral-200 focus:bg-white focus:border-[#FFD700] focus:ring-4 focus:ring-[#FFD700]/10 rounded-2xl px-5 py-4 outline-none transition-all" />
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider ml-2">{t.formMsg}</label>
-                <textarea rows={4} required value={contactForm.formData.message} onChange={(e) => contactForm.update("message", e.target.value)} placeholder={t.formMsgP} className="w-full bg-neutral-50 border border-neutral-200 focus:bg-white focus:border-[#FFD700] focus:ring-4 focus:ring-[#FFD700]/10 rounded-2xl px-5 py-4 outline-none transition-all resize-none" />
+                <label htmlFor="contact-message" className="text-xs font-bold text-neutral-500 uppercase tracking-wider ml-2">{t.formMsg}</label>
+                <textarea id="contact-message" rows={4} required value={contactForm.formData.message} onChange={(e) => contactForm.update("message", e.target.value)} placeholder={t.formMsgP} className="w-full bg-neutral-50 border border-neutral-200 focus:bg-white focus:border-[#FFD700] focus:ring-4 focus:ring-[#FFD700]/10 rounded-2xl px-5 py-4 outline-none transition-all resize-none" />
               </div>
               {contactForm.error && (
                 <p className="text-red-500 text-sm font-medium">{contactForm.error}</p>
@@ -792,6 +807,7 @@ export function Home() {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="Hanga Roa, Easter Island"
+              sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
               allowFullScreen
             />
           </div>
@@ -807,8 +823,11 @@ export function Home() {
       <AnimatePresence>
         {selectedTour && (
           <>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedTour(null)} className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]" />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedTour(null)} aria-hidden="true" className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]" />
             <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-label={selectedTour.title}
               initial={{ opacity: 0, y: "100%" }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: "100%" }}
@@ -816,7 +835,7 @@ export function Home() {
               className="fixed inset-x-0 bottom-0 top-[max(2.5rem,env(safe-area-inset-top))] md:top-20 z-[70] bg-white rounded-t-[2.5rem] overflow-hidden flex flex-col shadow-2xl mx-auto md:max-w-5xl"
             >
               <div className="absolute top-6 right-6 z-10">
-                <button onClick={() => setSelectedTour(null)} className="w-12 h-12 bg-white/50 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg border border-white/20 text-neutral-900">
+                <button type="button" onClick={() => setSelectedTour(null)} aria-label={language === 'es' ? 'Cerrar detalle del tour' : 'Close tour details'} className="w-12 h-12 bg-white/50 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg border border-white/20 text-neutral-900">
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -864,7 +883,7 @@ export function Home() {
                       <h4 className="text-lg font-bold mb-4 flex items-center gap-2 text-neutral-900"><Check className="w-5 h-5 text-emerald-500" /> {t.modalIncludes}</h4>
                       <ul className="space-y-3">
                         {selectedTour.included.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-3 text-neutral-600"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 flex-shrink-0" />{item}</li>
+                          <li key={item} className="flex items-start gap-3 text-neutral-600"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 flex-shrink-0" />{item}</li>
                         ))}
                       </ul>
                     </div>
@@ -872,7 +891,7 @@ export function Home() {
                       <h4 className="text-lg font-bold mb-4 flex items-center gap-2 text-neutral-900"><XCircle className="w-5 h-5 text-rose-500" /> {t.modalNotIncludes}</h4>
                       <ul className="space-y-3">
                         {selectedTour.notIncluded.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-3 text-neutral-500"><span className="w-1.5 h-1.5 rounded-full bg-rose-300 mt-2 flex-shrink-0" />{item}</li>
+                          <li key={item} className="flex items-start gap-3 text-neutral-500"><span className="w-1.5 h-1.5 rounded-full bg-rose-300 mt-2 flex-shrink-0" />{item}</li>
                         ))}
                       </ul>
                     </div>
@@ -882,7 +901,7 @@ export function Home() {
                     <h3 className="text-2xl font-black mb-6">{t.modalItinerary}</h3>
                     <div className="space-y-6">
                       {selectedTour.itinerary.map((step, idx) => (
-                        <motion.div key={idx} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.05 }} className="flex gap-6">
+                        <motion.div key={`${step.time}-${step.title}`} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.05 }} className="flex gap-6">
                           <div className="flex flex-col items-center">
                             <div className="w-3 h-3 rounded-full bg-[#FFD700]" />
                             {idx !== selectedTour.itinerary.length - 1 && <div className="w-px h-full bg-neutral-200 mt-2" />}
@@ -903,13 +922,15 @@ export function Home() {
                     {/* Calendar */}
                     <div>
                       <div className="flex items-center justify-between mb-3">
-                        <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider">{t.modalAddDate}</label>
+                        <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider">{t.modalAddDate}</span>
                         {calLoading && <span className="text-xs text-neutral-400">{language === 'es' ? 'Cargando...' : 'Loading...'}</span>}
                       </div>
                       <div className="bg-white border border-neutral-200 rounded-2xl p-4 select-none">
                         {/* Month nav */}
                         <div className="flex items-center justify-between mb-3">
                           <button
+                            type="button"
+                            aria-label={language === 'es' ? 'Mes anterior' : 'Previous month'}
                             onClick={() => {
                               if (calMonth === 0) { setCalMonth(11); setCalYear(y => y - 1); }
                               else setCalMonth(m => m - 1);
@@ -922,6 +943,8 @@ export function Home() {
                             {new Date(calYear, calMonth).toLocaleString(language === 'es' ? 'es-CL' : 'en-US', { month: 'long', year: 'numeric' })}
                           </span>
                           <button
+                            type="button"
+                            aria-label={language === 'es' ? 'Mes siguiente' : 'Next month'}
                             onClick={() => {
                               const maxDate = new Date(today);
                               maxDate.setDate(today.getDate() + 90);
@@ -964,6 +987,7 @@ export function Home() {
                             cells.push(
                               <button
                                 key={d}
+                                type="button"
                                 disabled={disabled}
                                 onClick={() => !disabled && setSelectedDate(dateStr)}
                                 className={[
@@ -993,15 +1017,16 @@ export function Home() {
                     {/* Modality — solo si el tour ofrece versión privada */}
                     {selectedTour.pricePrivate && (
                       <div className="flex-1 w-full">
-                        <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2 block">
+                        <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2 block">
                           {language === 'es' ? 'Modalidad' : 'Modality'}
-                        </label>
+                        </span>
                         <div className="grid grid-cols-2 gap-2">
                           {(["group", "private"] as const).map((m) => {
                             const active = modality === m;
                             return (
                               <button
                                 key={m}
+                                type="button"
                                 onClick={() => setModality(m)}
                                 aria-pressed={active}
                                 className={`rounded-2xl border px-4 py-3 text-left transition-all ${
@@ -1029,11 +1054,11 @@ export function Home() {
 
                     {/* Travelers */}
                     <div className="flex-1 w-full">
-                      <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2 block">{t.cartTravelers}</label>
+                      <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2 block">{t.cartTravelers}</span>
                       <div className="flex items-center bg-white border border-neutral-200 rounded-2xl px-5 py-3">
-                        <button onClick={() => setTravelers(Math.max(selectedTour.minPassengers || 1, travelers - 1))} className="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center font-bold text-neutral-500 hover:bg-neutral-200 transition-colors">-</button>
+                        <button type="button" aria-label={language === 'es' ? 'Quitar un viajero' : 'Remove one traveler'} onClick={() => setTravelers(Math.max(selectedTour.minPassengers || 1, travelers - 1))} className="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center font-bold text-neutral-500 hover:bg-neutral-200 transition-colors">-</button>
                         <span className="flex-1 text-center font-bold text-xl">{travelers}</span>
-                        <button onClick={() => setTravelers(travelers + 1)} className="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center font-bold text-neutral-500 hover:bg-neutral-200 transition-colors">+</button>
+                        <button type="button" aria-label={language === 'es' ? 'Añadir un viajero' : 'Add one traveler'} onClick={() => setTravelers(travelers + 1)} className="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center font-bold text-neutral-500 hover:bg-neutral-200 transition-colors">+</button>
                       </div>
                     </div>
                   </div>
@@ -1052,7 +1077,7 @@ export function Home() {
                     {language === 'es' ? 'según el número de personas' : 'based on group size'}
                   </p>
                 </div>
-                <button onClick={() => {
+                <button type="button" onClick={() => {
                   if (!selectedDate) {
                     alert(language === 'es' ? "Por favor selecciona una fecha para el tour." : "Please select a date for the tour.");
                     return;
