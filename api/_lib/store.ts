@@ -27,7 +27,10 @@ export async function sbInsert<T = unknown>(table: string, row: unknown): Promis
 }
 
 /** Casillas del negocio (acepta lista separada por comas vía NOTIFY_EMAIL). */
-export const OWNER_EMAILS = (process.env.NOTIFY_EMAIL || "info@touamamari.com")
+// jemasolutionsit es respaldo TEMPORAL (pedido del usuario 2026-07-14):
+// touamamari.com está suspendido por Squarespace (clientHold) y no recibe
+// correo. Quitarlo cuando el dominio vuelva a resolver y se confirme entrega.
+export const OWNER_EMAILS = (process.env.NOTIFY_EMAIL || "info@touamamari.com,jemasolutionsit@gmail.com")
   .split(",")
   .map((e) => e.trim())
   .filter(Boolean);
