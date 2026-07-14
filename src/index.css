@@ -8,6 +8,9 @@ html {
 body {
   -webkit-tap-highlight-color: transparent;
   overflow-x: hidden;
+  /* Piedra cálida en vez de blanco puro: suaviza el choque con las secciones
+     negras y armoniza con el dorado de la marca. */
+  background-color: #fafaf9;
 }
 
 /* iOS safe-areas (requieren viewport-fit=cover en el meta viewport).

@@ -173,9 +173,7 @@ export function Layout({ children, scrolled }: { children: ReactNode; scrolled: 
       </main>
 
       {/* FOOTER */}
-      {/* hairline dorado: mismo lenguaje que los divisores entre secciones oscuras */}
-      <div aria-hidden className="h-px bg-gradient-to-r from-transparent via-[#FFD700]/20 to-transparent mt-auto" />
-      <footer className="bg-neutral-950 text-neutral-400 py-16 pb-[calc(4rem+env(safe-area-inset-bottom))] border-t border-neutral-900">
+      <footer className="bg-neutral-950 text-neutral-400 py-16 pb-[calc(4rem+env(safe-area-inset-bottom))] mt-auto">
         <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
           
           <div className="flex flex-col items-center md:items-start">

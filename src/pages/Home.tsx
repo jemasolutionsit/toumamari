@@ -104,23 +104,23 @@ function SectionDivider() {
 }
 
 /**
- * Costura entre secciones oscuras y claras: una franja corta con grises
- * cálidos (armonizan con el dorado) y el rombo de la marca centrado en el
- * borde. Corta a propósito — un degradado largo blanco↔negro pasa por grises
- * neutros "sucios" y se lee como una sección gris vacía, no como transición.
+ * Fundido entre secciones claras y oscuras. Las paradas siguen una curva
+ * ease-in-out sobre la luminancia: no hay borde perceptible en ningún punto
+ * (arranque y llegada lentísimos) y el tramo gris del medio se cruza rápido,
+ * así el degradado se lee como una sombra y no como una franja gris. Los
+ * medios tonos van levemente cálidos para armonizar con el dorado.
+ * Extremos exactos: #fafaf9 (body, index.css) y #0a0a0a (neutral-950).
  */
 function SectionBridge({ from }: { from: 'dark' | 'light' }) {
-  const gradient = from === 'dark'
-    ? "linear-gradient(to bottom, #0a0a0a 0%, #55524c 55%, #fafaf8 100%)"
-    : "linear-gradient(to bottom, #fafaf8 0%, #55524c 45%, #0a0a0a 100%)";
+  const stops = from === 'light'
+    ? "#fafaf9 0%, #f9f9f8 10%, #f2f2f1 20%, #e3e2e0 30%, #c3c0bd 40%, #8a8682 50%, #4d4a47 60%, #272624 70%, #121212 80%, #0b0b0b 90%, #0a0a0a 100%"
+    : "#0a0a0a 0%, #0b0b0b 10%, #121212 20%, #272624 30%, #4d4a47 40%, #8a8682 50%, #c3c0bd 60%, #e3e2e0 70%, #f2f2f1 80%, #f9f9f8 90%, #fafaf9 100%";
   return (
-    <div aria-hidden className="relative h-16 md:h-20 -mb-1 flex items-center justify-center" style={{ background: gradient }}>
-      <div className="flex items-center">
-        <div className="h-px w-20 md:w-32 bg-gradient-to-r from-transparent to-[#FFD700]/60" />
-        <div className="w-2.5 h-2.5 rotate-45 border border-[#FFD700]/70 mx-4 shadow-[0_0_14px_rgba(255,215,0,0.45)]" />
-        <div className="h-px w-20 md:w-32 bg-gradient-to-l from-transparent to-[#FFD700]/60" />
-      </div>
-    </div>
+    <div
+      aria-hidden
+      className="h-56 md:h-72 -mb-1"
+      style={{ background: `linear-gradient(to bottom, ${stops})` }}
+    />
   );
 }
 
@@ -465,7 +465,7 @@ export function Home() {
         </div>
       </section>
 
-      {/* gradient bridge: dark promo → light tours */}
+      {/* fundido: videos (oscuro) → tours (claro) */}
       <SectionBridge from="dark" />
 
       {/* ═══════════════ CATÁLOGO DE TOURS ═══════════════ */}
@@ -515,7 +515,7 @@ export function Home() {
         </div>
       </section>
 
-      {/* gradient bridge: light tours → dark gallery */}
+      {/* fundido: tours (claro) → galería (oscuro) */}
       <SectionBridge from="light" />
 
       {/* ═══════════════ GALERÍA FOTOGRÁFICA (TEASER) ═══════════════ */}
@@ -639,8 +639,6 @@ export function Home() {
         </div>
       </section>
 
-      {/* divisor sutil entre secciones oscuras */}
-      <div aria-hidden className="relative h-px bg-gradient-to-r from-transparent via-[#FFD700]/20 to-transparent" />
 
       {/* ═══════════════ NOSOTROS ═══════════════ */}
       <section id="nosotros" className="py-20 md:py-28 bg-neutral-950 text-white relative overflow-hidden">
@@ -682,11 +680,11 @@ export function Home() {
         </div>
       </section>
 
-      {/* gradient bridge: dark nosotros → light why-us */}
+      {/* fundido: nosotros (oscuro) → por qué (claro) */}
       <SectionBridge from="dark" />
 
       {/* ═══════════════ POR QUÉ TOUAMAMARI ═══════════════ */}
-      <section className="py-16 md:py-24 bg-neutral-50 relative overflow-hidden">
+      <section className="py-16 md:py-24 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp} className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-black text-neutral-900">{t.whyUsTitle} <span className="text-gradient-gold-dark">{t.whyUsSubtitle}</span></h2>
@@ -709,7 +707,7 @@ export function Home() {
       </section>
 
       {/* ═══════════════ RESEÑAS ═══════════════ */}
-      <section className="py-16 md:py-24 bg-white relative overflow-hidden">
+      <section className="py-16 md:py-24 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-black text-neutral-900">{t.reviewsTitle} <span className="text-gradient-gold-dark">{t.reviewsSubtitle}</span></h2>
@@ -717,7 +715,7 @@ export function Home() {
 
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {REVIEWS.map((r) => (
-              <motion.div key={r.id} variants={fadeUp} className="bg-neutral-50 p-8 rounded-3xl border border-neutral-200 flex flex-col h-full hover:shadow-xl hover:border-[#FFD700]/30 transition-all duration-500 hover-lift">
+              <motion.div key={r.id} variants={fadeUp} className="bg-white p-8 rounded-3xl border border-neutral-200 flex flex-col h-full hover:shadow-xl hover:border-[#FFD700]/30 transition-all duration-500 hover-lift">
                 <div className="flex gap-1 mb-4">
                   {[1,2,3,4,5].map(i => <Star key={i} className="w-5 h-5 text-[#FFD700] fill-current" />)}
                 </div>
@@ -831,9 +829,12 @@ export function Home() {
       </section>
 
       {/* ═══════════════ FOOTER NOTE ═══════════════ */}
-      <div className="bg-neutral-100 py-6 px-4 text-center">
+      <div className="py-6 px-4 text-center">
         <p className="text-xs text-neutral-500 max-w-3xl mx-auto leading-relaxed">{t.footerNote}</p>
       </div>
+
+      {/* fundido de cierre: contenido (claro) → footer (oscuro) */}
+      <SectionBridge from="light" />
 
       {/* ═══════════════ MODAL TOUR ═══════════════ */}
       <AnimatePresence>

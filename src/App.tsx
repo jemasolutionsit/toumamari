@@ -1,7 +1,18 @@
-import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { lazy, Suspense, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { MotionConfig } from "motion/react";
 import { Home } from "./pages/Home";
+
+// React Router mantiene la posición de scroll al navegar: al hacer clic en un
+// link del footer la página nueva aparecía "abajo" (mostrando su propio footer)
+// y parecía que el link no funcionaba. "instant" evita el smooth-scroll del CSS.
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [pathname]);
+  return null;
+}
 
 // Home entra en el bundle inicial: es la landing y el LCP depende de ella.
 // El resto se descarga solo cuando se navega, para bajar el TBT de la primera carga.
@@ -28,6 +39,7 @@ export default function App() {
     // (prefers-reduced-motion), las animaciones de transform se desactivan.
     <MotionConfig reducedMotion="user">
       <Router>
+        <ScrollToTop />
         <Suspense fallback={<RouteFallback />}>
           <Routes>
             <Route path="/" element={<Home />} />
