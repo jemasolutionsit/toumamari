@@ -26,9 +26,8 @@ export async function sbInsert<T = unknown>(table: string, row: unknown): Promis
   return (Array.isArray(body) ? body[0] : body) as T;
 }
 
-/** Casillas del negocio (acepta lista separada por comas vía NOTIFY_EMAIL).
- *  info@touamamari.com es el correo oficial; jema queda como copia de respaldo. */
-export const OWNER_EMAILS = (process.env.NOTIFY_EMAIL || "info@touamamari.com,jemasolutionsit@gmail.com")
+/** Casillas del negocio (acepta lista separada por comas vía NOTIFY_EMAIL). */
+export const OWNER_EMAILS = (process.env.NOTIFY_EMAIL || "info@touamamari.com")
   .split(",")
   .map((e) => e.trim())
   .filter(Boolean);

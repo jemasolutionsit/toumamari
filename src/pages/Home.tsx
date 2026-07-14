@@ -397,13 +397,16 @@ export function Home() {
                   transition={{ duration: 0.55, ease: EASE }}
                   className="absolute inset-0"
                 >
+                  {/* Estilo GIF: autoplay silencioso en bucle, sin controles (pedido del cliente) */}
                   <video
-                    controls
+                    autoPlay
                     muted
+                    loop
                     playsInline
-                    preload="none"
+                    disablePictureInPicture
+                    preload="metadata"
                     poster="/hero-fondo.webp"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover pointer-events-none"
                     src={PROMO_VIDEOS[promoVideoIndex]}
                   />
                 </motion.div>
