@@ -6,15 +6,13 @@ negocio y cierre por WhatsApp).
 Para dejarlo 100% operativo faltan estos datos, que solo el cliente puede entregar:
 
 ## 1. Correo del negocio: info@touamamari.com
-- **LISTO (2026-07-13):** los avisos de reservas y mensajes de contacto del sitio ahora
-  se envían a `info@touamamari.com` (con copia de respaldo a jemasolutionsit@gmail.com
-  para que nada se pierda). Ese correo también es el que aparece publicado en la página.
-- **Falta confirmar que los correos LLEGAN:** revisar la bandeja de `info@touamamari.com`
-  — enviamos un correo de prueba el 2026-07-13 con asunto "Prueba de avisos —
-  www.touamamari.cl" (revisar también spam). Si NO llega, avisar a quien administra
-  esa casilla, porque tiene un problema de recepción; mientras tanto la copia de
-  respaldo asegura que ninguna reserva se pierda. Cuando confirmen que llega,
-  avisar para quitar la copia de respaldo.
+- **LISTO (2026-07-13):** los avisos de reservas y mensajes de contacto del sitio se
+  envían únicamente a `info@touamamari.com`. Ese correo también es el que aparece
+  publicado en la página.
+- **Importante:** revisar la bandeja de `info@touamamari.com` (y el spam) — el
+  2026-07-13 se enviaron correos de prueba ("Prueba de avisos" y "Nuevo mensaje de
+  contacto — PRUEBA interna"). Si NO llegaron, avisar de inmediato a quien administra
+  esa casilla: mientras no reciba, los avisos de reservas se pierden.
 
 ## 2. Redes sociales
 - El cliente confirmó que **sí tienen Instagram** y enviará el usuario a la brevedad.
