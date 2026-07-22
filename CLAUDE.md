@@ -56,3 +56,51 @@ Only `VITE_` prefixed variables are exposed to the client and inlined during bui
 ## Docs
 
 Client-facing documentation (pending items, contact data) lives in `docs/PARA-EL-CLIENTE.md`.
+
+## Estado del proyecto (traspaso de sesión — 2026-07-22)
+
+El trabajo hasta acá se hizo en Windows; el usuario cambia a un Mac y no va a reabrir
+este directorio. Todo lo que importa está commiteado y pusheado a `main` en
+`github.com/jemasolutionsit/touamamari` — al clonar el repo en el Mac, Claude Code
+carga este archivo automáticamente y recupera el contexto. Lo que **no** viaja solo:
+
+- **`.env.local`** no está en git (correctamente, ver `.gitignore`). Vercel ya tiene
+  `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `VITE_SUPABASE_URL`,
+  `VITE_SUPABASE_ANON_KEY` en production/preview — para desarrollar local en el Mac,
+  copiar `.env.example` a `.env.local` y pedirle los valores al usuario o sacarlos del
+  dashboard de Vercel (`vercel env pull` si el CLI está logueado).
+- **El skill `ui-ux-pro-max`** vive en `~/.claude/skills/` de esta máquina Windows
+  (instalado el 14-07 desde `github.com/nextlevelbuilder/ui-ux-pro-max-skill`, requiere
+  Python 3). Hay una copia de sus datos en `.agents/skills/` dentro del repo (quedó de
+  un intento anterior con su CLI) pero **no es invocable así** — si se quiere usar en
+  el Mac hay que instalarlo de nuevo ahí.
+- La memoria de Claude Code (aprendizajes tipo "no asumir el correo del negocio sin
+  confirmar") vive en `~/.claude/projects/.../memory/` de este PC y no se sincroniza
+  sola a otra máquina.
+
+### Qué está resuelto y en producción
+
+- **Correo del negocio: `info.touamamari@gmail.com`** (Gmail creado por el cliente el
+  14-07). `OWNER_EMAILS` en `api/_lib/store.ts` es el único lugar que define el
+  destinatario de avisos (acepta `NOTIFY_EMAIL` con lista separada por comas).
+  `notifyOwner` manda **un envío de Resend por destinatario** (no una lista compartida)
+  para que el rebote de una casilla no oculte si otra sí recibió — lección del correo
+  `.com` anterior, que quedaba suspendido y hacía "bounce" a todo el lote.
+- **Dominio oficial: `www.touamamari.cl`.** `touamamari.com` (con "u") quedó abandonado:
+  el registrador (Squarespace) lo puso en `clientHold` y nunca se destrabó.
+- **WhatsApp de ventas confirmado:** `+56 9 5760 9175` (en `CONTACT_INFO`, `data.ts`).
+- **Redes sociales:** se retiraron los íconos de Instagram/Facebook del footer
+  (commit `fc4a6c8`) — las cuentas nunca se confirmaron como reales. Si el cliente
+  entrega usuarios reales, hay que agregarlas de vuelta en `Layout.tsx`.
+- **Diseño de transiciones (2026-07-22):** las secciones claras/oscuras de `Home.tsx`
+  usan un fundido con curva ease-in-out (`SectionBridge`) en vez de una costura corta
+  — la versión anterior se veía como una línea/destello blanco entre secciones. Al
+  navegar entre páginas hay un velo con el rombo dorado de la marca (`App.tsx`,
+  `RouteTransition`) que además corrige que React Router no volvía el scroll al tope.
+- PWA probada en iPhone real, RLS + backend-insert pattern para contacto/reservas
+  funcionando, react-doctor limpio (a11y, tipos de botón, memoización de contexto).
+
+### Pendiente (solo el cliente puede resolverlo)
+
+Ver `docs/PARA-EL-CLIENTE.md` para el detalle completo. En resumen: razón social exacta
+y términos de cancelación a confirmar; usuario real de Instagram/Facebook si existen.
