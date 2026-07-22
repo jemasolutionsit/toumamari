@@ -252,7 +252,7 @@ export const getCustomExperiences = (lang: 'es' | 'en') => [
 ];
 
 export const CONTACT_INFO = {
-  email: "info@touamamari.com",
+  email: "info.touamamari@gmail.com",
   location: "Hanga Roa, Rapa Nui (Isla de Pascua)",
   whatsapp: "+56 9 5760 9175",
   instagram: "https://www.instagram.com/touamamari.rapanui",

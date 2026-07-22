@@ -5,14 +5,15 @@ El sitio está en producción en **https://www.touamamari.cl** y funciona de pun
 negocio y cierre por WhatsApp).
 Para dejarlo 100% operativo faltan estos datos, que solo el cliente puede entregar:
 
-## 1. Correo del negocio: info@touamamari.com
-- **LISTO (2026-07-13):** los avisos de reservas y mensajes de contacto del sitio se
-  envían únicamente a `info@touamamari.com`. Ese correo también es el que aparece
-  publicado en la página.
-- **Importante:** revisar la bandeja de `info@touamamari.com` (y el spam) — el
-  2026-07-13 se enviaron correos de prueba ("Prueba de avisos" y "Nuevo mensaje de
-  contacto — PRUEBA interna"). Si NO llegaron, avisar de inmediato a quien administra
-  esa casilla: mientras no reciba, los avisos de reservas se pierden.
+## 1. Correo del negocio: info.touamamari@gmail.com
+- **LISTO (2026-07-14):** los avisos de reservas y mensajes de contacto del sitio se
+  envían a `info.touamamari@gmail.com` (Gmail creado por el cliente). Ese correo
+  también es el que aparece publicado en la página.
+- El correo anterior (`info@touamamari.com`) quedó descartado: ese dominio está
+  suspendido por el registrador (Squarespace) desde el 10-06-2026 y no podía
+  recibir correo.
+- **Importante:** revisar la bandeja de `info.touamamari@gmail.com` (y el spam) y
+  confirmar que llegó el correo de prueba enviado el 14-07.
 
 ## 2. Redes sociales
 - El cliente confirmó que **sí tienen Instagram** y enviará el usuario a la brevedad.
