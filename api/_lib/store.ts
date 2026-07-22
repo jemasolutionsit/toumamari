@@ -27,9 +27,6 @@ export async function sbInsert<T = unknown>(table: string, row: unknown): Promis
 }
 
 /** Casillas del negocio (acepta lista separada por comas vía NOTIFY_EMAIL). */
-// Correo oficial desde 2026-07-14: info.touamamari@gmail.com (Gmail directo,
-// creado por el cliente). El .com quedó descartado (suspendido por
-// Squarespace, clientHold) y jemasolutionsit ya no hace falta de respaldo.
 export const OWNER_EMAILS = (process.env.NOTIFY_EMAIL || "info.touamamari@gmail.com")
   .split(",")
   .map((e) => e.trim())
@@ -39,9 +36,9 @@ export const OWNER_EMAILS = (process.env.NOTIFY_EMAIL || "info.touamamari@gmail.
 export const FROM_EMAIL = "Touamamari <noreply@touamamari.cl>";
 
 /** Notificación interna al negocio. Best-effort: nunca lanza. */
-// Un envío POR destinatario, no una lista: con lista compartida el rebote de
-// una casilla caída (hoy info@touamamari.com, dominio en clientHold) marca
-// todo el correo "bounced" y no se puede saber si el respaldo sí lo recibió.
+// Un envío POR destinatario, no una lista: si NOTIFY_EMAIL define varias
+// casillas, el rebote de una no debe marcar "bounced" el envío completo ni
+// ocultar si las demás sí recibieron.
 export async function notifyOwner(subject: string, html: string): Promise<boolean> {
   const key = process.env.RESEND_API_KEY;
   if (!key) return false;
